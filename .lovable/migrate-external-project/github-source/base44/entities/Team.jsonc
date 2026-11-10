@@ -1,0 +1,260 @@
+{
+  "name": "Team",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this team belongs to"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the team (used for imports/updates)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Team name"
+    },
+    "age_group": {
+      "type": "string",
+      "description": "Age group (e.g., U14, U16)"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Boys",
+        "Girls",
+        "Boys and Girls"
+      ],
+      "default": "Boys and Girls",
+      "description": "Gender eligibility"
+    },
+    "playing_format": {
+      "type": "string",
+      "enum": [
+        "4v4",
+        "7v7",
+        "9v9",
+        "11v11"
+      ],
+      "description": "Playing format / roster size the team competes under. Required when creating a team."
+    },
+    "season": {
+      "type": "string",
+      "description": "Season year range (e.g., 2026-2027, 2027-2028)"
+    },
+    "league": {
+      "type": "string",
+      "description": "League the team competes in (e.g., MSPRL, NPL, ECNL)"
+    },
+    "platform_id": {
+      "type": "string",
+      "description": "ID of the competitive platform this team belongs to (e.g., MLS-Next, Girls Academy)"
+    },
+    "platform_name": {
+      "type": "string",
+      "description": "Platform name (denormalized for display)"
+    },
+    "team_plans": {
+      "type": "string",
+      "description": "Team plans and goals for the season (tournaments, training focus)"
+    },
+    "cost": {
+      "type": "number",
+      "description": "Registration cost per player for this team"
+    },
+    "location_id": {
+      "type": "string",
+      "description": "ID of the Location this team is based at"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "Location name (denormalized for display)"
+    },
+    "coach_id": {
+      "type": "string",
+      "description": "ID of the head coach (Coach entity). Legacy single-coach field; coach_ids is preferred."
+    },
+    "coach_name": {
+      "type": "string",
+      "description": "Head coach name (denormalized for display)"
+    },
+    "coach_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of all coaches assigned to this team"
+    },
+    "coach_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Coach names (denormalized for display)"
+    },
+    "next_season_coach_id": {
+      "type": "string",
+      "description": "ID of the Coach tentatively assigned to lead this team next season"
+    },
+    "next_season_coach_name": {
+      "type": "string",
+      "description": "Next-season coach name (denormalized for display)"
+    },
+    "team_manager_id": {
+      "type": "string",
+      "description": "ID of the primary Guardian assigned as Team Manager. Legacy; team_manager_ids is preferred."
+    },
+    "team_manager_name": {
+      "type": "string",
+      "description": "Primary Team Manager full name (denormalized for display)"
+    },
+    "team_manager_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of all Guardians assigned as Team Managers"
+    },
+    "team_manager_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Team Manager names (denormalized for display)"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "ID of the associated program (Program entity)"
+    },
+    "program_title": {
+      "type": "string",
+      "description": "Program title (denormalized for display)"
+    },
+    "team_plan_id": {
+      "type": "string",
+      "description": "ID of the TeamPlan this team is assigned to. A team can only be linked to one plan; a plan can be linked to multiple teams."
+    },
+    "qbo_class_id": {
+      "type": "string",
+      "description": "QuickBooks Class ID this team is mapped to"
+    },
+    "qbo_class_name": {
+      "type": "string",
+      "description": "QuickBooks Class name (denormalized for display)"
+    },
+    "max_roster_size": {
+      "type": "number",
+      "default": 18,
+      "description": "Maximum number of players on the roster"
+    },
+    "player_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Array of Player IDs on this team"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about the team"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "planned",
+        "active",
+        "skipped",
+        "merged",
+        "retired"
+      ],
+      "description": "Lifecycle state. draft = proposed by rollover, planned = matrix confirmed, active = live team. Empty on legacy teams means active."
+    },
+    "rolled_from_team_id": {
+      "type": "string",
+      "description": "ID of the prior-season team this team was rolled forward from"
+    },
+    "rollover_decision": {
+      "type": "string",
+      "enum": [
+        "roll",
+        "skip",
+        "merge",
+        "split",
+        "new"
+      ],
+      "description": "Rollover review decision for this team"
+    },
+    "merge_into_team_id": {
+      "type": "string",
+      "description": "When decision is merge, the draft team this one merges into"
+    },
+    "source": {
+      "type": "string",
+      "description": "Where this record came from (e.g. migration)"
+    },
+    "migration_batch_id": {
+      "type": "string",
+      "description": "Migration commit batch that created or last updated this record"
+    }
+  },
+  "required": [
+    "name",
+    "playing_format"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

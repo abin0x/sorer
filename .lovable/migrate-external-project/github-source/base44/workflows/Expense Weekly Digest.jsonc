@@ -1,0 +1,63 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 8 * * 1",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Every Monday at 8am: emails a weekly expense activity summary to each club's bookkeepers and admins, then sends the monthly digest (if enabled per club).",
+  "name": "Expense Weekly Digest",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "expense_weekly_digest",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "weekly": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "expense-weekly-digest",
+            "args": {
+              "mode": "weekly"
+            }
+          },
+          "then": "monthly",
+          "x-base44": {
+            "title": "Send weekly digest",
+            "description": "Summarize the week's expense activity"
+          }
+        }
+      },
+      {
+        "monthly": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "expense-weekly-digest",
+            "args": {
+              "mode": "monthly"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send monthly digest",
+            "description": "Monthly summary (if enabled per club)"
+          }
+        }
+      }
+    ]
+  }
+}

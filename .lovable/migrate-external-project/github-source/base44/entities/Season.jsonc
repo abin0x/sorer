@@ -1,0 +1,134 @@
+{
+  "name": "Season",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this season belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Season label (e.g. 2026-2027)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "preparing",
+        "active",
+        "closing",
+        "completed",
+        "archived"
+      ],
+      "default": "draft",
+      "description": "preparing = next season being built, active = current, closing = passed pre-flight, archived = read-only history."
+    },
+    "is_current": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the club's active/current season."
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Season start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Season end date"
+    },
+    "rolled_over_from_season_id": {
+      "type": "string",
+      "description": "ID of the prior Season this one was cloned from"
+    },
+    "previous_season_id": {
+      "type": "string",
+      "description": "ID of the season that preceded this one"
+    },
+    "switch_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this season was switched to Active"
+    },
+    "lifecycle_scope": {
+      "type": "string",
+      "enum": [
+        "club",
+        "branches"
+      ],
+      "default": "club",
+      "description": "'club' = Club Admin manages every branch; 'branches' = only admin_branch_ids."
+    },
+    "admin_branch_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Branch IDs the Club Admin manages when lifecycle_scope is 'branches'"
+    },
+    "matrix_confirmed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the admin confirmed the team and platform matrix"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this season"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

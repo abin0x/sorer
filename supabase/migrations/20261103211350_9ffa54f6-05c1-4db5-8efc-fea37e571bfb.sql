@@ -1,0 +1,1 @@
+ALTER TABLE public.club_invitations ADD COLUMN IF NOT EXISTS delivery_status text;

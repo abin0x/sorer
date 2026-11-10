@@ -1,0 +1,91 @@
+{
+  "name": "RecurrenceRule",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this rule belongs to"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "ID of the Event this recurrence rule expands"
+    },
+    "rrule_string": {
+      "type": "string",
+      "description": "RFC 5545 RRULE string (e.g. FREQ=WEEKLY;BYDAY=MO,WE). Blank for a multi_date event \u2014 dates come from rdates only."
+    },
+    "dtstart": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First occurrence date/time the rule expands from"
+    },
+    "until": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Optional end date for the recurrence. Blank = expand on a rolling 90-day window."
+    },
+    "exdates": {
+      "type": "string",
+      "description": "JSON array of ISO date strings to exclude from the generated occurrences"
+    },
+    "rdates": {
+      "type": "string",
+      "description": "JSON array of ISO date strings to add in addition to the rule (or the full date list for multi_date events)"
+    }
+  },
+  "required": [
+    "club_id",
+    "event_id",
+    "dtstart"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

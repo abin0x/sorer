@@ -1,0 +1,163 @@
+{
+  "name": "Facility",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this facility belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Facility name (e.g. Toca Wixom, Novi Athletic Facility)"
+    },
+    "address": {
+      "type": "string",
+      "description": "Street address of the facility"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Facility contact phone number"
+    },
+    "location_id": {
+      "type": "string",
+      "description": "ID of the primary Branch (Location) this facility is associated with, if any"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "Primary branch name (denormalized for display)"
+    },
+    "branch_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of all Branches (Locations) that share this facility. A facility can serve multiple branches."
+    },
+    "branch_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Branch names (denormalized for display)"
+    },
+    "surface_type": {
+      "type": "string",
+      "enum": [
+        "grass",
+        "turf",
+        "indoor",
+        "mixed"
+      ],
+      "default": "grass",
+      "description": "Primary playing surface type"
+    },
+    "field_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Number of fields or courts available at this facility"
+    },
+    "capacity": {
+      "type": "number",
+      "default": 1,
+      "description": "Maximum number of concurrent bookings (teams or sessions) the facility can host at once"
+    },
+    "operating_hours": {
+      "type": "string",
+      "description": "Standard operating hours (e.g. '8:00 AM \u2013 10:00 PM')"
+    },
+    "daily_hours": {
+      "type": "object",
+      "description": "Per-day operating hours. Keys are day abbreviations (mon, tue, wed, thu, fri, sat, sun). Each value is an object with 'available' (boolean), 'open' (HH:MM string), and 'close' (HH:MM string).",
+      "default": {}
+    },
+    "available_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "default": [
+        "mon",
+        "tue",
+        "wed",
+        "thu",
+        "fri",
+        "sat",
+        "sun"
+      ],
+      "description": "Days of the week this facility is available for booking"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this facility"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this facility is currently in use"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

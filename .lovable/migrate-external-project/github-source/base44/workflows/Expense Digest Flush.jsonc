@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/15 * * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Every 15 minutes, batches pending digest-mode expense notifications into one email per recipient and marks them sent.",
+  "name": "Expense Digest Flush",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "expense_digest_flush",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "flush": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "expense-digest-flush",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Flush digest notifications",
+            "description": "Batch and email pending expense digests"
+          }
+        }
+      }
+    ]
+  }
+}

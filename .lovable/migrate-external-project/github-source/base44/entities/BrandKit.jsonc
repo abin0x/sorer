@@ -1,0 +1,121 @@
+{
+  "name": "BrandKit",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this brand kit belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Brand kit name (e.g. 'Main brand', 'Tournament brand')"
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the club's default brand kit"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "URL to the club logo (stored publicly for social sharing)"
+    },
+    "primary_color": {
+      "type": "string",
+      "description": "Primary brand color (hex, e.g. #5048e5)"
+    },
+    "secondary_color": {
+      "type": "string",
+      "description": "Secondary/accent brand color (hex)"
+    },
+    "font_heading": {
+      "type": "string",
+      "description": "Heading font family name"
+    },
+    "font_body": {
+      "type": "string",
+      "description": "Body font family name"
+    },
+    "voice": {
+      "type": "string",
+      "description": "Brand voice description fed to the AI content generator (tone, personality, do/don't)"
+    },
+    "tagline": {
+      "type": "string",
+      "description": "Club tagline / slogan"
+    },
+    "default_hashtags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Hashtags appended to generated content by default"
+    },
+    "asset_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Public URLs of brand image assets (stored publicly for social sharing)"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "User ID of the brand kit owner"
+    }
+  },
+  "required": [
+    "club_id",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

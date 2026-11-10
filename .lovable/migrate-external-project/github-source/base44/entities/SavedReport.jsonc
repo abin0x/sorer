@@ -1,0 +1,113 @@
+{
+  "name": "SavedReport",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this saved report belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "User-given name for this saved report configuration"
+    },
+    "report_id": {
+      "type": "string",
+      "description": "ID of the report definition from the report library (e.g. payments_received)"
+    },
+    "report_name": {
+      "type": "string",
+      "description": "Report name (denormalized for display)"
+    },
+    "report_category": {
+      "type": "string",
+      "description": "Report category (denormalized for display)"
+    },
+    "config": {
+      "type": "object",
+      "default": {},
+      "description": "Saved configuration: { filters (global), reportFilters, columns (visible keys), groupBy, sort }"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "private",
+        "role",
+        "club"
+      ],
+      "default": "private",
+      "description": "private = only owner; role = shared with a specific role; club = shared with entire club"
+    },
+    "shared_role": {
+      "type": "string",
+      "description": "When visibility=role, the role that can see this saved report"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "User ID of the owner"
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Owner name (denormalized for display)"
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this saved report is pinned to the Reports Overview"
+    }
+  },
+  "required": [
+    "name",
+    "report_id",
+    "visibility"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

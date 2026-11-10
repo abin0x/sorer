@@ -1,0 +1,188 @@
+{
+  "name": "Tournament",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (organizer) hosting this tournament"
+    },
+    "name": {
+      "type": "string",
+      "description": "Tournament name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Public description shown on the registration and schedule pages"
+    },
+    "sport": {
+      "type": "string",
+      "default": "soccer",
+      "description": "Sport (e.g. soccer, basketball, volleyball)"
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "round_robin",
+        "knockout",
+        "group_stage",
+        "group_knockout"
+      ],
+      "default": "round_robin",
+      "description": "Tournament competition format"
+    },
+    "age_group": {
+      "type": "string",
+      "description": "Age group (e.g. U14, U16, Open)"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Boys",
+        "Girls",
+        "Coed"
+      ],
+      "default": "Coed"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Tournament start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Tournament end date"
+    },
+    "entry_fee": {
+      "type": "number",
+      "default": 0,
+      "description": "Per-team entry fee in major currency units (USD)"
+    },
+    "max_teams": {
+      "type": "number",
+      "default": 16,
+      "description": "Maximum number of teams allowed to register"
+    },
+    "registered_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Denormalized count of approved registrations"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "registration_open",
+        "scheduling",
+        "active",
+        "completed",
+        "canceled"
+      ],
+      "default": "draft",
+      "description": "Tournament lifecycle status"
+    },
+    "rules": {
+      "type": "string",
+      "description": "Tournament rules and format details shown to registrants"
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Public contact email for tournament questions"
+    },
+    "banner_url": {
+      "type": "string",
+      "description": "Optional banner image URL"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this tournament is visible on public schedule/standings pages"
+    },
+    "points_win": {
+      "type": "number",
+      "default": 3,
+      "description": "Points awarded for a win"
+    },
+    "points_draw": {
+      "type": "number",
+      "default": 1,
+      "description": "Points awarded for a draw"
+    },
+    "points_loss": {
+      "type": "number",
+      "default": 0,
+      "description": "Points awarded for a loss"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "format",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

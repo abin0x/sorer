@@ -1,0 +1,148 @@
+{
+  "name": "Incident",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Incident name shown on the status page and banner"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "monitoring",
+        "identified",
+        "investigating",
+        "mitigated",
+        "resolved"
+      ],
+      "default": "investigating",
+      "description": "Incident lifecycle status"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "default": "P2",
+      "description": "Incident severity"
+    },
+    "affected_club_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Club IDs affected by this incident. Empty = all clubs / platform-wide."
+    },
+    "affected_club_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Club names (denormalized for display)"
+    },
+    "updates": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Timeline of updates: { timestamp, status, message, author }"
+    },
+    "start_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the incident started"
+    },
+    "end_time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the incident was resolved"
+    },
+    "banner_message": {
+      "type": "string",
+      "description": "Message shown in the app and /help banner while the incident is active"
+    },
+    "show_banner": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the banner is currently shown to affected users"
+    },
+    "is_public": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this incident appears on the public status page"
+    },
+    "issue_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Issues grouped into this incident"
+    },
+    "notify_club_admins": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether to email affected club admins on each update"
+    },
+    "declared_by": {
+      "type": "string",
+      "description": "Email of the system owner who declared the incident"
+    }
+  },
+  "required": [
+    "name",
+    "status",
+    "severity"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

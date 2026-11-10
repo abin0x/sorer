@@ -1,0 +1,146 @@
+{
+  "name": "Channel",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this channel belongs to"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID of the Team this channel is scoped to. Blank for club-wide channels."
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team name (denormalized for display)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Channel display name (e.g. 'U14 Boys \u2014 Team Chat')"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "club_announcements",
+        "scheduling",
+        "team_chat",
+        "parents_chat",
+        "social_feed"
+      ],
+      "description": "Channel kind \u2014 determines posting rules, read audience, and default notification behavior"
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "club",
+        "team"
+      ],
+      "description": "club = everyone in the club/branch, team = members of team_id only"
+    },
+    "allow_replies": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether open replies are allowed. Announcements turn this off \u2014 reactions and acknowledgment instead."
+    },
+    "moderation_mode": {
+      "type": "string",
+      "enum": [
+        "pre_approve",
+        "post_review"
+      ],
+      "default": "post_review",
+      "description": "Social feed moderation mode: pre_approve holds posts for admin approval before they're visible, post_review publishes immediately and admins review after."
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": true,
+      "description": "True for channels auto-created by the system (vs. a future custom channel)"
+    }
+  },
+  "required": [
+    "name",
+    "type",
+    "scope"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.team_id": {
+                "$exists": false
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.team_id": ""
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.team_id": {
+                "$in": "{{user.data.team_ids}}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

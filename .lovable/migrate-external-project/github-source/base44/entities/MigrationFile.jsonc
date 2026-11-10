@@ -1,0 +1,105 @@
+{
+  "name": "MigrationFile",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Copied from the project by the server"
+    },
+    "file_uri": {
+      "type": "string",
+      "description": "Private storage URI of the untouched original file"
+    },
+    "original_name": {
+      "type": "string"
+    },
+    "detected_entity": {
+      "type": "string",
+      "description": "Entity the app guessed this file contains"
+    },
+    "selected_entity": {
+      "type": "string",
+      "description": "Entity currently used for mapping (user may override)"
+    },
+    "detection_scores": {
+      "type": "object",
+      "default": {}
+    },
+    "row_count": {
+      "type": "number",
+      "description": "Non-blank data rows"
+    },
+    "blank_row_count": {
+      "type": "number",
+      "default": 0
+    },
+    "column_count": {
+      "type": "number"
+    },
+    "checksum": {
+      "type": "string",
+      "description": "SHA-256 of the original bytes"
+    },
+    "encoding": {
+      "type": "string"
+    },
+    "delimiter": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "analyzed",
+        "confirmed"
+      ],
+      "default": "analyzed"
+    },
+    "confirmed_by": {
+      "type": "string"
+    },
+    "confirmed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "uploaded_by": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_id",
+    "club_id",
+    "file_uri"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

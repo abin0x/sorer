@@ -1,0 +1,171 @@
+{
+  "name": "Field",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this field belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Field name or code (e.g. Field 1, North Pitch)"
+    },
+    "facility_id": {
+      "type": "string",
+      "description": "ID of the parent Facility this field belongs to"
+    },
+    "facility_name": {
+      "type": "string",
+      "description": "Facility name (denormalized for display)"
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "4v4",
+        "7v7",
+        "9v9",
+        "11v11"
+      ],
+      "description": "Primary playing format; drives the grid layout (11v11 = 8 grids, 9v9 = 6, 7v7 = 4, 4v4 = 2)"
+    },
+    "grid_layout": {
+      "type": "string",
+      "description": "Comma-separated grid labels for this field, e.g. A1,A2,B1,B2"
+    },
+    "surface": {
+      "type": "string",
+      "enum": [
+        "grass",
+        "turf",
+        "hybrid",
+        "indoor_hard",
+        "futsal"
+      ],
+      "default": "grass",
+      "description": "Playing surface type"
+    },
+    "indoor_outdoor": {
+      "type": "string",
+      "enum": [
+        "indoor",
+        "outdoor"
+      ],
+      "default": "outdoor",
+      "description": "Whether this field is indoor or outdoor"
+    },
+    "lighted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the field has lighting for evening use"
+    },
+    "format_supported": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "11v11",
+          "9v9",
+          "7v7",
+          "4v4"
+        ]
+      },
+      "default": [],
+      "description": "Playing formats this field supports"
+    },
+    "max_sections": {
+      "type": "number",
+      "default": 8,
+      "description": "Maximum number of training sections this field can be divided into"
+    },
+    "daily_hours": {
+      "type": "object",
+      "description": "Per-day operating hours for this specific field. If null/empty, inherits from the parent Facility's daily_hours. Keys are day abbreviations (mon-sun). Each value: { available: boolean, open: HH:MM, close: HH:MM }.",
+      "default": {}
+    },
+    "available_days": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "mon",
+          "tue",
+          "wed",
+          "thu",
+          "fri",
+          "sat",
+          "sun"
+        ]
+      },
+      "default": [],
+      "description": "Days this field is available. If empty, inherits from the parent Facility's available_days."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "maintenance",
+        "closed"
+      ],
+      "default": "active",
+      "description": "Current field status"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this field (e.g. drainage issue on north end)"
+    }
+  },
+  "required": [
+    "name",
+    "facility_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

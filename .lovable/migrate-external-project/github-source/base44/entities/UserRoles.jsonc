@@ -1,0 +1,102 @@
+{
+  "name": "UserRoles",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this role grant belongs to"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "ID of the User this role belongs to"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "User email (denormalized for display)"
+    },
+    "user_name": {
+      "type": "string",
+      "description": "User full name (denormalized for display)"
+    },
+    "role": {
+      "type": "string",
+      "description": "The custom_role key this record grants (e.g. coach, parent_guardian, bookkeeper)"
+    },
+    "role_label": {
+      "type": "string",
+      "description": "Human-readable role label (denormalized for display)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active"
+      ],
+      "default": "pending",
+      "description": "pending = accepted the invite but hasn't finished role-specific onboarding yet; active = onboarding complete, role is usable"
+    },
+    "source_invitation_id": {
+      "type": "string",
+      "description": "ID of the ClubInvitation this role grant originated from, if any"
+    },
+    "activated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this role's onboarding was completed and it became active"
+    }
+  },
+  "required": [
+    "user_id",
+    "role"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

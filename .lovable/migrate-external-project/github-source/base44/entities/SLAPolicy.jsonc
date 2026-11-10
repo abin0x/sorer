@@ -1,0 +1,123 @@
+{
+  "name": "SLAPolicy",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club ID for club-specific SLA. Empty/null = global default policy."
+    },
+    "name": {
+      "type": "string",
+      "description": "Policy name"
+    },
+    "plan_tier": {
+      "type": "string",
+      "description": "Plan tier this policy applies to (e.g. free, starter, pro, enterprise). Matched against the club's subscription plan."
+    },
+    "priority_config": {
+      "type": "object",
+      "default": {},
+      "description": "Per-priority SLA targets: { P1: { response_hours, resolution_hours }, P2: {...}, P3: {...}, P4: {...} }"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this policy is active"
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the fallback policy when no plan-tier match exists"
+    }
+  },
+  "required": [
+    "name",
+    "plan_tier"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1 @@
+ALTER FUNCTION public.can_review_club_players(text) SECURITY INVOKER;

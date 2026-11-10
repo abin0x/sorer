@@ -1,0 +1,180 @@
+{
+  "name": "DemoAccessRequest",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Requester's full name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Requester's email address \u2014 used to match authenticated users and send invite emails"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "The club the requester belongs to or is evaluating for"
+    },
+    "sport": {
+      "type": "string",
+      "description": "Primary sport (e.g. Soccer, Basketball)"
+    },
+    "branch_count": {
+      "type": "string",
+      "enum": [
+        "1",
+        "2-5",
+        "6-10",
+        "10+"
+      ],
+      "description": "Number of branches the requester's club has"
+    },
+    "message": {
+      "type": "string",
+      "description": "Optional note from the requester about their needs"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "invited",
+        "opened",
+        "approved",
+        "trial_in_progress",
+        "denied"
+      ],
+      "default": "pending",
+      "description": "Lifecycle: pending = awaiting review (public form), invited = invite email sent, opened = recipient clicked the demo link, approved = legacy approved state, trial_in_progress = recipient created a demo club, denied = rejected"
+    },
+    "access_token": {
+      "type": "string",
+      "description": "Unique token embedded in the demo access link, generated on approval or direct invite"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "request",
+        "invite"
+      ],
+      "default": "request",
+      "description": "request = submitted via the public form, invite = created directly by the system owner"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "Email of the system owner who approved or denied this request"
+    },
+    "reviewed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the request was reviewed"
+    },
+    "invite_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the invite/approval email was sent to the requester"
+    },
+    "invite_sent_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invite email was sent"
+    },
+    "invite_opened_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the recipient first clicked the demo link (opened the invite)"
+    },
+    "trial_club_id": {
+      "type": "string",
+      "description": "ID of the demo club created by this invitee, if they started a trial"
+    },
+    "trial_club_name": {
+      "type": "string",
+      "description": "Name of the demo club created by this invitee (denormalized for display)"
+    },
+    "trial_started_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invitee created a demo club and started their trial"
+    }
+  },
+  "required": [
+    "email",
+    "name",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

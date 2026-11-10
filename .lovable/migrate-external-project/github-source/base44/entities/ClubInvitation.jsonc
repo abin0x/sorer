@@ -1,0 +1,161 @@
+{
+  "name": "ClubInvitation",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this invitation belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name (denormalized for display)"
+    },
+    "token": {
+      "type": "string",
+      "description": "Unique token embedded in the invitation link, used to identify this invitation independent of email matching"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address of the invitee"
+    },
+    "invitee_name": {
+      "type": "string",
+      "description": "Name of the invitee, captured at invite time (optional)"
+    },
+    "role": {
+      "type": "string",
+      "description": "The primary custom_role the invitee will receive once they validate their account"
+    },
+    "role_label": {
+      "type": "string",
+      "description": "Human-readable role label (denormalized for display)"
+    },
+    "intended_roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "All role(s) intended for this invitee (supports multi-role invites). Falls back to [role] when empty."
+    },
+    "access_level": {
+      "type": "string",
+      "enum": [
+        "full",
+        "limited"
+      ],
+      "default": "full",
+      "description": "For co-guardian invitations: full administration or limited view access."
+    },
+    "invited_by_name": {
+      "type": "string",
+      "description": "Name of the user who sent the invitation (denormalized)"
+    },
+    "invited_by_email": {
+      "type": "string",
+      "description": "Email of the user who sent the invitation (denormalized)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "accepted",
+        "expired",
+        "revoked"
+      ],
+      "default": "pending",
+      "description": "Current status of the invitation"
+    },
+    "last_error": {
+      "type": "string",
+      "description": "Error message from the most recent failed send attempt, if any"
+    },
+    "accepted_by_user_id": {
+      "type": "string",
+      "description": "ID of the user who accepted this invitation"
+    },
+    "accepted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invitation was accepted"
+    },
+    "sent_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "received_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When delivery to the recipient's mail server was confirmed"
+    },
+    "opened_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the recipient first opened the invitation link"
+    },
+    "resend_email_id": {
+      "type": "string",
+      "description": "Resend message ID used to check delivery"
+    },
+    "delivery_status": {
+      "type": "string",
+      "description": "Provider-confirmed delivery state"
+    },
+    "reminder_count": {
+      "type": "number",
+      "default": 0
+    },
+    "last_reminded_date": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "email",
+    "role"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

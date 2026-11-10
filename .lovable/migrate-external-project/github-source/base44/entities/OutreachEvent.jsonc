@@ -1,0 +1,56 @@
+{
+  "name": "OutreachEvent",
+  "type": "object",
+  "properties": {
+    "resend_event_id": {
+      "type": "string",
+      "description": "Resend's event ID (for dedup)"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "email.sent",
+        "email.delivered",
+        "email.opened",
+        "email.clicked",
+        "email.bounced",
+        "email.complained"
+      ],
+      "description": "Resend event type"
+    },
+    "prospect_id": {
+      "type": "string",
+      "description": "Resolved prospect ID (null if not matched)"
+    },
+    "send_id": {
+      "type": "string",
+      "description": "Resolved OutreachSend ID (null if not matched)"
+    },
+    "payload": {
+      "type": "object",
+      "default": {},
+      "description": "Raw Resend webhook payload"
+    }
+  },
+  "required": [
+    "event_type"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

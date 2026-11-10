@@ -1,0 +1,229 @@
+{
+  "name": "Macro",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club ID for club-specific macros. Empty/null = global macro available to all clubs."
+    },
+    "name": {
+      "type": "string",
+      "description": "Macro name shown in the picker"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this macro is for"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "greeting",
+        "status_update",
+        "resolution",
+        "escalation",
+        "info_request",
+        "custom"
+      ],
+      "default": "custom",
+      "description": "Macro category for grouping"
+    },
+    "body_template": {
+      "type": "string",
+      "description": "Message body with {{variables}}: ticket_number, customer_name, club_name, agent_name, subject"
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Variable names available in this template"
+    },
+    "status_change": {
+      "type": "string",
+      "enum": [
+        "new",
+        "open",
+        "pending_customer",
+        "escalated",
+        "resolved",
+        "closed"
+      ],
+      "description": "Optional status to set when this macro is applied"
+    },
+    "created_by_name": {
+      "type": "string",
+      "description": "Name of the agent who created this macro"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this macro is available for use"
+    },
+    "usage_count": {
+      "type": "number",
+      "default": 0,
+      "description": "How many times this macro has been used"
+    }
+  },
+  "required": [
+    "name",
+    "body_template"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

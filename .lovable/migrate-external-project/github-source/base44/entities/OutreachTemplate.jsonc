@@ -1,0 +1,66 @@
+{
+  "name": "OutreachTemplate",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Template name shown in the picker"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Default subject line (can be overridden per step)"
+    },
+    "body_html": {
+      "type": "string",
+      "description": "HTML body with {{variable}} placeholders"
+    },
+    "preview_data": {
+      "type": "object",
+      "default": {},
+      "description": "Sample variable values for preview rendering"
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Declared variable names: first_name, club_name, branch_count, pain_signal_line, etc."
+    },
+    "created_by": {
+      "type": "string",
+      "description": "User ID of creator"
+    },
+    "created_by_name": {
+      "type": "string",
+      "description": "Creator name (denormalized)"
+    }
+  },
+  "required": [
+    "name",
+    "subject",
+    "body_html"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

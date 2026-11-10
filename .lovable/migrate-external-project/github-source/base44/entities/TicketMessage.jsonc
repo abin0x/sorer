@@ -1,0 +1,249 @@
+{
+  "name": "TicketMessage",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this message belongs to"
+    },
+    "ticket_id": {
+      "type": "string",
+      "description": "ID of the Ticket this message belongs to"
+    },
+    "ticket_number": {
+      "type": "string",
+      "description": "Ticket number (denormalized for display)"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Name of the message author"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of the message author"
+    },
+    "author_role": {
+      "type": "string",
+      "description": "Role of the author (custom_role or system_role label)"
+    },
+    "author_type": {
+      "type": "string",
+      "enum": [
+        "customer",
+        "agent",
+        "system"
+      ],
+      "default": "customer",
+      "description": "Whether the author is the ticket submitter, a support agent, or the system"
+    },
+    "is_internal": {
+      "type": "boolean",
+      "default": false,
+      "description": "Internal notes are visible only to system owner and support agents"
+    },
+    "body": {
+      "type": "string",
+      "description": "Message body text"
+    },
+    "message_type": {
+      "type": "string",
+      "enum": [
+        "message",
+        "status_change",
+        "assignment",
+        "internal_note",
+        "system_note",
+        "satisfaction",
+        "auto_close"
+      ],
+      "default": "message",
+      "description": "Type of message \u2014 drives rendering and system behavior"
+    },
+    "metadata": {
+      "type": "object",
+      "default": {},
+      "description": "Structured data for non-message types: { old_status, new_status, assigned_to_name, rating, reason }"
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "File URIs of attachments (private storage)"
+    }
+  },
+  "required": [
+    "club_id",
+    "ticket_id",
+    "body",
+    "author_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.is_internal": {
+                "$ne": true
+              }
+            },
+            {
+              "$or": [
+                {
+                  "$and": [
+                    {
+                      "data.club_id": "{{user.data.club_id}}"
+                    },
+                    {
+                      "$or": [
+                        {
+                          "user_condition": {
+                            "custom_role": "club_admin"
+                          }
+                        },
+                        {
+                          "user_condition": {
+                            "custom_role": "club_director"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "created_by_id": "{{user.id}}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.is_internal": {
+                "$ne": true
+              }
+            },
+            {
+              "$or": [
+                {
+                  "$and": [
+                    {
+                      "data.club_id": "{{user.data.club_id}}"
+                    },
+                    {
+                      "$or": [
+                        {
+                          "user_condition": {
+                            "custom_role": "club_admin"
+                          }
+                        },
+                        {
+                          "user_condition": {
+                            "custom_role": "club_director"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "created_by_id": "{{user.id}}"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

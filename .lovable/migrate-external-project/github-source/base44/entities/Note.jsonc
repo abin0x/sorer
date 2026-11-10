@@ -1,0 +1,76 @@
+{
+  "name": "Note",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this note belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the note (used for imports/updates)"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "ID of the associated program"
+    },
+    "content": {
+      "type": "string",
+      "description": "Note content"
+    }
+  },
+  "required": [
+    "program_id",
+    "content"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

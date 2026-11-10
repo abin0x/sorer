@@ -1,0 +1,105 @@
+{
+  "source": "https://github.com/AdiSal73/club-rudder-os",
+  "branch": "main",
+  "commit": "125385a9717710af79bfb4498ad6765fdc7df8f0",
+  "capabilities": [
+    {
+      "capability": "code",
+      "source": "108 React/Base44 pages; 165 backend functions",
+      "outcome": "Inspected GitHub main snapshot retained; tenant directory ported and URL selection adapted to existing console; Supabase/TanStack preserved",
+      "status": "baseline_applied",
+      "next_action": "Port remaining changed pages and services individually; do not replace Supabase/TanStack bootstrap"
+    },
+    {
+      "capability": "schema",
+      "source": "168 Base44 entity definitions",
+      "outcome": "Partial migration: tenant_modules, module_catalogs and entitlement_events restored with club-isolated reads and platform-admin writes; storage reads verified, real-owner saving remains unverified",
+      "status": "pending",
+      "next_action": "Compare new entities and columns with existing Supabase schema before activating their workflows"
+    },
+    {
+      "capability": "records",
+      "source": "GitHub archive contains no record exports; existing app already uses Supabase",
+      "outcome": "preserve existing Supabase records",
+      "status": "pending",
+      "next_action": "Verify coverage against production exports; no database overwrite"
+    },
+    {
+      "capability": "auth identities",
+      "source": "Base44 auth; existing app uses Supabase",
+      "outcome": "migrate",
+      "status": "pending",
+      "next_action": "Preserve current Supabase auth and verify migrated identities; no password/session import"
+    },
+    {
+      "capability": "authorization",
+      "source": "Base44 roles and memberships",
+      "outcome": "preserve current Supabase isolation policies",
+      "status": "pending",
+      "next_action": "Verify authenticated owner and tenant isolation; external unmanaged auth prevents automatic session minting"
+    },
+    {
+      "capability": "uploaded file bytes",
+      "source": "No file export bundled",
+      "outcome": "retain current storage",
+      "status": "pending",
+      "next_action": "Verify source asset coverage separately"
+    },
+    {
+      "capability": "external providers",
+      "source": "Stripe, QuickBooks, Resend, Wix, social, AI",
+      "outcome": "preserve compatible providers and existing club integrations",
+      "status": "pending",
+      "next_action": "Adapt each new source call; existing finance/email portal is retained"
+    },
+    {
+      "capability": "public endpoints",
+      "source": "Base44 backend functions",
+      "outcome": "preserve external callers through adapted server routes",
+      "status": "pending",
+      "next_action": "Inventory and port source public handlers before cutover"
+    },
+    {
+      "capability": "callbacks",
+      "source": "QuickBooks and source auth callbacks",
+      "outcome": "retain current QuickBooks callback; replace Base44 auth with Supabase",
+      "status": "pending",
+      "next_action": "Verify callbacks with provider accounts"
+    },
+    {
+      "capability": "webhooks",
+      "source": "Stripe and Wix",
+      "outcome": "preserve",
+      "status": "pending",
+      "next_action": "Port and verify signatures and reconciliation before changing dashboard URLs"
+    },
+    {
+      "capability": "schedules",
+      "source": "Base44 workflows and functions",
+      "outcome": "preserve",
+      "status": "pending",
+      "next_action": "Inventory workflow schedules and recreate execution"
+    },
+    {
+      "capability": "secrets",
+      "source": "Provider variable names detected in source",
+      "outcome": "retain existing secure configuration",
+      "status": "pending",
+      "next_action": "Request only missing provider-owned secrets securely when corresponding verification is ready"
+    },
+    {
+      "capability": "cutover",
+      "source": "GitHub main snapshot",
+      "outcome": "manual source baseline, not automatic Git sync",
+      "status": "pending",
+      "next_action": "Complete capability migration and verify before publication"
+    },
+    {
+      "capability": "verification",
+      "source": "Current app and GitHub snapshot",
+      "outcome": "Tenant selection tests passed; console redirects signed-out users to login; connections sign-in boundary verified; no browser runtime errors",
+      "status": "partially_verified",
+      "next_action": "Authenticated tenant switching remains unverified because Supabase is external unmanaged; full newer workflows still require adaptation"
+    }
+  ]
+}

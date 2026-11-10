@@ -1,0 +1,106 @@
+{
+  "name": "ExpenseNotificationSettings",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) these settings belong to. One record per club."
+    },
+    "reminder_days": {
+      "type": "number",
+      "default": 3,
+      "description": "Days a report sits in submitted/in_review before approvers get a reminder notification."
+    },
+    "escalation_days": {
+      "type": "number",
+      "default": 7,
+      "description": "Days a report sits unresolved before the club director is escalated to."
+    },
+    "batch_window_minutes": {
+      "type": "number",
+      "default": 15,
+      "description": "Window for batching approver notifications into one digest email."
+    },
+    "weekly_digest_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether a weekly expense summary is emailed to bookkeepers/admins."
+    },
+    "weekly_digest_day": {
+      "type": "string",
+      "enum": [
+        "monday",
+        "tuesday",
+        "wednesday",
+        "thursday",
+        "friday",
+        "saturday",
+        "sunday"
+      ],
+      "default": "monday",
+      "description": "Day of the week the weekly digest is sent."
+    },
+    "monthly_digest_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a monthly expense summary is emailed to bookkeepers/admins."
+    },
+    "from_name": {
+      "type": "string",
+      "description": "Sender name override for expense notification emails. Blank = club name."
+    }
+  },
+  "required": [
+    "club_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

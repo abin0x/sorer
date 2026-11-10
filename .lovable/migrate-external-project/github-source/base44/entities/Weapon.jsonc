@@ -1,0 +1,43 @@
+{
+  "name": "Weapon",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Weapon name"
+    },
+    "weapon_type": {
+      "type": "string",
+      "description": "Type (Melee, Ranged)"
+    },
+    "weapon_category": {
+      "type": "string",
+      "description": "Category (Simple, Martial)"
+    },
+    "damage_dice": {
+      "type": "string",
+      "description": "Damage dice (e.g., 1d6)"
+    },
+    "damage_type": {
+      "type": "string",
+      "description": "Damage type (Bludgeoning, Piercing, Slashing)"
+    },
+    "range": {
+      "type": "string",
+      "description": "Range for ranged weapons"
+    },
+    "properties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Weapon properties (Finesse, Light, Heavy, etc.)"
+    },
+    "description": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

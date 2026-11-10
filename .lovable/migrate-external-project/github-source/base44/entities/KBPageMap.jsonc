@@ -1,0 +1,78 @@
+{
+  "name": "KBPageMap",
+  "type": "object",
+  "properties": {
+    "page_path": {
+      "type": "string",
+      "description": "App page path, e.g. /Reports"
+    },
+    "article_slug": {
+      "type": "string",
+      "description": "Slug of the article the '?' icon opens"
+    }
+  },
+  "required": [
+    "page_path",
+    "article_slug"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

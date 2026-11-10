@@ -1,0 +1,44 @@
+{
+  "description": "Daily check for due report email schedules \u2014 sends scoped CSV to each recipient",
+  "name": "Report Schedule Runner",
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 7 * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "report_schedule_runner",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_schedules": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "run-report-schedules"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Run due report schedules",
+            "description": "Emails scoped CSV to each recipient"
+          }
+        }
+      }
+    ]
+  }
+}

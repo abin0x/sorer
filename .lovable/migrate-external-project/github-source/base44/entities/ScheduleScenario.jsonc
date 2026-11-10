@@ -1,0 +1,144 @@
+{
+  "name": "ScheduleScenario",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this scenario belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Scenario name (e.g. 'Fall 2026 Draft A')"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "generating",
+        "ready",
+        "published",
+        "archived"
+      ],
+      "default": "draft",
+      "description": "Scenario lifecycle: draft = being configured, generating = algorithm running, ready = generated and reviewable, published = bookings created, archived = superseded"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season string (e.g. 2026-2027)"
+    },
+    "config": {
+      "type": "object",
+      "default": {},
+      "description": "Wizard inputs: { team_prefs: { [team_id]: { sessions_per_week, session_length_min, preferred_days, coach_ids } }, coach_availability: { [coach_id]: { mon: [{start, end}], ... } }, platform_priorities: [platform_id], mode: 'strict'|'weighted', hard_rules: {...}, soft_prefs: {...}, grid_counts: { '11v11': 8, ... }, latest_end_by_age: { 'U10': 1140, ... }, season_start, season_end, weeks }"
+    },
+    "sessions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Generated weekly template sessions: { key, team_id, team_name, platform_name, format, gender, age_group, field_id, field_name, facility_name, day, start_min, end_min, start_time, end_time, grid_label, coach_names, locked, why_here }"
+    },
+    "scorecard": {
+      "type": "object",
+      "default": {},
+      "description": "Quality metrics: { percent_placed, total_sessions, placed_count, unscheduled_count, coach_gaps, facility_switches, fairness_score }"
+    },
+    "unscheduled": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Sessions that could not be placed: { team_id, team_name, reason }"
+    },
+    "locked_session_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Session keys that are locked (stay fixed when re-running the generator)"
+    },
+    "run_log": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Audit trail: { timestamp, user_name, action, status, detail }"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published_by": {
+      "type": "string",
+      "description": "User ID who published this scenario"
+    },
+    "published_by_name": {
+      "type": "string"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "User ID who created this scenario"
+    },
+    "created_by_name": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "club_id",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

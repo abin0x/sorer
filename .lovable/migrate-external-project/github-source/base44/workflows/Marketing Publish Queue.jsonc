@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/10 * * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Every 10 minutes: publishes approved posts whose scheduled time has arrived. club_feed posts go live directly; external platforms publish via Ayrshare. Retries up to 3 times, then marks Failed and notifies the marketing manager. Never publishes unapproved content.",
+  "name": "Marketing Publish Queue",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "marketing_publish_queue",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "publish_due": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "publish-queue",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Publish due posts",
+            "description": "Publishes approved posts whose scheduled time has arrived"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,498 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Default palette — indigo primary / sky accent. Overridden at runtime
+       by TenantBrandingProvider from the SaaSAdmin Config tab (system_theme
+       AppConfig row). These are just the stylesheet fallbacks. */
+    --background: 0 0% 100%;
+    --foreground: 213 59% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 213 59% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 59% 11%;
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 213 40% 20%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 45%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 68% 53%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 14% 91%;
+    --input: 220 14% 91%;
+    --ring: 243 75% 59%;
+    --chart-1: 243 75% 59%;
+    --chart-2: 199 89% 48%;
+    --chart-3: 210 70% 55%;
+    --chart-4: 280 55% 60%;
+    --chart-5: 340 60% 55%;
+    /* 12px card radius (rounded-lg / card surfaces); md = 10px, sm = 8px. */
+    --radius: 0.75rem;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 213 20% 35%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 96%;
+    --sidebar-accent-foreground: 213 40% 20%;
+    --sidebar-border: 220 14% 91%;
+    --sidebar-ring: 243 75% 59%;
+    /* Modular surface tokens for data-dense cards */
+    --surface-1: 220 14% 97%;
+    --surface-2: 220 14% 94%;
+    --surface-border: 220 14% 88%;
+
+    /* ===== Three-Layer Color System ===== */
+
+    /* Layer 1: Primitives (locked, never tenant-themed) */
+    --neutral-0: 255 255 255;
+    --neutral-50: 248 250 252;
+    --neutral-100: 241 245 249;
+    --neutral-200: 226 232 240;
+    --neutral-400: 148 163 184;
+    --neutral-600: 71 85 105;
+    --neutral-800: 30 41 59;
+    --neutral-900: 15 23 42;
+    --success-50: 236 253 243;
+    --success-500: 18 161 80;
+    --success-700: 10 107 52;
+    --warning-50: 255 248 235;
+    --warning-500: 232 163 23;
+    --warning-700: 146 95 0;
+    --danger-50: 254 242 242;
+    --danger-500: 220 38 38;
+    --danger-700: 153 27 27;
+    --info-50: 239 246 255;
+    --info-500: 37 99 235;
+    --info-700: 30 64 175;
+    --cat-1: 100 116 139;
+    --cat-2: 14 116 144;
+    --cat-3: 79 70 229;
+    --cat-4: 180 83 9;
+    --cat-5: 190 18 60;
+    --cat-6: 4 120 87;
+
+    /* Layer 2: Tenant tokens (injected at runtime by TenantBrandingProvider) */
+    --brand-500: 80 72 229;
+    --accent-500: 37 99 235;
+    --brand-on: 255 255 255;
+    --brand-50: 243 242 254;
+    --brand-100: 230 227 252;
+    --brand-600: 64 57 206;
+    --brand-700: 48 43 165;
+    --brand-ring: 80 72 229;
+
+    /* Layer 3: Semantic aliases (what components use) */
+    --action-primary: var(--brand-500);
+    --action-primary-text: var(--brand-on);
+    --action-primary-hover: var(--brand-600);
+    --focus-ring: var(--brand-ring);
+    --selected-bg: var(--brand-50);
+    --selected-border: var(--brand-500);
+    --selected-text: var(--brand-700);
+    --surface-page: var(--neutral-100);
+    --surface-card: var(--neutral-0);
+    --border-subtle: var(--neutral-200);
+    --text-primary: var(--neutral-900);
+    --text-secondary: var(--neutral-600);
+  }
+
+  .dark {
+    /* Adisal-inspired dark theme — near-black charcoal with vibrant accents */
+    --background: 0 0% 6%;
+    --foreground: 0 0% 92%;
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 92%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 92%;
+    --primary: 152 30% 52%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 92%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 58%;
+    --accent: 28 70% 58%;
+    --accent-foreground: 0 0% 6%;
+    --destructive: 358 55% 52%;
+    --destructive-foreground: 0 0% 96%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 152 30% 52%;
+    --chart-1: 174 70% 45%;
+    --chart-2: 28 80% 55%;
+    --chart-3: 210 70% 55%;
+    --chart-4: 280 55% 62%;
+    --chart-5: 340 60% 60%;
+    --sidebar-background: 0 0% 8%;
+    --sidebar-foreground: 0 0% 72%;
+    --sidebar-primary: 152 30% 52%;
+    --sidebar-primary-foreground: 0 0% 6%;
+    --sidebar-accent: 0 0% 16%;
+    --sidebar-accent-foreground: 0 0% 92%;
+    --sidebar-border: 0 0% 18%;
+    --sidebar-ring: 152 30% 52%;
+    --surface-1: 0 0% 12%;
+    --surface-2: 0 0% 16%;
+    --surface-border: 0 0% 22%;
+
+    /* Three-Layer Color System — dark mode semantic overrides */
+    --surface-page: var(--neutral-900);
+    --surface-card: var(--neutral-800);
+    --border-subtle: var(--neutral-800);
+    --text-primary: var(--neutral-0);
+    --text-secondary: var(--neutral-400);
+    --selected-bg: var(--brand-700);
+    --selected-text: var(--neutral-0);
+  }
+
+  .force-light {
+    --background: 0 0% 100%;
+    --foreground: 213 59% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 213 59% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 213 59% 11%;
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 213 40% 20%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 215 16% 45%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 68% 53%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 14% 91%;
+    --input: 220 14% 91%;
+    --ring: 243 75% 59%;
+    color-scheme: light;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html, body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  /* Prevent horizontal scroll on mobile webviews */
+  html, body {
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  /* Prevent iOS auto-zoom on focus: inputs must be >= 16px */
+  @media (max-width: 640px) {
+    input, select, textarea {
+      /* 1rem, not 16px: still >=16px so iOS never auto-zooms, but it follows
+         the user's system font size (see "System font scaling" below). */
+      font-size: 1rem !important;
+    }
+  }
+  /* Ensure tap targets are at least 44px on touch devices — includes the
+     options and items inside dropdowns and select menus. */
+  @media (pointer: coarse) {
+    button, [role="button"], a.btn, .touch-target,
+    [role="option"], [role="menuitem"], [role="menuitemcheckbox"], [role="menuitemradio"] {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
+  /* Lazy-load images by default */
+  img {
+    loading: lazy;
+  }
+}
+
+/* ===== Native mobile safe areas (notch / home indicator) =====
+   The outermost container respects the device safe areas, so no content is
+   ever hidden behind the status bar or the home indicator. Insets resolve to
+   0px on desktop and non-notched devices, so nothing shifts there. */
+:root {
+  --safe-top: env(safe-area-inset-top, 0px);
+  /* 12px floor: on devices without a home indicator the bar still keeps
+     breathing room, and on notched devices the inset wins. */
+  --safe-bottom: max(env(safe-area-inset-bottom, 0px), 12px);
+}
+
+/* Insets are applied per region — never on <body>, which is what double-pads
+   against the header and the fixed bottom tab bar.
+     .safe-top            → the header / navbar container only
+     .safe-bottom         → fixed bottom bars (tab bar, sticky CTAs)
+     .content-safe-bottom → scrollable content, so it clears the tab bar
+                            (4rem tall, mobile only) plus the device inset. */
+.safe-top { padding-top: env(safe-area-inset-top, 0px); }
+/* Fixed bottom bars / bottom sheets: never a bare env() — max() guarantees at
+   least 12px so content is never flush against the home indicator. */
+.safe-bottom { padding-bottom: var(--safe-bottom); }
+.content-safe-bottom { padding-bottom: calc(4rem + var(--safe-bottom)); }
+@media (min-width: 640px) {
+  .content-safe-bottom { padding-bottom: 0; }
+}
+
+/* ===== WebView / touch refinements =====
+   Page transitions are pure CSS (opacity + transform only, so the compositor
+   does the work) — no JS animation loop runs on route change. */
+@keyframes routeFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+.route-fade { animation: routeFade 0.2s ease-out both; }
+
+/* Drill-down slide: entering a detail view (from the right) and coming back out
+   of one (the list returns from the left, so the detail view reads as leaving to
+   the right). Transform + opacity only, so the compositor does the work, and
+   both are skipped for reduced-motion users. Top-level and tab navigation keeps
+   the plain fade above. */
+@keyframes routeSlideFromRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes routeSlideFromLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to { opacity: 1; transform: none; }
+}
+.route-slide-forward { animation: routeSlideFromRight 0.26s ease-out both; }
+.route-slide-back { animation: routeSlideFromLeft 0.24s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .route-slide-forward, .route-slide-back { animation: none; }
+}
+
+/* Prevent accidental text selection app-wide; form fields and long-form
+   content stay selectable. */
+html, body {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+input, textarea, select, [contenteditable="true"], .select-text, .kb-body, .ql-editor {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Touch devices have no hover state, so anything revealed only by group-hover
+   would stay permanently invisible there — keep it visible instead. */
+@media (hover: none) {
+  [class*="group-hover:opacity-100"] { opacity: 1 !important; }
+  [class*="group-hover:translate-y-0"] { transform: none !important; }
+}
+
+/* ===== Native-like press feedback =====
+   Touch devices have no hover, and the platform tap highlight is suppressed
+   above, so every tappable control dims while pressed: the tap always
+   registers visually (same idea as an Android ripple, without the JS). */
+@media (pointer: coarse) {
+  button:not(:disabled):active,
+  [role="button"]:not([aria-disabled="true"]):active,
+  [role="option"]:active,
+  [role="menuitem"]:active,
+  [role="menuitemradio"]:active,
+  [role="menuitemcheckbox"]:active,
+  [role="tab"]:active,
+  a:active,
+  /* Clickable rows and tiles are plain divs with a pointer cursor. */
+  .cursor-pointer:active { opacity: 0.6; }
+}
+
+/* ===== Bottom-sheet pickers (mobile selects) =====
+   The sheet slides up from the bottom edge; reduced-motion users get it
+   instantly instead. */
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.sheet-slide-up { animation: sheetUp 0.22s ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .sheet-slide-up { animation: none; }
+}
+
+/* ===== System font scaling =====
+   rem is the app's text unit, so type and spacing follow the user's system
+   font size. text-size-adjust stays at 100% (never 'none') to keep it. */
+html { font-size: 100%; }
+
+/* ===== Wellness helpers (light mode) ===== */
+.wellness-bg {
+  background:
+    radial-gradient(ellipse at top left, hsl(152 40% 96% / 0.6), transparent 50%),
+    radial-gradient(ellipse at bottom right, hsl(28 50% 96% / 0.5), transparent 50%),
+    hsl(var(--background));
+}
+.dark .wellness-bg {
+  background:
+    radial-gradient(ellipse at top left, hsl(152 30% 16% / 0.5), transparent 50%),
+    radial-gradient(ellipse at bottom right, hsl(28 40% 14% / 0.4), transparent 50%),
+    hsl(var(--background));
+}
+
+.glass-wellness {
+  background: hsl(0 0% 100% / 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(40 15% 90% / 0.8);
+}
+.dark .glass-wellness {
+  background: hsl(0 0% 12% / 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid hsl(0 0% 22% / 0.8);
+}
+
+.gradient-bg {
+  background: hsl(var(--background));
+}
+
+.glass-effect {
+  background: hsl(var(--card) / 0.8);
+  backdrop-filter: blur(12px);
+}
+
+.soft-shadow {
+  box-shadow: 0 1px 3px hsl(200 18% 20% / 0.04), 0 8px 24px hsl(200 18% 20% / 0.06);
+}
+
+.soft-shadow-lg {
+  box-shadow: 0 2px 8px hsl(200 18% 20% / 0.05), 0 16px 40px hsl(200 18% 20% / 0.08);
+}
+
+.btn-modern {
+  box-shadow: 0 4px 14px hsl(var(--primary) / 0.3);
+}
+
+/* ===== Adisal-inspired modular dashboard helpers ===== */
+.adisal-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.adisal-card:hover {
+  border-color: hsl(var(--primary) / 0.4);
+}
+
+.metric-card {
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: calc(var(--radius) - 2px);
+  padding: 1rem;
+  transition: transform 0.15s ease, border-color 0.2s ease;
+}
+.metric-card:hover {
+  transform: translateY(-2px);
+  border-color: hsl(var(--primary) / 0.5);
+}
+
+.surface-tile {
+  background: hsl(var(--surface-1));
+  border: 1px solid hsl(var(--surface-border));
+  border-radius: calc(var(--radius) - 4px);
+}
+
+.section-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: hsl(var(--muted-foreground));
+}
+
+.data-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+/* Accent status pills */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+/* Progress bar track refinement */
+.progress-track {
+  background: hsl(var(--surface-2));
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(var(--muted-foreground) / 0.3); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--primary) / 0.5); }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeInUp { animation: fadeInUp 0.5s ease-out both; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ===== Public marketing pages — cinematic matchday ===== */
+@keyframes pubRise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes pubSlow { from { transform: scale(1.12); opacity: 0.3; } to { transform: scale(1); opacity: 1; } }
+@keyframes pubGlow { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+.pub-slow { animation: pubSlow 14s ease-out both; }
+.pub-glow { animation: pubGlow 5s infinite; }
+.pub-rise { animation: pubRise 1.1s both; }
+
+.pub-display { text-transform: uppercase; font-weight: 900; letter-spacing: -0.01em; line-height: 1.05; }
+.pub-muted { color: #64748b; }
+.dark .pub-muted { color: #a9a495; }
+.pub-eye { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase; color: hsl(var(--primary)); }
+
+.pub-card { background: hsl(var(--card)); border: 1px solid hsl(var(--border)); border-radius: 16px; transition: border-color 0.25s, box-shadow 0.25s; }
+.pub-card:hover { border-color: hsl(var(--primary)); box-shadow: 0 0 30px hsl(var(--primary) / 0.18); }
+
+.pub-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 26px; border-radius: 8px; font-weight: 800; font-size: 0.9375rem; line-height: 1; border: 2px solid hsl(var(--primary)); background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); cursor: pointer; transition: box-shadow 0.25s, background 0.25s, color 0.25s; }
+.pub-btn:hover { box-shadow: 0 0 28px hsl(var(--primary) / 0.55); }
+.pub-btn:active { background: hsl(var(--primary) / 0.85); }
+.pub-btn.gh { background: transparent; color: inherit; border-color: currentColor; }
+.pub-btn.gh:hover { background: hsl(var(--primary) / 0.1); box-shadow: none; }
+.pub-btn.sm { padding: 8px 16px; font-size: 0.8125rem; }
+.pub-btn:focus-visible, .pub-link:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 3px; }
+
+.pub-link { transition: color 0.2s; }
+.pub-link:hover { color: hsl(var(--primary)); }
+
+/* ===== Knowledge Base article body ===== */
+.kb-body { line-height: 1.7; font-size: 1rem; overflow-wrap: anywhere; }
+.kb-body h2 { font-size: 1.25rem; font-weight: 700; margin: 1.5rem 0 0.5rem; }
+.kb-body h3 { font-size: 1.1rem; font-weight: 600; margin: 1.25rem 0 0.4rem; }
+.kb-body p { margin: 0.6rem 0; }
+.kb-body ol { list-style: decimal; padding-left: 1.4rem; margin: 0.6rem 0; }
+.kb-body ul { list-style: disc; padding-left: 1.4rem; margin: 0.6rem 0; }
+.kb-body li { margin: 0.3rem 0; }
+.kb-body a { color: hsl(var(--primary)); text-decoration: underline; }
+.kb-body img { max-width: 100%; height: auto; border-radius: 12px; border: 1px solid hsl(var(--border)); margin: 0.75rem 0; }
+.kb-body iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; border: 0; border-radius: 12px; margin: 0.75rem 0; }
+.kb-editor .ql-editor { min-height: 280px; font-size: 1rem; }
+.kb-editor .ql-toolbar { border-radius: 8px 8px 0 0; }
+.kb-editor .ql-container { border-radius: 0 0 8px 8px; }
+
+/* ===== Micro-label text sizes =====
+   Chips, badges, table captions and eyebrow labels use pixel-named utilities
+   (text-[10px], text-[9px], …). Pixels ignore the user's system font size, so
+   each of those values is re-expressed in rem below: identical at the default
+   root size, but they now honour system font scaling. Declared after
+   @tailwind utilities so they win against the generated rules. New text and
+   any new size should use a rem value directly (e.g. text-[0.75rem]). */
+.text-\[6px\]  { font-size: 0.375rem; }  /* 6px  at default root */
+.text-\[7px\]  { font-size: 0.4375rem; } /* 7px  */
+.text-\[8px\]  { font-size: 0.5rem; }    /* 8px  */
+.text-\[9px\]  { font-size: 0.5625rem; } /* 9px  */
+.text-\[10px\] { font-size: 0.625rem; }  /* 10px */
+.text-\[11px\] { font-size: 0.6875rem; } /* 11px */

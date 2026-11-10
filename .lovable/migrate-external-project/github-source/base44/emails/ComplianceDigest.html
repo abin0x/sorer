@@ -1,0 +1,39 @@
+<mjml>
+  <mj-head>
+    <mj-title>Weekly Compliance Digest — {{season}}</mj-title>
+    <mj-preview>Your weekly coach compliance summary for the {{season}} season.</preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Helvetica, Arial, sans-serif" />
+      <mj-section background-color="#ffffff" padding="0 36px" />
+      <mj-text color="#0f172a" font-size="15px" line-height="1.6" padding="0" />
+      <mj-button background-color="#5048e5" border-radius="8px" font-weight="700" inner-padding="14px 28px" align="left" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <mj-section padding="40px 36px 12px"><mj-column>
+      <mj-text font-size="13px" font-weight="700" letter-spacing="0.12em" text-transform="uppercase" color="#5048e5">Club Rudder · Compliance</mj-text>
+      <mj-text font-size="28px" font-weight="800" line-height="1.15" padding-top="8px">Weekly Compliance Digest</mj-text>
+      <mj-text font-size="15px" color="#64748b" padding-top="4px">{{season}} season · {{bodies}}</mj-text>
+    </mj-column></mj-section>
+
+    <mj-section padding="12px 36px"><mj-column>
+      <mj-text font-weight="700" font-size="16px">At a glance</mj-text>
+      <mj-table cellpadding="8" css-class="digest-table" container-background-color="#f8fafc">
+        <tr style="border-bottom:1px solid #e5e7eb"><td style="padding:10px 14px">Coaches</td><td style="text-align:right;font-weight:700">{{stats.total}}</td></tr>
+        <tr style="border-bottom:1px solid #e5e7eb"><td style="padding:10px 14px;color:#059669">Fully compliant</td><td style="text-align:right;font-weight:700;color:#059669">{{stats.compliant}}</td></tr>
+        <tr style="border-bottom:1px solid #e5e7eb"><td style="padding:10px 14px;color:#d97706">Pending review</td><td style="text-align:right;font-weight:700;color:#d97706">{{stats.pending}}</td></tr>
+        <tr style="border-bottom:1px solid #e5e7eb"><td style="padding:10px 14px;color:#ea580c">Flagged</td><td style="text-align:right;font-weight:700;color:#ea580c">{{stats.flagged}}</td></tr>
+        <tr style="border-bottom:1px solid #e5e7eb"><td style="padding:10px 14px;color:#dc2626">Missing</td><td style="text-align:right;font-weight:700;color:#dc2626">{{stats.missing}}</td></tr>
+        <tr><td style="padding:10px 14px;color:#dc2626">Expired</td><td style="text-align:right;font-weight:700;color:#dc2626">{{stats.expired}}</td></tr>
+      </mj-table>
+    </mj-column></mj-section>
+
+    <mj-section padding="12px 36px"><mj-column>
+      <mj-button href="https://clubrudder.com/Compliance">Open Compliance Dashboard</mj-button>
+    </mj-column></mj-section>
+
+    <mj-section padding="8px 36px 40px"><mj-column>
+      <mj-text font-size="12px" color="#94a3b8">You are receiving this because you are a club director or admin. This digest is sent weekly.</mj-text>
+    </mj-column></mj-section>
+  </mj-body>
+</mjml>

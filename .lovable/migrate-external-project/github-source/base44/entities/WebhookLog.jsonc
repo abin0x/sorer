@@ -1,0 +1,109 @@
+{
+  "name": "WebhookLog",
+  "type": "object",
+  "properties": {
+    "provider": {
+      "type": "string",
+      "default": "stripe",
+      "description": "Source of the webhook event"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "Provider event id (evt_...) \u2014 the idempotency key"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "e.g. checkout.session.completed, invoice.paid"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Tenant the event resolved to, when known"
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Facility Invoice matched to this event, when known"
+    },
+    "payload_summary": {
+      "type": "object",
+      "default": {},
+      "description": "Minimal subset of the event for audit \u2014 never the full payload"
+    },
+    "processed": {
+      "type": "boolean",
+      "default": false
+    },
+    "processed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "error": {
+      "type": "string"
+    },
+    "received_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

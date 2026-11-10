@@ -1,0 +1,113 @@
+{
+  "name": "TrainingVideo",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this training video belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Video title"
+    },
+    "tenet": {
+      "type": "string",
+      "enum": [
+        "explosive",
+        "precise",
+        "insightful",
+        "combative"
+      ],
+      "description": "E.P.I.C. tenet"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "default": "intermediate"
+    },
+    "thumbnail_url": {
+      "type": "string",
+      "description": "Thumbnail image URL"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "Video URL (YouTube or hosted)"
+    },
+    "author": {
+      "type": "string",
+      "description": "Video author / presenter"
+    },
+    "duration": {
+      "type": "string",
+      "description": "Video duration (e.g. 04:15)"
+    },
+    "category": {
+      "type": "string",
+      "description": "Category for grouping"
+    },
+    "description": {
+      "type": "string"
+    },
+    "order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

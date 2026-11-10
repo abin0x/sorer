@@ -1,0 +1,242 @@
+{
+  "name": "Payment",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this payment belongs to"
+    },
+    "source_type": {
+      "type": "string",
+      "enum": [
+        "registration",
+        "offer",
+        "tryout_event",
+        "tryout_registration",
+        "club_event",
+        "other"
+      ],
+      "default": "other",
+      "description": "What this payment was collected against"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the Registration, Offer, TryoutFinalRegistration, TryoutRegistration, EventRegistration, or ClubEvent record"
+    },
+    "source_label": {
+      "type": "string",
+      "description": "Denormalized description of the source (e.g. program or team name)"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the related Player, if applicable"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "guardian_name": {
+      "type": "string",
+      "description": "Guardian full name (denormalized)"
+    },
+    "family_email": {
+      "type": "string",
+      "description": "Payer/family email \u2014 used to find or create the matching QuickBooks Customer and avoid duplicates"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Payment amount (positive for charges, negative for refunds)"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD",
+      "description": "Currency code"
+    },
+    "processor_id": {
+      "type": "string",
+      "description": "ID of the PaymentProcessor connection used"
+    },
+    "processor_name": {
+      "type": "string",
+      "description": "Processor display name (denormalized)"
+    },
+    "payment_method": {
+      "type": "string",
+      "enum": [
+        "card",
+        "ach",
+        "cash",
+        "check",
+        "other"
+      ],
+      "default": "card",
+      "description": "How the payment was made"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "pending_setup",
+        "active",
+        "paid_in_full",
+        "past_due",
+        "payment_failed",
+        "on_hold",
+        "waived",
+        "refunded",
+        "cancelled"
+      ],
+      "default": "paid_in_full",
+      "description": "Payment status"
+    },
+    "transaction_reference": {
+      "type": "string",
+      "description": "External transaction / confirmation reference number (Stripe charge or refund id)"
+    },
+    "payment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the payment was made or recorded"
+    },
+    "recorded_by": {
+      "type": "string",
+      "description": "Email of the staff member who recorded this payment"
+    },
+    "promo_code": {
+      "type": "string",
+      "description": "Promo code applied to this payment, if any"
+    },
+    "discount_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Discount applied by a promo code on this payment"
+    },
+    "is_refund": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if this ledger entry is a refund (negative amount) rather than a charge"
+    },
+    "original_payment_id": {
+      "type": "string",
+      "description": "For refunds: ID of the original Payment ledger entry being refunded"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID of the Team this payment is attributed to (e.g. dues) \u2014 drives the QuickBooks Class on sync"
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team name (denormalized for display)"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "ID of the Location/branch this payment is attributed to \u2014 drives the QuickBooks Location on sync"
+    },
+    "branch_name": {
+      "type": "string",
+      "description": "Branch name (denormalized for display)"
+    },
+    "charge_type": {
+      "type": "string",
+      "enum": [
+        "dues",
+        "event",
+        "spiritwear",
+        "other"
+      ],
+      "default": "other",
+      "description": "What kind of charge this is, for QuickBooks income account mapping"
+    },
+    "stripe_fee": {
+      "type": "number",
+      "description": "Stripe processing fee for this charge, pulled from the balance transaction"
+    },
+    "net_amount": {
+      "type": "number",
+      "description": "Amount after the Stripe fee (amount - stripe_fee), what actually lands in the payout"
+    },
+    "stripe_payout_id": {
+      "type": "string",
+      "description": "Stripe payout ID this charge's net amount was included in, once paid out"
+    },
+    "qbo_entry_type": {
+      "type": "string",
+      "enum": [
+        "sales_receipt",
+        "refund_receipt",
+        "blocked",
+        "none"
+      ],
+      "default": "none",
+      "description": "What was posted to QuickBooks for this payment. 'blocked' = team or branch mapping missing, bookkeeper was alerted."
+    },
+    "qbo_entry_id": {
+      "type": "string",
+      "description": "QuickBooks SalesReceipt/RefundReceipt ID created for this payment"
+    },
+    "qbo_fee_entry_id": {
+      "type": "string",
+      "description": "QuickBooks Purchase (Expense) ID created for the Stripe fee on this payment"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this payment"
+    }
+  },
+  "required": [
+    "source_type",
+    "source_id",
+    "amount",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Training Calendar Sync",
+  "description": "Syncs training session bookings to Google Calendar in real-time \u2014 creates, updates, or deletes calendar events when training bookings change.",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Booking",
+      "events": [
+        "create",
+        "update",
+        "delete"
+      ]
+    },
+    "condition": "${ .trigger.data.type == \"training\" or .trigger.old_data.type == \"training\" }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "training_calendar_sync",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_booking": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sync-to-google-calendar",
+            "args": {
+              "entity_type": "booking",
+              "entity_id": "${ .trigger.entity_id }",
+              "event_type": "${ .trigger.event_type }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sync training to Google Calendar",
+            "description": "Creates, updates, or deletes the calendar event"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "name": "PlayerFeedback",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this feedback belongs to"
+    },
+    "note_id": {
+      "type": "string",
+      "description": "ID of the source PlayerNote this feedback was generated from"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player this feedback is about"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "feedback_text": {
+      "type": "string",
+      "description": "Editable feedback narrative (AI-generated, then human-edited)"
+    },
+    "strengths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Strengths identified in the feedback"
+    },
+    "development_priorities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Development priorities / areas to work on"
+    },
+    "recommended_videos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "video_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Video Library recommendations with a short reason each"
+    },
+    "suggested_goal_description": {
+      "type": "string",
+      "description": "Proposed development goal description"
+    },
+    "suggested_goal_target": {
+      "type": "string",
+      "description": "Proposed measurable target for the goal"
+    },
+    "goal_accepted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the coach accepted the suggested goal"
+    },
+    "tone": {
+      "type": "string",
+      "enum": [
+        "supportive",
+        "developmental",
+        "corrective"
+      ],
+      "default": "developmental",
+      "description": "Tone used for AI generation"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "approved",
+        "sent"
+      ],
+      "default": "draft",
+      "description": "Workflow status"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Email of the coach/director who generated the draft"
+    },
+    "approved_by": {
+      "type": "string",
+      "description": "Email of who approved the feedback"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the feedback was sent to player/parents"
+    }
+  },
+  "required": [
+    "player_id",
+    "feedback_text"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

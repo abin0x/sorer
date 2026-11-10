@@ -1,0 +1,97 @@
+{
+  "name": "EventOccurrence",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this occurrence belongs to"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "ID of the parent Event"
+    },
+    "occurrence_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Calendar date of this occurrence"
+    },
+    "timezone": {
+      "type": "string",
+      "description": "Timezone this occurrence's times are interpreted in (denormalized from the Event)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "cancelled",
+        "postponed"
+      ],
+      "default": "scheduled",
+      "description": "Status of this single occurrence"
+    },
+    "is_override": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when this occurrence was manually added outside the recurrence rule"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes specific to this occurrence"
+    }
+  },
+  "required": [
+    "club_id",
+    "event_id",
+    "occurrence_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

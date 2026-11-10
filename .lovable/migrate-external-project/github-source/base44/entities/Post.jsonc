@@ -1,0 +1,208 @@
+{
+  "name": "Post",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "Branch this post is scoped to (for feed filtering). Empty = club-wide."
+    },
+    "source_type": {
+      "type": "string",
+      "description": "club_event | tournament | tryout | game"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "event_title": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "tryout",
+        "tournament",
+        "match",
+        "registration",
+        "fundraiser",
+        "custom"
+      ]
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "campaign_role": {
+      "type": "string",
+      "enum": [
+        "teaser",
+        "reminder",
+        "day_of",
+        "live",
+        "recap",
+        "thank_you"
+      ]
+    },
+    "sequence_order": {
+      "type": "number"
+    },
+    "offset_days": {
+      "type": "number"
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "facebook",
+        "x",
+        "tiktok",
+        "linkedin",
+        "youtube",
+        "club_feed"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "tone": {
+      "type": "string"
+    },
+    "media_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "alt_text": {
+      "type": "string"
+    },
+    "hashtags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "approved",
+        "scheduled",
+        "published",
+        "failed"
+      ],
+      "default": "draft",
+      "description": "Content lifecycle: draft \u2192 in_review \u2192 approved \u2192 scheduled \u2192 published. failed = publish error."
+    },
+    "scheduled_for": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "published_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "platform_post_id": {
+      "type": "string"
+    },
+    "platform_post_url": {
+      "type": "string"
+    },
+    "metrics": {
+      "type": "object",
+      "default": {}
+    },
+    "attempts": {
+      "type": "number",
+      "default": 0
+    },
+    "approved_by": {
+      "type": "string"
+    },
+    "failure_reason": {
+      "type": "string"
+    },
+    "utm_link": {
+      "type": "string",
+      "description": "Tracking link with UTM params for this post"
+    },
+    "qr_code_url": {
+      "type": "string",
+      "description": "QR code image URL encoding the UTM link"
+    },
+    "image_brief": {
+      "type": "string",
+      "description": "AI image brief / prompt for this post's visual"
+    },
+    "brand_kit_id": {
+      "type": "string",
+      "description": "BrandKit used to generate this post"
+    },
+    "marketing_plan_id": {
+      "type": "string",
+      "description": "MarketingPlan this post belongs to"
+    }
+  },
+  "required": [
+    "club_id",
+    "platform",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "name": "PricingQuote",
+  "type": "object",
+  "properties": {
+    "branches": {
+      "type": "number",
+      "description": "Number of branches entered in the calculator"
+    },
+    "players": {
+      "type": "number",
+      "description": "Number of players entered in the calculator"
+    },
+    "tier_key": {
+      "type": "string",
+      "description": "Selected pricing tier key (fairway, regatta, flagship)"
+    },
+    "tier_name": {
+      "type": "string",
+      "description": "Selected pricing tier display name (denormalized)"
+    },
+    "selected_modules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Keys of the add-on modules selected"
+    },
+    "setup_total": {
+      "type": "number",
+      "description": "Setup fee x branches"
+    },
+    "player_total": {
+      "type": "number",
+      "description": "Per-player cost x players"
+    },
+    "module_total": {
+      "type": "number",
+      "description": "Final module cost after volume + tier discounts"
+    },
+    "grand_total": {
+      "type": "number",
+      "description": "Total Year 1 price"
+    },
+    "contact_name": {
+      "type": "string"
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email"
+    },
+    "club_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "contacted",
+        "converted",
+        "closed"
+      ],
+      "default": "new",
+      "description": "Lead follow-up status"
+    }
+  },
+  "required": [
+    "branches",
+    "players",
+    "tier_key",
+    "grand_total"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

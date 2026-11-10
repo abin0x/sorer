@@ -1,0 +1,123 @@
+{
+  "name": "StripeWebhookEvent",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Stripe event ID (evt_...) \u2014 used for idempotency / dedup"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Stripe event type (e.g. invoice.paid, customer.subscription.updated)"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Tenant resolved from the subscription metadata"
+    },
+    "processed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the event was successfully handled"
+    },
+    "processed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if processing failed"
+    },
+    "payload_summary": {
+      "type": "object",
+      "default": {},
+      "description": "Minimal subset of the event for audit (subscription ID, amount, etc.) \u2014 never the full payload"
+    }
+  },
+  "required": [
+    "event_id",
+    "event_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "name": "ValidationIssue",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string"
+    },
+    "staged_record_id": {
+      "type": "string"
+    },
+    "entity": {
+      "type": "string"
+    },
+    "source_file_id": {
+      "type": "string"
+    },
+    "source_row_number": {
+      "type": "number"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "error",
+        "warning",
+        "info"
+      ]
+    },
+    "rule": {
+      "type": "string"
+    },
+    "field": {
+      "type": "string"
+    },
+    "message": {
+      "type": "string"
+    },
+    "suggested_fix": {
+      "type": "string"
+    },
+    "issue_key": {
+      "type": "string",
+      "description": "record + rule + field, used to carry resolutions across re-validation"
+    },
+    "resolution": {
+      "type": "string",
+      "enum": [
+        "open",
+        "fixed",
+        "accepted",
+        "excluded"
+      ],
+      "default": "open"
+    },
+    "resolved_by": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "project_id",
+    "club_id",
+    "severity",
+    "rule"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,262 @@
+{
+  "name": "MigrationJob",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Authoritative originating club ID, fixed when the club admin submits the request"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name resolved from the originating Club record"
+    },
+    "competitor_source": {
+      "type": "string",
+      "enum": [
+        "teamsnap",
+        "sportsengine",
+        "sprocket",
+        "leagueapps",
+        "playmetrics",
+        "waresport",
+        "spreadsheet_other"
+      ],
+      "description": "The platform this club is migrating from. Determines which reusable mapping template is applied during auto-mapping."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_approval",
+        "draft",
+        "processing",
+        "client_review",
+        "support_review",
+        "needs_fixes",
+        "completed"
+      ],
+      "default": "draft",
+      "description": "pending_approval awaits system-owner permission; draft permits uploads; processing maps files; client_review lets the club fix auto-mapped issues before escalating; support_review awaits a specialist; needs_fixes returns the request; completed is live"
+    },
+    "files": {
+      "type": "object",
+      "default": {},
+      "description": "Uploaded source files keyed by type, each with file_uri and file_name"
+    },
+    "staging_data": {
+      "type": "object",
+      "default": {},
+      "description": "Auto-mapped guardians, players, teams, exceptions, duplicates, and categorized issues produced by the mapping template"
+    },
+    "preview_counts": {
+      "type": "object",
+      "default": {},
+      "description": "Record counts per data type"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Integrity warnings"
+    },
+    "team_sheet": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "age_group": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string"
+          },
+          "playing_format": {
+            "type": "string"
+          },
+          "season": {
+            "type": "string"
+          },
+          "location_id": {
+            "type": "string"
+          },
+          "coach_id": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Client-completed team metadata sheet \u2014 one entry per distinct team name from the export, filled in during the client_review step"
+    },
+    "client_decisions": {
+      "type": "object",
+      "default": {},
+      "description": "Client answers to migration decisions (club column meaning, leading account columns, cancelled registrations) collected during client_review"
+    },
+    "duplicate_decisions": {
+      "type": "object",
+      "default": {},
+      "description": "Client's per-group duplicate resolution: { 'g-1': 'merge'|'skip'|'delete', 'p-1': ... }. Applied during import to deduplicate guardians and players."
+    },
+    "client_submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the club submitted their reviewed data for specialist review"
+    },
+    "specialist_name": {
+      "type": "string",
+      "description": "Reviewing specialist name"
+    },
+    "specialist_notes": {
+      "type": "string",
+      "description": "Reviewer notes shown to the club"
+    },
+    "reviewed_by_user_id": {
+      "type": "string",
+      "description": "Reviewer user ID"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "commit_progress": {
+      "type": "object",
+      "default": {},
+      "description": "Resumable Go-Live commit state: phase (teams/guardians/players/links/done), index, imported counts, error log, and accumulated ID maps for cross-linking. Written by the approve action and updated by each commit_step call."
+    },
+    "imported_counts": {
+      "type": "object",
+      "default": {}
+    },
+    "error_log": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When files were submitted for mapping"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "created_by_user_id": {
+      "type": "string",
+      "description": "Authenticated club-admin requester, never the approving reviewer"
+    },
+    "requested_by_name": {
+      "type": "string"
+    },
+    "requested_by_email": {
+      "type": "string",
+      "format": "email"
+    },
+    "requested_by_role": {
+      "type": "string"
+    },
+    "requested_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "club_id",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "data.created_by_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

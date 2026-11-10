@@ -1,0 +1,151 @@
+{
+  "name": "Location",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this branch belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Branch name (e.g. Novi, Northville, Lansing)"
+    },
+    "role_description": {
+      "type": "string",
+      "description": "Strategic role of this branch (e.g. Core club Nexus, Regional branch)"
+    },
+    "branch_type": {
+      "type": "string",
+      "enum": [
+        "nexus",
+        "branch",
+        "regional",
+        "training"
+      ],
+      "default": "branch",
+      "description": "Category of branch within the club footprint"
+    },
+    "address": {
+      "type": "string",
+      "description": "Street address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state": {
+      "type": "string",
+      "default": "MI",
+      "description": "State"
+    },
+    "zip_code": {
+      "type": "string",
+      "description": "ZIP / postal code"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Branch contact phone number"
+    },
+    "facilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Fields / facilities used at this branch (e.g. Toca Wixom, Novi Athletic Facility)"
+    },
+    "branch_director_email": {
+      "type": "string",
+      "description": "Email of the Branch Director assigned to this branch"
+    },
+    "branch_director_name": {
+      "type": "string",
+      "description": "Name of the Branch Director (denormalized for display)"
+    },
+    "branch_admin_email": {
+      "type": "string",
+      "description": "Email of the Branch Admin assigned to this branch"
+    },
+    "branch_admin_name": {
+      "type": "string",
+      "description": "Name of the Branch Admin (denormalized for display)"
+    },
+    "location_director_email": {
+      "type": "string",
+      "description": "Email of the Branch Director (legacy field name)"
+    },
+    "location_admin_email": {
+      "type": "string",
+      "description": "Email of the Branch Admin (legacy field name)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this branch is currently active"
+    },
+    "qbo_location_id": {
+      "type": "string",
+      "description": "QuickBooks Location ID (called Department in the API) this branch is mapped to, for tagging synced Stripe payments by branch"
+    },
+    "qbo_location_name": {
+      "type": "string",
+      "description": "QuickBooks Location name (denormalized for display)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about the branch"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

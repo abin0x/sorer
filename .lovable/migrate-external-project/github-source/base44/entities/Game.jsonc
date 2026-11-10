@@ -1,0 +1,217 @@
+{
+  "name": "Game",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the organizing Club"
+    },
+    "tournament_id": {
+      "type": "string",
+      "description": "ID of the Tournament this game belongs to"
+    },
+    "division": {
+      "type": "string",
+      "description": "Division/bracket this game belongs to (e.g. 'Division A'). Set during division-based scheduling."
+    },
+    "round": {
+      "type": "string",
+      "description": "Round label (e.g. 'Round 1', 'Quarterfinal', 'Final', 'Division A - Round 1')"
+    },
+    "round_number": {
+      "type": "number",
+      "default": 1,
+      "description": "Numeric round index for sorting"
+    },
+    "game_number": {
+      "type": "number",
+      "description": "Sequential game number within the tournament"
+    },
+    "home_team_id": {
+      "type": "string",
+      "description": "ID of the home team (Team entity for in-house, TournamentRegistration id for outside teams)"
+    },
+    "home_team_name": {
+      "type": "string",
+      "description": "Home team name (denormalized for display)"
+    },
+    "home_coach_name": {
+      "type": "string",
+      "description": "Home team head coach name (denormalized for coach conflict detection and travel-aware scheduling)"
+    },
+    "home_team_type": {
+      "type": "string",
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "default": "external",
+      "description": "Whether the home team is an in-house Team or an outside TournamentRegistration"
+    },
+    "away_team_id": {
+      "type": "string",
+      "description": "ID of the away team"
+    },
+    "away_team_name": {
+      "type": "string",
+      "description": "Away team name (denormalized for display)"
+    },
+    "away_coach_name": {
+      "type": "string",
+      "description": "Away team head coach name (denormalized for coach conflict detection and travel-aware scheduling)"
+    },
+    "away_team_type": {
+      "type": "string",
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "default": "external",
+      "description": "Whether the away team is an in-house Team or an outside TournamentRegistration"
+    },
+    "field_id": {
+      "type": "string",
+      "description": "ID of the Field where the game is played"
+    },
+    "facility_id": {
+      "type": "string",
+      "description": "ID of the Facility where the game is played (used for travel-time-aware scheduling)"
+    },
+    "field_name": {
+      "type": "string",
+      "description": "Field name (denormalized for display)"
+    },
+    "facility_name": {
+      "type": "string",
+      "description": "Facility name (denormalized for display)"
+    },
+    "scheduled_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the game is scheduled"
+    },
+    "start_min": {
+      "type": "number",
+      "description": "Start time, minutes after midnight"
+    },
+    "end_min": {
+      "type": "number",
+      "description": "End time, minutes after midnight"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Display start time (e.g. 9:00 AM)"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "Display end time (e.g. 10:30 AM)"
+    },
+    "referee_id": {
+      "type": "string",
+      "description": "ID of the assigned Referee"
+    },
+    "referee_name": {
+      "type": "string",
+      "description": "Referee name (denormalized for display)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "in_progress",
+        "completed",
+        "cancelled"
+      ],
+      "default": "scheduled",
+      "description": "Game status"
+    },
+    "home_score": {
+      "type": "number",
+      "description": "Final home team score"
+    },
+    "away_score": {
+      "type": "number",
+      "description": "Final away team score"
+    },
+    "is_played": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the game has been played and a score recorded"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Game notes (e.g. weather delay, reschedule reason)"
+    }
+  },
+  "required": [
+    "club_id",
+    "tournament_id",
+    "home_team_name",
+    "away_team_name",
+    "status"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

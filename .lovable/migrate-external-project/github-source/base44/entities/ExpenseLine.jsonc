@@ -1,0 +1,180 @@
+{
+  "name": "ExpenseLine",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this line belongs to"
+    },
+    "report_id": {
+      "type": "string",
+      "description": "ID of the parent ExpenseReport"
+    },
+    "line_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the expense was incurred"
+    },
+    "description": {
+      "type": "string",
+      "description": "What the expense was for"
+    },
+    "expense_type_id": {
+      "type": "string",
+      "description": "ID of the ExpenseType"
+    },
+    "expense_type_name": {
+      "type": "string",
+      "description": "Expense type name (denormalized)"
+    },
+    "calculation_method": {
+      "type": "string",
+      "enum": [
+        "flat",
+        "mileage",
+        "per_diem"
+      ],
+      "default": "flat",
+      "description": "Denormalized from the ExpenseType at the time the line was created"
+    },
+    "miles": {
+      "type": "number",
+      "description": "Miles driven, for mileage-type lines"
+    },
+    "days": {
+      "type": "number",
+      "description": "Days, for per_diem-type lines"
+    },
+    "rate_used": {
+      "type": "number",
+      "description": "Rate snapshot at the time this line was created (mileage $/mile or per_diem $/day). Historical lines never change even if the ExpenseType rate changes later."
+    },
+    "route_note": {
+      "type": "string",
+      "description": "Optional route note for mileage lines (origin/destination)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Submitted line amount. For mileage/per_diem this is auto-calculated (miles or days x rate_used); for flat types it's entered directly."
+    },
+    "approved_amount": {
+      "type": "number",
+      "description": "Amount approved by the reviewer, defaults to amount. Lets a report be partially approved line by line."
+    },
+    "approver_comment": {
+      "type": "string",
+      "description": "Comment left by the reviewer on this specific line (used when adjusting or flagging it)"
+    },
+    "flagged": {
+      "type": "boolean",
+      "default": false,
+      "description": "Reviewer flagged this line for attention"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Submitter notes on this line"
+    },
+    "location": {
+      "type": "string",
+      "description": "Copied from the parent report at creation time so it can't drift"
+    },
+    "allocations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "team_id": {
+            "type": "string"
+          },
+          "team_name": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "number"
+          }
+        }
+      },
+      "default": [],
+      "description": "How this line is billed across teams. Defaults to an even split across the report's default teams; must sum to the line amount. Also what pushes each team into QuickBooks as a Class."
+    },
+    "receipts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_uri": {
+            "type": "string"
+          },
+          "file_name": {
+            "type": "string"
+          },
+          "uploaded_by_name": {
+            "type": "string"
+          },
+          "uploaded_date": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Receipt files attached to this line"
+    }
+  },
+  "required": [
+    "club_id",
+    "report_id",
+    "line_date",
+    "expense_type_id",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,182 @@
+{
+  "name": "Invoice",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club (tenant) issuing this invoice"
+    },
+    "billing_entity_id": {
+      "type": "string",
+      "description": "BillingEntity this invoice is addressed to"
+    },
+    "billing_entity_name": {
+      "type": "string",
+      "description": "Entity name (denormalized for lists and emails)"
+    },
+    "invoice_number": {
+      "type": "string",
+      "description": "Human invoice number, e.g. FV-202609-0001"
+    },
+    "period_label": {
+      "type": "string",
+      "description": "Billing period label, e.g. September 2026"
+    },
+    "period_start": {
+      "type": "string",
+      "format": "date",
+      "description": "First day of the billed period"
+    },
+    "period_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Last day of the billed period"
+    },
+    "issue_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent",
+        "partially_paid",
+        "paid",
+        "overdue",
+        "void"
+      ],
+      "default": "draft",
+      "description": "draft \u2192 sent \u2192 paid. The monthly job only ever creates drafts."
+    },
+    "subtotal": {
+      "type": "number",
+      "default": 0
+    },
+    "total": {
+      "type": "number",
+      "default": 0
+    },
+    "amount_paid": {
+      "type": "number",
+      "default": 0
+    },
+    "balance": {
+      "type": "number",
+      "default": 0,
+      "description": "total - amount_paid"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "booking_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of bookings on this invoice"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "stripe_session_id": {
+      "type": "string",
+      "description": "Stripe Checkout Session created for this invoice"
+    },
+    "stripe_payment_intent_id": {
+      "type": "string"
+    },
+    "stripe_checkout_url": {
+      "type": "string",
+      "description": "Hosted Stripe payment link for this invoice"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_emailed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time the draft PDF was emailed to the entity"
+    },
+    "email_count": {
+      "type": "number",
+      "default": 0
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payment_method": {
+      "type": "string",
+      "description": "How it was settled: stripe, cash, check, ach, other"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Email of the person who created it, or 'system' for the scheduled job"
+    }
+  },
+  "required": [
+    "club_id",
+    "billing_entity_id",
+    "invoice_number",
+    "total",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.billing_entity_id": "{{user.data.billing_entity_id}}"
+        },
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

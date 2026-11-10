@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 6 * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Every day at 6am ET, charges due installments via autopay or emails a payment link to families without autopay. Processes both season registrations and tryout final-registration installment plans.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "daily_installment_billing",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "bill_installments": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "charge-installments",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Charge due installments",
+            "description": "Autopay charges + payment-link emails"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Daily Installment Billing"
+}

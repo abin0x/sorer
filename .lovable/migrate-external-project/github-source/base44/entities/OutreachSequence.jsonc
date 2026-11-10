@@ -1,0 +1,62 @@
+{
+  "name": "OutreachSequence",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Sequence name, e.g. Directors \u2014 Multi-Branch Q4"
+    },
+    "segment_id": {
+      "type": "string",
+      "description": "FK \u2192 ProspectSegment (the target segment)"
+    },
+    "segment_name": {
+      "type": "string",
+      "description": "Segment name (denormalized)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "paused",
+        "archived"
+      ],
+      "default": "draft",
+      "description": "Sequence lifecycle"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "User ID of creator"
+    },
+    "created_by_name": {
+      "type": "string",
+      "description": "Creator name (denormalized)"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "name": "OutreachSequenceStep",
+  "type": "object",
+  "properties": {
+    "sequence_id": {
+      "type": "string",
+      "description": "FK \u2192 OutreachSequence"
+    },
+    "step_order": {
+      "type": "number",
+      "description": "1-based step order within the sequence"
+    },
+    "delay_days": {
+      "type": "number",
+      "default": 0,
+      "description": "Days after previous step (or enrollment for step 1)"
+    },
+    "subject_template": {
+      "type": "string",
+      "description": "Subject line with {{first_name}}, {{club_name}} etc."
+    },
+    "body_template": {
+      "type": "string",
+      "description": "Email body (markdown/HTML) with variable placeholders"
+    },
+    "template_id": {
+      "type": "string",
+      "description": "FK \u2192 OutreachTemplate (optional, overrides inline body)"
+    },
+    "template_name": {
+      "type": "string",
+      "description": "Template name (denormalized)"
+    },
+    "condition": {
+      "type": "string",
+      "enum": [
+        "always",
+        "if_not_opened",
+        "if_not_clicked",
+        "if_opened_not_clicked"
+      ],
+      "default": "always",
+      "description": "Send condition evaluated against prospect's engagement history"
+    },
+    "ab_variant": {
+      "type": "string",
+      "enum": [
+        "a",
+        "b"
+      ],
+      "description": "A/B test variant. Null = not part of an A/B test."
+    },
+    "ab_parent_step_id": {
+      "type": "string",
+      "description": "If this is a variant, the ID of the parent step it duplicates"
+    }
+  },
+  "required": [
+    "sequence_id",
+    "step_order"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

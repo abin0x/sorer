@@ -1,0 +1,113 @@
+{
+  "name": "RBACConfig",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "master_admin",
+        "admin",
+        "club_director",
+        "club_admin",
+        "branch_director",
+        "branch_admin",
+        "bookkeeper",
+        "project_manager",
+        "coach",
+        "team_manager",
+        "parent_guardian",
+        "player"
+      ],
+      "description": "Role name"
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of permission strings (module:action) for this role"
+    },
+    "role_label": {
+      "type": "string",
+      "description": "Display label for this role"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of what this role can do"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this configuration is active"
+    },
+    "is_custom": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this config has been customized from defaults"
+    }
+  },
+  "required": [
+    "role",
+    "permissions"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,135 @@
+{
+  "name": "ColumnMapping",
+  "type": "object",
+  "properties": {
+    "file_id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string"
+    },
+    "source_column": {
+      "type": "string"
+    },
+    "source_index": {
+      "type": "number"
+    },
+    "group": {
+      "type": "number",
+      "default": 0,
+      "description": "0 = main record; 1,2,... = repeating column group (Parent 1, Parent 2) unpivoted into its own guardian"
+    },
+    "group_label": {
+      "type": "string"
+    },
+    "target_entity": {
+      "type": "string"
+    },
+    "target_field": {
+      "type": "string",
+      "description": "Empty when unmapped"
+    },
+    "transform": {
+      "type": "string",
+      "enum": [
+        "none",
+        "split_first",
+        "split_last"
+      ],
+      "default": "none"
+    },
+    "confidence": {
+      "type": "number",
+      "default": 0
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "suggested",
+        "unmapped",
+        "confirmed",
+        "edited",
+        "ignored",
+        "kept"
+      ],
+      "default": "unmapped"
+    },
+    "non_empty_count": {
+      "type": "number",
+      "default": 0
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "unique_values": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "count": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "value_map": {
+      "type": "object",
+      "default": {},
+      "description": "source value -> schema enum option"
+    },
+    "decided_by": {
+      "type": "string"
+    },
+    "signoff_by": {
+      "type": "string",
+      "description": "Specialist who signed off an ignored/kept column"
+    }
+  },
+  "required": [
+    "file_id",
+    "project_id",
+    "club_id",
+    "source_column"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

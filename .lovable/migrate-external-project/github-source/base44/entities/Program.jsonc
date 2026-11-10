@@ -1,0 +1,255 @@
+{
+  "name": "Program",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this program belongs to"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the program (used for imports/updates)"
+    },
+    "workstream": {
+      "type": "string",
+      "description": "Workstream/category name"
+    },
+    "year": {
+      "type": "string",
+      "description": "Year of the program"
+    },
+    "title": {
+      "type": "string",
+      "description": "Program Name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Program Description for Website"
+    },
+    "category": {
+      "type": "string",
+      "description": "Program category (e.g., Marketing, Registration, Fields, Camps, Tournaments)"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season year range (e.g., 2026-2027, 2027-2028)"
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of branches this program belongs to"
+    },
+    "location_id": {
+      "type": "string",
+      "description": "ID of the primary Location this program runs at"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "Location name (denormalized for display)"
+    },
+    "program_dates": {
+      "type": "string",
+      "description": "Program Dates"
+    },
+    "program_time": {
+      "type": "string",
+      "description": "Program Time"
+    },
+    "field_location": {
+      "type": "string",
+      "description": "Field Location Name and Address"
+    },
+    "field_number": {
+      "type": "string",
+      "description": "Field Number"
+    },
+    "facility_id": {
+      "type": "string",
+      "description": "ID of the Facility this program is assigned to, for space utilization tracking"
+    },
+    "facility_name": {
+      "type": "string",
+      "description": "Facility name (denormalized for display)"
+    },
+    "age_eligibility": {
+      "type": "string",
+      "description": "Age Eligibility - By birth year for 25/26 season"
+    },
+    "gender_eligibility": {
+      "type": "string",
+      "enum": [
+        "Boys",
+        "Girls",
+        "Boys and Girls"
+      ],
+      "description": "Gender Eligibility"
+    },
+    "suggested_start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Suggested start date for the program"
+    },
+    "started_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when program actually started (moved to In Progress)"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Due date for program completion"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when program was completed"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "todo",
+        "in_progress",
+        "in_review",
+        "done"
+      ],
+      "default": "todo",
+      "description": "Current status of the program"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "description": "Program priority level"
+    },
+    "budget_approval": {
+      "type": "string",
+      "description": "Budget approval status"
+    },
+    "budget": {
+      "type": "number",
+      "description": "Program budget amount (revenue)"
+    },
+    "revenue_by_player": {
+      "type": "object",
+      "description": "Revenue tracked by player/participant (e.g., {playerId: amount})"
+    },
+    "cost_by_player": {
+      "type": "object",
+      "description": "Cost/expense tracked by player/participant (e.g., {playerId: amount})"
+    },
+    "assignee": {
+      "type": "string",
+      "description": "Program Lead \u2014 auto-derived from the first Accountable (RACI A) staff email."
+    },
+    "accountable": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails accountable for the outcome (RACI A \u2014 owns the result). The first entry is treated as the Program Lead."
+    },
+    "responsible": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails responsible for doing the work (RACI R)"
+    },
+    "consulted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails consulted for input (RACI C)"
+    },
+    "informed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails kept informed of progress (RACI I)"
+    },
+    "roadmap_task_id": {
+      "type": "string",
+      "description": "ID of the RoadmapTask this program was auto-created from"
+    },
+    "roadmap_project_id": {
+      "type": "string",
+      "description": "ID of the parent RoadmapProject this program belongs to"
+    },
+    "created_by_email": {
+      "type": "string",
+      "description": "Email of the program creator"
+    },
+    "order": {
+      "type": "number",
+      "description": "Order within the column for drag and drop",
+      "default": 0
+    }
+  },
+  "required": [
+    "title",
+    "suggested_start_date",
+    "due_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 6 1 * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Monthly on the 1st: collects every confirmed external training and game booking from the previous month that has not been invoiced, groups them by billing entity, and creates one draft invoice per entity (one line per booking). Internal bookings are never invoiced. Only clubs with the facilities module active are billed.",
+  "name": "Facilities Invoice Generation",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "facilities_invoice_generation",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "generate_draft_invoices": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "generate-facility-invoices",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Generate draft invoices",
+            "description": "Last month's external bookings \u2192 one draft invoice per billing entity"
+          }
+        }
+      }
+    ]
+  }
+}

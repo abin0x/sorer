@@ -1,0 +1,132 @@
+{
+  "name": "TestSession",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this test session belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Test title (e.g. U-15 Skill Testing)"
+    },
+    "test_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the test"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Start time (e.g. 04:00 PM)"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "default": 60,
+      "description": "Duration in minutes"
+    },
+    "location": {
+      "type": "string",
+      "description": "Field / facility name"
+    },
+    "assessment_type": {
+      "type": "string",
+      "enum": [
+        "skill",
+        "physical"
+      ],
+      "default": "skill",
+      "description": "Type of assessment"
+    },
+    "invited_coaches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Emails of invited coaches"
+    },
+    "roster_player_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of players on the test roster"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes for participants (e.g. Bring cleats, water)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "completed",
+        "cancelled"
+      ],
+      "default": "scheduled"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Email of the creator"
+    },
+    "calendar_event_id": {
+      "type": "string",
+      "description": "ID of the created calendar event"
+    }
+  },
+  "required": [
+    "title",
+    "test_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "custom_role": {
+      "type": "string",
+      "enum": [
+        "master_admin",
+        "admin",
+        "club_director",
+        "club_admin",
+        "branch_director",
+        "branch_admin",
+        "bookkeeper",
+        "project_manager",
+        "coach",
+        "team_manager",
+        "parent_guardian",
+        "player"
+      ],
+      "description": "Custom role assignment"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this user belongs to. Empty for SaaS super admins."
+    },
+    "is_super_admin": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this user is a SaaS platform super admin with cross-tenant access"
+    },
+    "system_role": {
+      "type": "string",
+      "enum": [
+        "system_owner",
+        "system_admin",
+        "system_support",
+        "system_billing"
+      ],
+      "description": "System-level role spanning ALL clubs (tenant-independent). Granted outside any club membership. system_owner = full system access & billing; system_admin = manage clubs/users; system_support = read-only + impersonation for troubleshooting; system_billing = cross-club invoices/plans/payments. Leave unset for regular club-scoped users."
+    },
+    "branch": {
+      "type": "string",
+      "description": "Branch assignment (for branch-scoped roles: Branch Director, Branch Admin, Coach)"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "ID of the assigned Branch entity (for branch-scoped roles)"
+    },
+    "location_id": {
+      "type": "string",
+      "description": "ID of the assigned Branch (legacy field name, maps to branch)"
+    },
+    "location_name": {
+      "type": "string",
+      "description": "Assigned branch name (denormalized for display)"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "Linked Player record ID, if this user account belongs to a player"
+    },
+    "guardian_id": {
+      "type": "string",
+      "description": "Linked Guardian record ID, if this user account belongs to a parent/guardian"
+    },
+    "title": {
+      "type": "string",
+      "description": "Job title"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number"
+    },
+    "address": {
+      "type": "string",
+      "description": "Address"
+    },
+    "bio": {
+      "type": "string",
+      "description": "Brief biography"
+    },
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the user has completed onboarding"
+    },
+    "completed_tutorials": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "List of completed tutorial IDs"
+    },
+    "preferences": {
+      "type": "object",
+      "description": "User preferences and settings"
+    },
+    "team_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Team IDs this user may access in Beacon (own team, teams they coach or manage, or their children's teams; staff get every team in the club). Locked \u2014 set only by the app's own server code, which the Beacon channel read rules rely on.",
+      "rls": {
+        "update": {
+          "user_condition": {
+            "collaborator_role": "editor"
+          }
+        }
+      }
+    },
+    "billing_entity_id": {
+      "type": "string",
+      "description": "BillingEntity this account belongs to, for outside organizations that rent facilities. Locked \u2014 set only by the app's own server code after it verifies the signed-in email matches the entity's billing contacts.",
+      "rls": {
+        "update": {
+          "user_condition": {
+            "collaborator_role": "editor"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "custom_role"
+  ]
+}

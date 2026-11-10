@@ -1,0 +1,82 @@
+{
+  "name": "MarketingSettings",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string"
+    },
+    "require_approval": {
+      "type": "boolean",
+      "default": false,
+      "description": "Posts go to pending_approval until a club leader approves"
+    },
+    "brand_voice": {
+      "type": "string",
+      "description": "Club voice notes fed to the AI post generator"
+    },
+    "default_hashtags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "utm_enabled": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "club_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

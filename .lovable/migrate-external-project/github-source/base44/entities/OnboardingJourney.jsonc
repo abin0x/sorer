@@ -1,0 +1,161 @@
+{
+  "name": "OnboardingJourney",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Tenant (Club) this journey belongs to"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name (denormalized)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "completed"
+      ],
+      "default": "active"
+    },
+    "current_stage": {
+      "type": "string",
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "default": "A",
+      "description": "Stage the user was last working in (used to resume)"
+    },
+    "last_step_key": {
+      "type": "string",
+      "description": "Step the user was last working on (used to resume exactly)"
+    },
+    "steps": {
+      "type": "object",
+      "default": {},
+      "description": "Per-step state map: { [stepKey]: { state, note, assignee_email, assignee_name, updated_at, updated_by } }"
+    },
+    "start_path": {
+      "type": "string",
+      "enum": [
+        "upload",
+        "known_system",
+        "fresh",
+        "assisted"
+      ],
+      "description": "How the club chose to start (Stage A)"
+    },
+    "source_system": {
+      "type": "string",
+      "description": "Source system the club is migrating from, if any"
+    },
+    "specialist_name": {
+      "type": "string",
+      "description": "Assigned migration specialist, if any"
+    },
+    "invited_via": {
+      "type": "string",
+      "enum": [
+        "system_owner",
+        "self_serve"
+      ],
+      "default": "system_owner"
+    },
+    "draft": {
+      "type": "object",
+      "default": {},
+      "description": "Unsaved Stage A form values so the user resumes mid-form on any device"
+    },
+    "last_active_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_active_by": {
+      "type": "string",
+      "description": "Email of the last person to work on the journey"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "club_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

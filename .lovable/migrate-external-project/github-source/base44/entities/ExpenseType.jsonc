@@ -1,0 +1,108 @@
+{
+  "name": "ExpenseType",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this expense type belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Expense type name (e.g. 'Coaching convention', 'Mileage', 'MLS per diem')"
+    },
+    "calculation_method": {
+      "type": "string",
+      "enum": [
+        "flat",
+        "mileage",
+        "per_diem"
+      ],
+      "default": "flat",
+      "description": "flat = submitter enters an amount directly, mileage = miles x rate, per_diem = days x daily rate"
+    },
+    "rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Rate used for mileage ($/mile) or per_diem ($/day) calculation types. Ignored for flat."
+    },
+    "rate_effective_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date this rate took effect. Changing the rate does not alter historical lines, which snapshot the rate used at the time."
+    },
+    "quickbooks_account": {
+      "type": "string",
+      "description": "QuickBooks income/expense account this type maps to, for Bill export"
+    },
+    "receipt_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether a receipt is required for lines of this type"
+    },
+    "receipt_threshold": {
+      "type": "number",
+      "default": 0,
+      "description": "Receipt is only required when the line amount is above this threshold. 0 = always required when receipt_required is true."
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Inactive types no longer appear as choices for new lines"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "calculation_method"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

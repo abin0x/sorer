@@ -1,0 +1,256 @@
+{
+  "name": "PaymentResolution",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this collection case belongs to"
+    },
+    "account_key": {
+      "type": "string",
+      "description": "Payer account this case tracks: '<source_type>:<source_id>' \u2014 one case per family account, however many payments were missed"
+    },
+    "source_type": {
+      "type": "string",
+      "description": "What the missed charges were collected against (registration, club_event, tryout_event, offer, other)"
+    },
+    "source_id": {
+      "type": "string",
+      "description": "ID of the Registration / event registration the charges belong to"
+    },
+    "source_label": {
+      "type": "string",
+      "description": "What was charged, e.g. the program, event, or installment (denormalized)"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player the charges belong to"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player name (denormalized for display)"
+    },
+    "guardian_name": {
+      "type": "string",
+      "description": "Responsible guardian name (denormalized)"
+    },
+    "family_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Billing contact email reminders are sent to"
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team the charges are attributed to"
+    },
+    "branch_name": {
+      "type": "string",
+      "description": "Branch name (denormalized)"
+    },
+    "amount_outstanding": {
+      "type": "number",
+      "default": 0,
+      "description": "Total of the missed charges still unpaid"
+    },
+    "late_payment_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of late or failed charges on this account"
+    },
+    "late_payment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Payment ledger entries on this account that are late or failed"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the oldest missed payment was due"
+    },
+    "last_late_payment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Most recent missed payment date"
+    },
+    "days_overdue": {
+      "type": "number",
+      "default": 0
+    },
+    "aging_bucket": {
+      "type": "string",
+      "enum": [
+        "0-30",
+        "31-60",
+        "61-90",
+        "90+"
+      ],
+      "default": "0-30",
+      "description": "Aging bucket the case falls into"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "in_progress",
+        "resolved",
+        "written_off"
+      ],
+      "default": "open",
+      "description": "open = nobody has worked it yet, in_progress = being chased, resolved = settled or corrected, written_off = deliberately abandoned"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "normal",
+        "high",
+        "critical"
+      ],
+      "default": "normal",
+      "description": "Triage priority derived from how old the balance is"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Email of the staff member working this case"
+    },
+    "assigned_name": {
+      "type": "string",
+      "description": "Assignee display name"
+    },
+    "next_follow_up": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the next follow-up is due"
+    },
+    "last_contacted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_contact_channel": {
+      "type": "string",
+      "description": "How the family was last contacted: call, email, text, in_person, letter, other"
+    },
+    "contact_attempts": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of contact attempts logged"
+    },
+    "reminder_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of reminder emails sent"
+    },
+    "last_reminder_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "plan_installments": {
+      "type": "number",
+      "default": 0,
+      "description": "Installments in the arranged payment plan, 0 when none"
+    },
+    "plan_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount per installment of the arranged plan"
+    },
+    "plan_first_due": {
+      "type": "string",
+      "format": "date"
+    },
+    "resolution_type": {
+      "type": "string",
+      "enum": [
+        "payment_received",
+        "payment_plan",
+        "financial_aid",
+        "written_off",
+        "corrected",
+        "other"
+      ],
+      "description": "How the case was closed"
+    },
+    "resolution_note": {
+      "type": "string",
+      "description": "Reason recorded when the case was closed"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolved_by": {
+      "type": "string",
+      "description": "Email of the person who closed the case, or 'auto' when it closed on its own"
+    },
+    "timeline": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Every action taken on this case: [{ at, by, action, note }]"
+    },
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time the case was refreshed from the payment ledger"
+    }
+  },
+  "required": [
+    "club_id",
+    "account_key",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

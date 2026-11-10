@@ -1,0 +1,255 @@
+{
+  "name": "TryoutPlan",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this tryout plan belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Plan title (e.g. 'U14 Boys 7v7 Tryouts \u2014 2027-2028')"
+    },
+    "age_group": {
+      "type": "string",
+      "description": "Age group this plan targets (e.g. U14). Blank when the plan spans a custom team selection across multiple age groups."
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Boys",
+        "Girls"
+      ],
+      "description": "Gender segment this plan targets"
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "4v4",
+        "7v7",
+        "9v9",
+        "11v11"
+      ],
+      "description": "Playing format segment this plan targets"
+    },
+    "location_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of the Branches (Locations) this plan covers"
+    },
+    "location_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Branch names (denormalized for display)"
+    },
+    "platform_id": {
+      "type": "string",
+      "description": "ID of the associated competitive Platform, if this plan is platform-specific"
+    },
+    "platform_name": {
+      "type": "string",
+      "description": "Platform name (denormalized for display)"
+    },
+    "platform_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of the competitive Platforms this plan covers"
+    },
+    "platform_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Platform names (denormalized for display)"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season this plan is for (e.g. 2027-2028)"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Start of the plan's tryout window"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "End of the plan's tryout window"
+    },
+    "team_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of the Teams included in this plan"
+    },
+    "team_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Team names (denormalized for display)"
+    },
+    "lead_user_id": {
+      "type": "string",
+      "description": "ID of the Tryout Lead responsible for this plan"
+    },
+    "lead_name": {
+      "type": "string",
+      "description": "Tryout Lead name (denormalized for display)"
+    },
+    "tryout_fee": {
+      "type": "number",
+      "description": "Tryout fee charged per player. 0 or empty means a free tryout."
+    },
+    "registration_open_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date family registration for this tryout opens"
+    },
+    "registration_close_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date family registration for this tryout closes"
+    },
+    "change_deadline": {
+      "type": "string",
+      "format": "date",
+      "description": "Last date families may reschedule or cancel a spot. Empty means the day before their session."
+    },
+    "refund_policy": {
+      "type": "string",
+      "description": "Refund terms shown to families at checkout and on their status page (e.g. 'Full refund if cancelled 7 days before the session')"
+    },
+    "max_capacity": {
+      "type": "number",
+      "description": "Maximum number of players the tryout accepts across all its sessions. Blank means no cap."
+    },
+    "required_documents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Waivers and documents a family must complete or upload to register: [{ name, required, notes }]"
+    },
+    "offer_approval_mode": {
+      "type": "string",
+      "enum": [
+        "coach_direct",
+        "admin_approval"
+      ],
+      "default": "admin_approval",
+      "description": "Whether a coach's proposed roster goes straight out to families (coach_direct) or an admin approves each offer first (admin_approval)"
+    },
+    "offer_expiry_hours": {
+      "type": "number",
+      "default": 72,
+      "description": "How many hours a family has to accept or decline an offer before it lapses and passes to the next waitlisted player"
+    },
+    "roster_locked": {
+      "type": "boolean",
+      "default": false,
+      "description": "True once the rosters are finalized \u2014 no more offers, acceptances or list changes until an admin unlocks"
+    },
+    "roster_finalized_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the rosters were locked"
+    },
+    "roster_finalized_by": {
+      "type": "string",
+      "description": "Who locked the rosters, or 'auto \u2014 all spots filled'"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "registration_open",
+        "registration_closed",
+        "sessions_in_progress",
+        "evaluation",
+        "offers_out",
+        "rosters_finalized",
+        "archived",
+        "active",
+        "completed"
+      ],
+      "default": "draft",
+      "description": "Tryout lifecycle status. 'active' and 'completed' are legacy values kept so earlier plans stay valid."
+    },
+    "kanban_board_id": {
+      "type": "string",
+      "description": "ID of the synced Kanban board, when the club's Kanban module is enabled"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this plan"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

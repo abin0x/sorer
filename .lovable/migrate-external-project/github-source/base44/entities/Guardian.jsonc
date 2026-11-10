@@ -1,0 +1,177 @@
+{
+  "name": "Guardian",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this guardian belongs to"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the guardian (used for imports/updates)"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Linked app User account ID, if this guardian has a login"
+    },
+    "household_id": {
+      "type": "string",
+      "description": "Household identifier grouping this guardian with co-parents/guardians and their players."
+    },
+    "first_name": {
+      "type": "string",
+      "description": "Guardian first name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Guardian last name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary email address (also used as the login username)"
+    },
+    "username": {
+      "type": "string",
+      "description": "Account username (usually the email)"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Primary phone number (cell)"
+    },
+    "relationship": {
+      "type": "string",
+      "enum": [
+        "mother",
+        "father",
+        "guardian",
+        "other"
+      ],
+      "default": "guardian",
+      "description": "Relationship to the player"
+    },
+    "player_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of all players (children) linked to this guardian"
+    },
+    "country": {
+      "type": "string",
+      "default": "USA",
+      "description": "Country (address info)"
+    },
+    "street_address": {
+      "type": "string",
+      "description": "Address line 1"
+    },
+    "address_line_2": {
+      "type": "string",
+      "description": "Address line 2 (apartment, suite, etc.)"
+    },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "zip_code": {
+      "type": "string",
+      "description": "ZIP / postal code"
+    },
+    "emergency_contact_name": {
+      "type": "string",
+      "description": "Emergency contact name"
+    },
+    "emergency_contact_phone": {
+      "type": "string",
+      "description": "Emergency contact phone"
+    },
+    "photo_consent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the guardian has consented to their child's photo being used in club marketing content. Opt-in required before AI-generated content references a player photo."
+    },
+    "name_consent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the guardian has consented to their child's name being used in club marketing content. Opt-in required before AI-generated content references a player by name."
+    },
+    "is_test_user": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a test/demo account (Settings panel)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about the guardian"
+    },
+    "source": {
+      "type": "string",
+      "description": "Where this record came from (e.g. migration)"
+    },
+    "migration_batch_id": {
+      "type": "string",
+      "description": "Migration commit batch that created or last updated this record"
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE public.calendar_events ADD COLUMN IF NOT EXISTS volunteer_slots jsonb NOT NULL DEFAULT '[]'::jsonb;

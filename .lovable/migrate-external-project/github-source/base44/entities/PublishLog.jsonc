@@ -1,0 +1,110 @@
+{
+  "name": "PublishLog",
+  "type": "object",
+  "properties": {
+    "post_id": {
+      "type": "string",
+      "description": "ID of the Post this log entry is for"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Club ID (for tenant-scoped queries)"
+    },
+    "platform": {
+      "type": "string",
+      "description": "Platform the attempt targeted"
+    },
+    "attempted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the attempt was made"
+    },
+    "success": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the attempt succeeded"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "queue",
+        "manual",
+        "composer"
+      ],
+      "default": "queue",
+      "description": "What triggered the attempt: the scheduled queue, a manual mark-as-posted, or the composer publish-now"
+    },
+    "attempt_number": {
+      "type": "number",
+      "default": 1,
+      "description": "Which retry this was (1 = first try)"
+    },
+    "error": {
+      "type": "string",
+      "description": "Error message if the attempt failed"
+    },
+    "platform_post_id": {
+      "type": "string",
+      "description": "Platform post ID returned on success"
+    },
+    "platform_post_url": {
+      "type": "string",
+      "description": "Platform post URL returned on success"
+    }
+  },
+  "required": [
+    "post_id",
+    "club_id",
+    "platform"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

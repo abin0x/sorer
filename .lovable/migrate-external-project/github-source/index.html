@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://media.base44.com/images/public/690d4c6dccfb0f4e79c33a38/161f01a1f_logo.png" />
+    <link rel="apple-touch-icon" href="https://media.base44.com/images/public/690d4c6dccfb0f4e79c33a38/161f01a1f_logo.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Club Rudder | Soccer Club Management Software</title>
+    <meta name="description" content="Registration, tryouts, payments and scheduling for multi-branch soccer clubs. Families pay straight into your Stripe and we never take a cut." />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="application-name" content="Club Rudder" />
+    <meta name="apple-mobile-web-app-title" content="Club Rudder" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Club Rudder" />
+    <meta property="og:url" content="https://clubrudder.com/" />
+    <meta property="og:title" content="Club Rudder | Soccer Club Management Software" />
+    <meta property="og:description" content="Registration, tryouts, payments and scheduling for multi-branch soccer clubs. Families pay straight into your Stripe and we never take a cut. Built soccer-first, flexible for any club sport." />
+    <meta property="og:image" content="https://media.base44.com/images/public/690d4c6dccfb0f4e79c33a38/161f01a1f_logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Club Rudder | Soccer Club Management Software" />
+    <meta name="twitter:description" content="Registration, tryouts, payments and scheduling for multi-branch soccer clubs. Families pay straight into your Stripe and we never take a cut. Built soccer-first, flexible for any club sport." />
+    <meta name="twitter:image" content="https://media.base44.com/images/public/690d4c6dccfb0f4e79c33a38/161f01a1f_logo.png" />
+    <!-- Organization schema, emitted once here so every page carries it. -->
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Organization","name":"Club Rudder","url":"https://clubrudder.com/","logo":"https://media.base44.com/images/public/690d4c6dccfb0f4e79c33a38/161f01a1f_logo.png"}
+    </script>
+    <style>
+      html { background: #ffffff; }
+      html.dark { background: #0f0f0f; }
+      /* Static splash painted before the bundle loads — masks the WebView's
+         render delay instead of showing a blank white screen. */
+      #app-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        transition: opacity 0.25s ease;
+        padding: env(safe-area-inset-top) env(safe-area-inset-right) max(env(safe-area-inset-bottom), 12px) env(safe-area-inset-left);
+      }
+      html.dark #app-splash { background: #0f0f0f; }
+      #app-splash img { width: 64px; height: 64px; border-radius: 16px; }
+      #app-splash.hide { opacity: 0; pointer-events: none; }
+    </style>
+  </head>
+  <body>
+    <div id="app-splash">
+      <img src="https://media.base44.com/images/public/690d4c6dccfb0f4e79c33a38/161f01a1f_logo.png" alt="Club Rudder logo" />
+    </div>
+    <div id="root"></div>
+    <script>
+      // Called once the app has painted its first frame (see src/main.jsx).
+      window.__hideSplash = function () {
+        var el = document.getElementById('app-splash');
+        if (!el) return;
+        el.classList.add('hide');
+        setTimeout(function () { el.remove(); }, 300);
+      };
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

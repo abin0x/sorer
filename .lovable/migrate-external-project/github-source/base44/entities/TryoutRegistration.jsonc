@@ -1,0 +1,371 @@
+{
+  "name": "TryoutRegistration",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this tryout registration belongs to"
+    },
+    "tryout_plan_id": {
+      "type": "string",
+      "description": "The tryout event (TryoutPlan) this registration is for. Empty for a rolled-over pool entry that is not tied to a plan yet."
+    },
+    "tryout_event_id": {
+      "type": "string",
+      "description": "The session (TryoutEvent) the player is booked into"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "ID of the Season this registration belongs to"
+    },
+    "season_name": {
+      "type": "string",
+      "description": "Season label (denormalized for display)"
+    },
+    "inquiry_id": {
+      "type": "string",
+      "description": "Associated Inquiry ID (legacy, may be empty)"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the Player record created after offer acceptance (links tryout signup to enrolled player)"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "player_date_of_birth": {
+      "type": "string",
+      "format": "date",
+      "description": "Player date of birth at the time of registration (used for the season eligibility check)"
+    },
+    "player_gender": {
+      "type": "string",
+      "description": "Player gender eligibility at the time of registration"
+    },
+    "bib_number": {
+      "type": "number",
+      "description": "Bib number the player wears at the tryout. Auto-assigned from the Tryout Dashboard, unique within a tryout."
+    },
+    "guardian_id": {
+      "type": "string",
+      "description": "ID of the Guardian (family profile) this registration belongs to"
+    },
+    "guardian_name": {
+      "type": "string",
+      "description": "Guardian full name (denormalized)"
+    },
+    "guardian_email": {
+      "type": "string",
+      "description": "Guardian email (denormalized)"
+    },
+    "guardian_phone": {
+      "type": "string",
+      "description": "Guardian phone (denormalized)"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "App User id of the signed-in parent, when they registered while logged in"
+    },
+    "desired_age_group": {
+      "type": "string",
+      "description": "Age group the player is eligible for in this tryout"
+    },
+    "session_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the booked session (denormalized for lists and emails)"
+    },
+    "session_start_time": {
+      "type": "string",
+      "description": "Start time of the booked session (denormalized)"
+    },
+    "session_field_name": {
+      "type": "string",
+      "description": "Field or venue of the booked session (denormalized)"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "ID of the Branch (Location) the session runs at"
+    },
+    "branch_name": {
+      "type": "string",
+      "description": "Branch name (denormalized for display)"
+    },
+    "registered_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the player signed up for the tryout"
+    },
+    "checked_in": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the player checked in at the tryout"
+    },
+    "checked_in_at": {
+      "type": "string",
+      "description": "Timestamp of check-in"
+    },
+    "attended": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the player actually attended"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pooled",
+        "pending_payment",
+        "registered",
+        "waitlist",
+        "checked_in",
+        "no_show",
+        "cancelled"
+      ],
+      "default": "registered",
+      "description": "Lifecycle: pooled = age-eligible, in the tryout pool but no session yet; pending_payment = session held while the family pays; registered = confirmed spot; waitlist = session full; checked_in = arrived on day; no_show = did not attend; cancelled = withdrawn"
+    },
+    "pool_status": {
+      "type": "string",
+      "enum": [
+        "in_pool",
+        "registered",
+        "offered",
+        "accepted",
+        "declined",
+        "withdrawn"
+      ],
+      "default": "in_pool",
+      "description": "Tryout player pool stage: in_pool (eligible, not signed up), registered (signed up for the tryout), offered, accepted or declined an offer, or withdrawn"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "pending",
+        "paid",
+        "partially_paid",
+        "waived",
+        "financial_aid_pending",
+        "refunded",
+        "failed"
+      ],
+      "default": "unpaid",
+      "description": "Where the tryout fee stands"
+    },
+    "waiver_status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "signed"
+      ],
+      "default": "not_started",
+      "description": "Whether the required waivers and documents were accepted and signed"
+    },
+    "fee_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Tryout fee for this player before any discount"
+    },
+    "discount_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Promo or aid discount applied to this player's fee"
+    },
+    "amount_due": {
+      "type": "number",
+      "default": 0,
+      "description": "Fee minus discount \u2014 what the family owes for this player"
+    },
+    "amount_paid": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount actually collected for this player"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "promo_code": {
+      "type": "string",
+      "description": "Promo or fee-waiver code applied at checkout"
+    },
+    "checkout_group_id": {
+      "type": "string",
+      "description": "Groups the sibling registrations paid for in one checkout"
+    },
+    "stripe_checkout_session_id": {
+      "type": "string",
+      "description": "Stripe Checkout Session created for this registration's group"
+    },
+    "stripe_checkout_url": {
+      "type": "string",
+      "description": "Hosted Stripe payment link, while payment is outstanding"
+    },
+    "payment_id": {
+      "type": "string",
+      "description": "Payment ledger entry created when this fee was collected"
+    },
+    "waiver_signature": {
+      "type": "string",
+      "description": "Name typed by the guardian as their e-signature"
+    },
+    "waiver_signed_by": {
+      "type": "string",
+      "description": "Email of the guardian who signed"
+    },
+    "waiver_signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "waiver_documents": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Waivers and documents accepted at signup: [{ name, required, accepted, notes }]"
+    },
+    "financial_aid_requested": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the family asked for financial aid on this fee"
+    },
+    "financial_aid_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "requested",
+        "approved",
+        "declined"
+      ],
+      "default": "none"
+    },
+    "financial_aid_note": {
+      "type": "string",
+      "description": "What the family told us when requesting aid, or the admin's decision note"
+    },
+    "refund_status": {
+      "type": "string",
+      "enum": [
+        "none",
+        "due",
+        "issued"
+      ],
+      "default": "none",
+      "description": "none = no refund owed, due = a refund applies and is waiting on an admin, issued = refunded"
+    },
+    "refund_amount": {
+      "type": "number",
+      "default": 0
+    },
+    "refunded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cancelled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "cancel_reason": {
+      "type": "string",
+      "description": "Why the family or an admin cancelled the spot"
+    },
+    "reschedule_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Session moves for this registration: [{ at, by, from_event_id, from_date, to_event_id, to_date }]"
+    },
+    "check_in_code": {
+      "type": "string",
+      "description": "6-character code for QR/manual check-in lookup"
+    },
+    "admin_notes": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Notes staff added about this player: [{ at, by, text }]"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "inside",
+        "outside",
+        "rollover"
+      ],
+      "default": "outside",
+      "description": "inside = added by club admin from existing players, outside = public signup, rollover = added to the pool automatically when the season rolled over"
+    },
+    "utm_source": {
+      "type": "string",
+      "description": "UTM source param captured from the signup URL (e.g. instagram, facebook) for marketing attribution"
+    },
+    "utm_campaign": {
+      "type": "string",
+      "description": "UTM campaign param captured from the signup URL, matched to a Campaign.utm_campaign for per-post attribution"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes about this tryout registration"
+    }
+  },
+  "required": [
+    "club_id",
+    "player_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

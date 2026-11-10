@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 5 * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Daily: for clubs affiliated with GotSport, checks coach compliance records and notifies admins of gaps.",
+  "name": "Compliance GotSport Sync",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "compliance_gotsport_sync",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "compliance-gotsport-sync",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Run GotSport record sync",
+            "description": "Verifies coach compliance against GotSport for affiliated clubs"
+          }
+        }
+      }
+    ]
+  }
+}

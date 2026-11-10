@@ -1,0 +1,108 @@
+{
+  "name": "SkillTestScore",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this score belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player who took the test"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "test_id": {
+      "type": "string",
+      "description": "ID of the SkillTest"
+    },
+    "test_title": {
+      "type": "string",
+      "description": "Test title (denormalized)"
+    },
+    "score": {
+      "type": "number",
+      "description": "Numeric score achieved"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced",
+        "expert"
+      ],
+      "default": "intermediate",
+      "description": "Proficiency level derived from score"
+    },
+    "test_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the test was taken"
+    },
+    "logged_by": {
+      "type": "string",
+      "description": "Email of the coach who logged the score"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "player_id",
+    "test_id",
+    "score"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 2 * * *",
+      "one_time_date": null,
+      "timezone": "UTC",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Every night at 2am UTC, reconciles all TenantModule records against Stripe \u2014 flags drift, suspends expired grace periods, expires ended canceling periods, and alerts on discrepancies.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "nightly_module_reconcile",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "reconcile": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "module-reconcile",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Reconcile module access with Stripe",
+            "description": "Flag drift, suspend expired grace, expire ended canceling"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Nightly Module Reconciliation"
+}

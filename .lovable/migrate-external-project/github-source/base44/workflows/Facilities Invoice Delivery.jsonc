@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 8 * * 1",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Weekly on Monday morning: emails each draft facility invoice as a PDF attachment to its billing entity's contact email, so the entity can review and pay it before the facilities manager marks it sent.",
+  "name": "Facilities Invoice Delivery",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "facilities_invoice_delivery",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "email_draft_invoices": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "send-facility-invoices",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Email draft invoices",
+            "description": "PDF invoice attached, sent to each billing contact"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "name": "NotificationMatrix",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club (tenant) this notification rule belongs to"
+    },
+    "module": {
+      "type": "string",
+      "description": "Platform module this notification belongs to (e.g. Registration & Family, Scheduling & Events, Communication, Bookkeeping & Kanban, Player Development, Player Support)"
+    },
+    "trigger_event": {
+      "type": "string",
+      "description": "The event that triggers this notification"
+    },
+    "audience": {
+      "type": "string",
+      "description": "Who receives this notification (e.g. Parent/Guardian, Coach, Player, Director/Admin)"
+    },
+    "channels": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "Email",
+          "SMS",
+          "In-App",
+          "Push"
+        ]
+      },
+      "default": [],
+      "description": "Delivery channels used for this notification"
+    },
+    "subject_template": {
+      "type": "string",
+      "description": "Suggested subject line / content template, with [Placeholder] tokens"
+    },
+    "is_critical": {
+      "type": "boolean",
+      "default": false,
+      "description": "Critical alerts (e.g. payment overdue, safeguarding) override user channel preferences"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this notification rule is currently enabled"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order within the module"
+    }
+  },
+  "required": [
+    "module",
+    "trigger_event",
+    "audience"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

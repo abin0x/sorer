@@ -1,0 +1,195 @@
+{
+  "name": "KBArticle",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title in the user's words"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL slug, unique"
+    },
+    "category_slug": {
+      "type": "string",
+      "description": "Slug of the KBCategory"
+    },
+    "short_answer": {
+      "type": "string",
+      "description": "Short answer shown first"
+    },
+    "body": {
+      "type": "string",
+      "description": "Rich text HTML (steps, images, video embeds)"
+    },
+    "audience": {
+      "type": "string",
+      "enum": [
+        "public",
+        "signed_in",
+        "roles"
+      ],
+      "default": "public"
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Roles that can see it when audience = roles"
+    },
+    "module_gate": {
+      "type": "string",
+      "description": "Optional module key; only clubs with this module see the article"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_review",
+        "published",
+        "needs_update"
+      ],
+      "default": "draft"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Email of the article owner"
+    },
+    "last_reviewed": {
+      "type": "string",
+      "format": "date"
+    },
+    "review_interval_days": {
+      "type": "number",
+      "default": 180
+    },
+    "review_due": {
+      "type": "string",
+      "format": "date",
+      "description": "last_reviewed + interval; overdue = needs update"
+    },
+    "version": {
+      "type": "number",
+      "default": 1
+    },
+    "version_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Previous versions: {version,title,short_answer,body,saved_at,saved_by}"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Extra search words and synonyms"
+    },
+    "related_slugs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": []
+    },
+    "view_count": {
+      "type": "number",
+      "default": 0
+    },
+    "helpful_yes": {
+      "type": "number",
+      "default": 0
+    },
+    "helpful_no": {
+      "type": "number",
+      "default": 0
+    },
+    "negative_since_review": {
+      "type": "number",
+      "default": 0,
+      "description": "'No' votes since the last review"
+    }
+  },
+  "required": [
+    "title",
+    "slug"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

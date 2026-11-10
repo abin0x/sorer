@@ -1,0 +1,182 @@
+{
+  "name": "ExpenseReport",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this report belongs to"
+    },
+    "submitter_id": {
+      "type": "string",
+      "description": "ID of the User who submitted this report"
+    },
+    "submitter_name": {
+      "type": "string",
+      "description": "Submitter full name (denormalized for display)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short report title (e.g. 'MLS Convention 2026')"
+    },
+    "purpose": {
+      "type": "string",
+      "description": "Purpose / description of the trip or spend"
+    },
+    "location": {
+      "type": "string",
+      "description": "Where the expenses were incurred"
+    },
+    "report_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the report (defaults to today when created)"
+    },
+    "default_team_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Default team(s) this report is for, used to pre-fill new line allocations"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "submitted",
+        "in_review",
+        "approved",
+        "returned",
+        "rejected",
+        "exported_to_quickbooks",
+        "paid"
+      ],
+      "default": "draft",
+      "description": "Draft -> Submitted -> In review -> Approved -> Exported to QuickBooks -> Paid. Returned sends it back to Draft for the submitter. Rejected ends the workflow."
+    },
+    "submitted_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Sum of all line amounts at submission time"
+    },
+    "approved_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Sum of all approved line amounts (may be less than submitted_total on partial approval)"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "paid_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reviewer_id": {
+      "type": "string",
+      "description": "ID of the User who reviewed (approved/returned/rejected) this report"
+    },
+    "reviewer_name": {
+      "type": "string",
+      "description": "Reviewer name (denormalized for display)"
+    },
+    "return_reason": {
+      "type": "string",
+      "description": "Comment explaining why the report was returned for changes or rejected"
+    },
+    "quickbooks_bill_id": {
+      "type": "string",
+      "description": "QuickBooks Bill ID created on approval, with the submitter as vendor"
+    },
+    "payment_method": {
+      "type": "string",
+      "description": "How the report was paid (e.g. ACH, check, QuickBooks sync)"
+    },
+    "payment_reference": {
+      "type": "string",
+      "description": "Payment reference / check number / transaction id"
+    },
+    "status_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "by_name": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "Immutable audit trail of every status change, who made it, and when"
+    }
+  },
+  "required": [
+    "club_id",
+    "submitter_id",
+    "title",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

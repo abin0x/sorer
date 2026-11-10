@@ -1,0 +1,56 @@
+{
+  "name": "OutreachAuditLog",
+  "type": "object",
+  "properties": {
+    "actor_id": {
+      "type": "string",
+      "description": "User ID who performed the action"
+    },
+    "actor_email": {
+      "type": "string",
+      "description": "User email (denormalized)"
+    },
+    "action": {
+      "type": "string",
+      "description": "What happened: prospect.create, prospect.update, send.one_off, sequence.activate, settings.update, etc."
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Entity affected: Prospect, OutreachSequence, OutreachSettings, etc."
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the affected record"
+    },
+    "diff": {
+      "type": "object",
+      "default": {},
+      "description": "Before/after values for updates: { field: { before, after } }"
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "Requester IP if available"
+    }
+  },
+  "required": [
+    "action"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {},
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

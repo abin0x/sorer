@@ -1,0 +1,139 @@
+{
+  "name": "StagedRecord",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Stamped by the server from the project"
+    },
+    "entity": {
+      "type": "string",
+      "enum": [
+        "Team",
+        "Guardian",
+        "Player"
+      ]
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": true,
+      "description": "True when this record is the row's main entity (used for row accounting)"
+    },
+    "source_file_id": {
+      "type": "string"
+    },
+    "source_row_number": {
+      "type": "number",
+      "description": "Row number in the original file (header = row 1)"
+    },
+    "group": {
+      "type": "number",
+      "default": 0
+    },
+    "dedupe_key": {
+      "type": "string"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Stable key used to upsert into the live entity"
+    },
+    "raw_data": {
+      "type": "object",
+      "default": {},
+      "description": "Every source column of the row, untouched"
+    },
+    "mapped_data": {
+      "type": "object",
+      "default": {},
+      "description": "Transformed values keyed by target field"
+    },
+    "links": {
+      "type": "object",
+      "default": {},
+      "description": "guardian_emails, team_name, location_name"
+    },
+    "changes": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object"
+      },
+      "description": "Before/after samples for every transform"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "ready",
+        "excluded",
+        "rejected",
+        "merged"
+      ],
+      "default": "pending"
+    },
+    "merged_into": {
+      "type": "string"
+    },
+    "matched_live_id": {
+      "type": "string"
+    },
+    "match_decision": {
+      "type": "string",
+      "enum": [
+        "",
+        "update",
+        "create"
+      ],
+      "default": ""
+    },
+    "committed_id": {
+      "type": "string"
+    },
+    "commit_action": {
+      "type": "string",
+      "enum": [
+        "",
+        "created",
+        "updated"
+      ],
+      "default": ""
+    }
+  },
+  "required": [
+    "project_id",
+    "club_id",
+    "entity"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

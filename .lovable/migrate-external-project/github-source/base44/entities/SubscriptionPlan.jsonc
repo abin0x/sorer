@@ -1,0 +1,102 @@
+{
+  "name": "SubscriptionPlan",
+  "type": "object",
+  "properties": {
+    "tier": {
+      "type": "string",
+      "enum": [
+        "starter",
+        "standard",
+        "pro",
+        "enterprise"
+      ],
+      "description": "Plan tier key (used as the checkout productId)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Display name shown to buyers and on the Wix checkout page"
+    },
+    "price_monthly": {
+      "type": "number",
+      "default": 0,
+      "description": "Monthly price in major units"
+    },
+    "price_annually": {
+      "type": "number",
+      "default": 0,
+      "description": "Annual price in major units"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "max_players": {
+      "type": "number",
+      "description": "Player cap for this plan"
+    },
+    "max_branches": {
+      "type": "number",
+      "description": "Branch cap for this plan"
+    },
+    "max_teams": {
+      "type": "number",
+      "description": "Team cap for this plan"
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "kanban",
+          "recruiting",
+          "player_development",
+          "facility_management",
+          "calendar",
+          "communication",
+          "payments",
+          "analytics"
+        ]
+      },
+      "default": [],
+      "description": "Platform modules included in this plan. Each module can be toggled on/off individually."
+    },
+    "features": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Feature bullets shown on the plan picker"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "tier",
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "name": "PriorityAuditLog",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this priority send belongs to"
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "ID of the Channel the priority message was sent in"
+    },
+    "channel_name": {
+      "type": "string",
+      "description": "Channel name (denormalized for display)"
+    },
+    "message_id": {
+      "type": "string",
+      "description": "ID of the ChannelMessage that was flagged priority"
+    },
+    "sender_email": {
+      "type": "string",
+      "description": "Email of the user who sent the priority message"
+    },
+    "sender_name": {
+      "type": "string",
+      "description": "Sender's display name"
+    },
+    "audience_size": {
+      "type": "number",
+      "description": "Number of members the priority push was sent to"
+    }
+  },
+  "required": [
+    "channel_id",
+    "sender_email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

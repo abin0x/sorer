@@ -1,0 +1,68 @@
+{
+  "name": "Plugin",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Display name of the plugin"
+    },
+    "key": {
+      "type": "string",
+      "description": "Unique plugin key (e.g. club_kanban, club_nexxus)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of what the plugin does"
+    },
+    "category": {
+      "type": "string",
+      "description": "Plugin category (e.g. Project Management, Registration)"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Icon identifier from lucide-react (e.g. LayoutDashboard, ClipboardCheck)"
+    },
+    "color": {
+      "type": "string",
+      "description": "Tailwind color theme for the plugin card (e.g. emerald, blue)"
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Permission module keys this plugin governs (e.g. program, registration, recruiting)"
+    },
+    "menu_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Sidebar menu titles controlled by this plugin"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the plugin is currently activated/enabled"
+    },
+    "activated_by": {
+      "type": "string",
+      "description": "Email of the master admin who last toggled the plugin"
+    },
+    "activated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the plugin was last toggled"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order"
+    }
+  },
+  "required": [
+    "name",
+    "key",
+    "is_active"
+  ]
+}

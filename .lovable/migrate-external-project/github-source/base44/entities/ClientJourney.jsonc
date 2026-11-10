@@ -1,0 +1,230 @@
+{
+  "name": "ClientJourney",
+  "type": "object",
+  "properties": {
+    "contact_name": {
+      "type": "string",
+      "description": "Prospect's full name"
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Prospect's email \u2014 the key used to match this record to a logged-in user"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name the prospect is evaluating for"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Phone number, if provided"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "demo",
+        "trial"
+      ],
+      "default": "demo",
+      "description": "Which front door they came through"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "lead",
+        "demo_booked",
+        "demo_held",
+        "trial_active",
+        "agreement_signed",
+        "paid",
+        "migrating",
+        "live",
+        "active",
+        "renewal_due"
+      ],
+      "default": "lead",
+      "description": "Current pipeline stage: Lead \u2192 Demo booked \u2192 Demo held \u2192 Trial active \u2192 Agreement signed \u2192 Paid \u2192 Migrating \u2192 Live \u2192 Active \u2192 Renewal due"
+    },
+    "branch_count": {
+      "type": "string",
+      "description": "Approximate number of branches the prospect selected"
+    },
+    "sport": {
+      "type": "string",
+      "description": "Primary sport"
+    },
+    "current_platform": {
+      "type": "string",
+      "description": "Platform they're migrating from, if any"
+    },
+    "tier_key": {
+      "type": "string",
+      "description": "Pricing tier they're interested in (e.g. standard/pro/flagship) \u2014 used as the checkout productId"
+    },
+    "modules_selected": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Add-on module keys they're interested in"
+    },
+    "demo_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the demo was booked/held"
+    },
+    "trial_start_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "trial_end_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agreement_signed_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "paid_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "migration_started_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "live_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "renewal_date": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club this prospect converted to, once provisioned"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "ID of the User record for this prospect, once registered"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal staff notes"
+    },
+    "last_email_stage": {
+      "type": "string",
+      "description": "Stage the last automated follow-up email was sent for \u2014 prevents duplicate sends"
+    },
+    "checklist_trial": {
+      "type": "object",
+      "default": {},
+      "description": "Trial 5-step checklist completion, keyed by item key"
+    },
+    "checklist_migration": {
+      "type": "object",
+      "default": {},
+      "description": "Migration checklist completion, keyed by item key"
+    },
+    "checklist_setup": {
+      "type": "object",
+      "default": {},
+      "description": "Setup checklist completion, keyed by item key"
+    },
+    "checklist_onboarding": {
+      "type": "object",
+      "default": {},
+      "description": "Onboarding checklist completion, keyed by item key"
+    }
+  },
+  "required": [
+    "contact_email",
+    "stage"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "data.contact_email": "{{user.email}}"
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "data.contact_email": "{{user.email}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

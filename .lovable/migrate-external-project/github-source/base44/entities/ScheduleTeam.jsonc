@@ -1,0 +1,81 @@
+{
+  "name": "ScheduleTeam",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string"
+    },
+    "team_key": {
+      "type": "string",
+      "description": "club_id | team name, used to upsert"
+    },
+    "name": {
+      "type": "string"
+    },
+    "platform_name": {
+      "type": "string",
+      "description": "DPL, Girls Academy, Pre-GA, MLS Next, Pre-MLS, NAL, United, CW3, Novi, Programs"
+    },
+    "age_group": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "team_key"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

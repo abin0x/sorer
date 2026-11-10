@@ -1,0 +1,185 @@
+{
+  "name": "Task",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this task belongs to"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the task (used for imports/updates)"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "ID of the associated program, if any"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "ID of the associated CalendarEvent (e.g. a game booking), if this task was auto-created from a booking"
+    },
+    "campaign_id": {
+      "type": "string",
+      "description": "ID of the marketing Campaign this task supports, if any"
+    },
+    "marketing_plan_id": {
+      "type": "string",
+      "description": "ID of the MarketingPlan this task belongs to, if any"
+    },
+    "task_type": {
+      "type": "string",
+      "enum": [
+        "general",
+        "referee_schedule",
+        "trainer_schedule",
+        "matchday_prep",
+        "marketing"
+      ],
+      "default": "general",
+      "description": "Task template type, used for game-day and marketing task orchestration"
+    },
+    "requires_payment": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this task requires a payment to be scheduled and approved by the bookkeeper"
+    },
+    "title": {
+      "type": "string",
+      "description": "Task title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Task description"
+    },
+    "category": {
+      "type": "string",
+      "description": "Task category (e.g., Marketing, Registration, Fields, Camps, Tournaments, Match Day Operations)"
+    },
+    "assignee": {
+      "type": "string",
+      "description": "Email of the assigned team member"
+    },
+    "accountable": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails accountable for the outcome (RACI A \u2014 owns the result)"
+    },
+    "responsible": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails responsible for doing the work (RACI R)"
+    },
+    "consulted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails consulted for input (RACI C)"
+    },
+    "informed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Staff emails kept informed of progress (RACI I)"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the task is completed"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Task due date"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of task IDs that this task depends on"
+    },
+    "is_recurring": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a recurring task"
+    },
+    "recurrence_pattern": {
+      "type": "string",
+      "enum": [
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly"
+      ],
+      "description": "How often the task recurs"
+    },
+    "recurrence_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When to stop creating recurring instances"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

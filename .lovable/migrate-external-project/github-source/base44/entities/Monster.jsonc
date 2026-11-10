@@ -1,0 +1,70 @@
+{
+  "name": "Monster",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Monster name"
+    },
+    "size": {
+      "type": "string",
+      "description": "Size category (Tiny, Small, Medium, Large, Huge, Gargantuan)"
+    },
+    "type": {
+      "type": "string",
+      "description": "Monster type (Aberration, Beast, Celestial, etc.)"
+    },
+    "alignment": {
+      "type": "string",
+      "description": "Alignment"
+    },
+    "armor_class": {
+      "type": "number",
+      "description": "Armor Class"
+    },
+    "hit_points": {
+      "type": "number",
+      "description": "Hit points"
+    },
+    "speed": {
+      "type": "string",
+      "description": "Movement speeds"
+    },
+    "strength": {
+      "type": "number"
+    },
+    "dexterity": {
+      "type": "number"
+    },
+    "constitution": {
+      "type": "number"
+    },
+    "intelligence": {
+      "type": "number"
+    },
+    "wisdom": {
+      "type": "number"
+    },
+    "charisma": {
+      "type": "number"
+    },
+    "challenge": {
+      "type": "number",
+      "description": "Challenge rating"
+    },
+    "description": {
+      "type": "string",
+      "description": "Monster description"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "Monster actions"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

@@ -1,0 +1,2 @@
+revoke all on function public.has_role(uuid, public.app_role), public.is_club_member(text), public.is_club_admin(text) from public, anon;
+grant execute on function public.has_role(uuid, public.app_role), public.is_club_member(text), public.is_club_admin(text) to authenticated;

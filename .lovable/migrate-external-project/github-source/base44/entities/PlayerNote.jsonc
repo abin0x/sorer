@@ -1,0 +1,117 @@
+{
+  "name": "PlayerNote",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this note belongs to"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player this note is about"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of the coach/director who captured the note"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Author full name (denormalized)"
+    },
+    "context": {
+      "type": "string",
+      "enum": [
+        "practice",
+        "game",
+        "meeting",
+        "self",
+        "other"
+      ],
+      "default": "practice",
+      "description": "Context the note was captured in"
+    },
+    "note_text": {
+      "type": "string",
+      "description": "Raw note text (typed or dictated transcript)"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Tags: technical, tactical, physical, mental, attitude, effort"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "internal_only",
+        "draft_for_feedback"
+      ],
+      "default": "internal_only",
+      "description": "internal_only stays on the internal record; draft_for_feedback enters the AI feedback pipeline"
+    },
+    "linked_event_id": {
+      "type": "string",
+      "description": "Optional ID of the CalendarEvent this note relates to"
+    }
+  },
+  "required": [
+    "player_id",
+    "note_text"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

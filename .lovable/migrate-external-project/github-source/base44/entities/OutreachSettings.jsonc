@@ -1,0 +1,111 @@
+{
+  "name": "OutreachSettings",
+  "type": "object",
+  "properties": {
+    "config_key": {
+      "type": "string",
+      "default": "default",
+      "description": "Singleton key \u2014 always 'default'"
+    },
+    "resend_api_key": {
+      "type": "string",
+      "description": "Resend API key (stored encrypted, never returned in full)"
+    },
+    "from_name": {
+      "type": "string",
+      "default": "ClubRudder Team",
+      "description": "From name for outgoing emails"
+    },
+    "from_address": {
+      "type": "string",
+      "default": "team@mail.clubrudder.com",
+      "description": "From address"
+    },
+    "reply_to_address": {
+      "type": "string",
+      "description": "Reply-to address for inbound replies"
+    },
+    "tracking_subdomain": {
+      "type": "string",
+      "description": "e.g. links.mail.clubrudder.com"
+    },
+    "physical_address": {
+      "type": "string",
+      "default": "ClubRudder\n123 Main St, Suite 100\nAnn Arbor, MI 48104",
+      "description": "Physical mailing address for CAN-SPAM compliance"
+    },
+    "daily_send_limit": {
+      "type": "number",
+      "default": 100,
+      "description": "Max sends per day"
+    },
+    "warmup_mode": {
+      "type": "boolean",
+      "default": true,
+      "description": "Throttles sends to ramp up a new domain"
+    },
+    "warmup_started_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When warmup started (for ramp calculation)"
+    },
+    "notify_on_reply": {
+      "type": "boolean",
+      "default": true,
+      "description": "Send a notification email when a reply is received"
+    },
+    "notification_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Where reply alerts go"
+    },
+    "open_tracking_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether open tracking pixel is included"
+    },
+    "click_tracking_enabled": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether click tracking is enabled"
+    },
+    "domain_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the sending domain has been verified"
+    },
+    "suppression_list": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Globally suppressed email addresses \u2014 no send can bypass"
+    }
+  },
+  "required": [
+    "config_key"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

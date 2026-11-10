@@ -1,0 +1,111 @@
+{
+  "name": "TryoutSubtask",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this subtask belongs to"
+    },
+    "tryout_task_id": {
+      "type": "string",
+      "description": "ID of the parent TryoutTask this subtask belongs to"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "field",
+        "staff",
+        "registration",
+        "marketing",
+        "comms"
+      ],
+      "description": "Which of the five standard tryout-event workstreams this subtask covers"
+    },
+    "title": {
+      "type": "string",
+      "description": "Subtask title (e.g. 'Reserve the field')"
+    },
+    "default_owner_role": {
+      "type": "string",
+      "description": "The custom_role that owns this subtask type by default (field_manager, tryout_lead, club_admin, marketing_director)"
+    },
+    "assignee_id": {
+      "type": "string",
+      "description": "ID of the user currently assigned (defaults to the club member holding default_owner_role)"
+    },
+    "assignee_name": {
+      "type": "string",
+      "description": "Assignee name (denormalized for display)"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Subtask due date, offset from the event date per its type"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "in_progress",
+        "completed"
+      ],
+      "default": "pending",
+      "description": "Subtask status"
+    }
+  },
+  "required": [
+    "tryout_task_id",
+    "type",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "name": "GroupSession",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this assignment belongs to"
+    },
+    "group_id": {
+      "type": "string",
+      "description": "ID of the Group assigned to this session"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "ID of the Session this group is assigned to"
+    },
+    "custom_start_time": {
+      "type": "string",
+      "description": "Per-group override of the session's start time (HH:MM). Blank = inherit."
+    },
+    "custom_end_time": {
+      "type": "string",
+      "description": "Per-group override of the session's end time (HH:MM). Blank = inherit."
+    },
+    "custom_location_id": {
+      "type": "string",
+      "description": "Per-group override of the session's EventLocation. Blank = inherit."
+    },
+    "custom_field_id": {
+      "type": "string",
+      "description": "Per-group override of the session's EventField. Blank = inherit."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Notes about this group's assignment to the session"
+    }
+  },
+  "required": [
+    "club_id",
+    "group_id",
+    "session_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

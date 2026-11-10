@@ -1,0 +1,95 @@
+{
+  "name": "RoadmapProject",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this roadmap project belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "number": {
+      "type": "string",
+      "description": "Project number (e.g. '1', '2')"
+    },
+    "title": {
+      "type": "string",
+      "description": "Project title (e.g. 'Discovery & Process Design')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the project's purpose"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this project is currently active in the roadmap"
+    },
+    "activated_by": {
+      "type": "string",
+      "description": "Email of the user who activated this project"
+    },
+    "activated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this project was activated"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order"
+    }
+  },
+  "required": [
+    "number",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

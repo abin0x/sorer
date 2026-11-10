@@ -1,0 +1,98 @@
+{
+  "name": "Platform",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this platform/league belongs to. Blank for global reference platforms."
+    },
+    "name": {
+      "type": "string",
+      "description": "Competitive platform / league name (e.g. MLS-Next, Girls Academy, Aspire, MSPRL, NPL, ECNL)"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "Boys",
+        "Girls",
+        "Boys and Girls"
+      ],
+      "default": "Boys and Girls",
+      "description": "Gender eligibility for this platform"
+    },
+    "eligible_age_groups": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Age groups (e.g. U12) this platform allows. Empty means free-form (no eligibility check)."
+    },
+    "season_name": {
+      "type": "string",
+      "description": "Season this platform record applies to. Blank = all seasons."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this platform"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this platform is currently offered"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

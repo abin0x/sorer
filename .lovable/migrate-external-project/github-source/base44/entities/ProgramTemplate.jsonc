@@ -1,0 +1,136 @@
+{
+  "name": "ProgramTemplate",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this template belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "name": {
+      "type": "string",
+      "description": "Template name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Template description"
+    },
+    "default_season": {
+      "type": "string",
+      "description": "Default season year range (e.g., 2026-2027, 2027-2028)"
+    },
+    "default_branches": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Default branches"
+    },
+    "default_gender_eligibility": {
+      "type": "string",
+      "enum": [
+        "Boys",
+        "Girls",
+        "Boys and Girls"
+      ],
+      "description": "Default gender eligibility"
+    },
+    "default_priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "description": "Default priority"
+    },
+    "default_category": {
+      "type": "string",
+      "description": "Default category"
+    },
+    "default_duration_days": {
+      "type": "number",
+      "description": "Default duration in days"
+    },
+    "predefined_tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "days_offset": {
+            "type": "number",
+            "description": "Days from program start"
+          }
+        }
+      },
+      "description": "Pre-defined tasks to create with the program"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this template is active"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

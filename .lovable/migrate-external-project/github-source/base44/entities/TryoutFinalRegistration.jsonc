@@ -1,0 +1,173 @@
+{
+  "name": "TryoutFinalRegistration",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this final registration invite belongs to"
+    },
+    "tryout_plan_id": {
+      "type": "string",
+      "description": "ID of the TryoutPlan this invite was generated from"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the rostered Player being invited to complete final registration"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized for display)"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID of the Team the player was rostered to"
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team name (denormalized for display)"
+    },
+    "guardian_id": {
+      "type": "string",
+      "description": "ID of the Guardian this invite was sent to"
+    },
+    "guardian_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Guardian email the invite was sent to"
+    },
+    "amount_due": {
+      "type": "number",
+      "description": "Total registration amount due, denormalized from the team's cost"
+    },
+    "payment_frequency": {
+      "type": "string",
+      "enum": [
+        "one_time",
+        "installments"
+      ],
+      "description": "How the family chose to pay, selected in the portal"
+    },
+    "installment_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Total number of installments in the plan. 0 for one-time."
+    },
+    "installment_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount of each installment"
+    },
+    "installments_paid": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of installments collected so far"
+    },
+    "next_installment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the next installment is due"
+    },
+    "autopay_enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the guardian opted into autopay for this installment plan"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe Customer id for this family, created when autopay is set up"
+    },
+    "autopay_payment_method_id": {
+      "type": "string",
+      "description": "Stripe PaymentMethod id saved for off-session autopay charges"
+    },
+    "promo_code": {
+      "type": "string",
+      "description": "Promo code applied, if any"
+    },
+    "discount_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Discount applied by the promo code"
+    },
+    "waiver_accepted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the liability waiver was accepted in the portal"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "invited",
+        "submitted",
+        "paid"
+      ],
+      "default": "invited",
+      "description": "Lifecycle status of this final registration invite"
+    },
+    "invited_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the invite email was sent"
+    },
+    "submitted_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the family completed the portal form"
+    }
+  },
+  "required": [
+    "tryout_plan_id",
+    "player_id",
+    "player_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

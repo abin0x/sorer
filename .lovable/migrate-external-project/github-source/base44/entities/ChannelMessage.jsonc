@@ -1,0 +1,213 @@
+{
+  "name": "ChannelMessage",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this message belongs to"
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "ID of the Channel this message was posted in"
+    },
+    "channel_type": {
+      "type": "string",
+      "description": "Channel type, denormalized for quick permission/notification checks"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "Team ID, denormalized from the channel for mute/audience lookups. Blank for club-wide channels."
+    },
+    "author_email": {
+      "type": "string",
+      "description": "Email of the author"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Author's display name"
+    },
+    "author_role": {
+      "type": "string",
+      "description": "Author's custom_role at the time of posting"
+    },
+    "content": {
+      "type": "string",
+      "description": "Message / post text content (the poll question when this message is a poll)"
+    },
+    "image_uri": {
+      "type": "string",
+      "description": "Private file URI for social feed photo posts \u2014 resolve to a signed URL for display, never a public link"
+    },
+    "attachment_uri": {
+      "type": "string",
+      "description": "Private file URI for a channel attachment (photo, video, or document) \u2014 resolve to a signed URL before display, never a public link"
+    },
+    "attachment_name": {
+      "type": "string",
+      "description": "Original file name of the attachment, shown on document chips"
+    },
+    "attachment_kind": {
+      "type": "string",
+      "enum": [
+        "image",
+        "video",
+        "file"
+      ],
+      "description": "How the attachment is rendered: inline photo, inline video player, or a download chip"
+    },
+    "action_label": {
+      "type": "string",
+      "description": "Button label for a payment or registration link attached to this post"
+    },
+    "action_url": {
+      "type": "string",
+      "description": "Payment / registration link attached to this post (app-relative or absolute URL)"
+    },
+    "poll_options": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Poll options as [{ id, text }]. Empty for a normal message."
+    },
+    "poll_votes": {
+      "type": "object",
+      "default": {},
+      "description": "Poll results as a map of option id -> array of voter emails"
+    },
+    "parent_id": {
+      "type": "string",
+      "description": "ID of the parent message, for a reply/comment"
+    },
+    "is_priority": {
+      "type": "boolean",
+      "default": false,
+      "description": "Priority flag \u2014 pins to top, bypasses mute and (by default) quiet hours"
+    },
+    "ack_required": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the sender requires an explicit 'Got it' acknowledgment"
+    },
+    "acknowledged_by": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Emails of members who acknowledged this message"
+    },
+    "reactions": {
+      "type": "object",
+      "default": {},
+      "description": "Map of emoji -> array of emails who reacted"
+    },
+    "pinned": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this message is pinned to the top of the channel (always true while is_priority is true)"
+    },
+    "moderation_status": {
+      "type": "string",
+      "enum": [
+        "approved",
+        "pending",
+        "rejected"
+      ],
+      "default": "approved",
+      "description": "Social feed moderation state. Non-social-feed posts are always approved."
+    },
+    "soft_deleted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Soft-delete flag \u2014 message is hidden from normal views but kept for audit"
+    }
+  },
+  "required": [
+    "channel_id",
+    "author_email",
+    "content"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.team_id": {
+                "$exists": false
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.team_id": ""
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.team_id": {
+                "$in": "{{user.data.team_ids}}"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

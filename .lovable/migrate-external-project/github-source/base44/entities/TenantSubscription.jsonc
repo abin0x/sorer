@@ -1,0 +1,170 @@
+{
+  "name": "TenantSubscription",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this subscription belongs to"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe Customer ID for this tenant"
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Stripe Subscription ID"
+    },
+    "checkout_session_id": {
+      "type": "string",
+      "description": "Stripe Checkout Session ID that initiated this subscription"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "incomplete",
+        "incomplete_expired",
+        "trialing",
+        "active",
+        "past_due",
+        "canceled",
+        "unpaid",
+        "paused"
+      ],
+      "default": "incomplete",
+      "description": "Mirrors Stripe subscription status"
+    },
+    "module_keys": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Module keys covered by this subscription (one line item per module)"
+    },
+    "current_period_start": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Stripe current period start"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Stripe current period end"
+    },
+    "cancel_at_period_end": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the subscription is set to cancel at period end"
+    },
+    "trial_end": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Stripe trial end timestamp"
+    },
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this record was last reconciled with Stripe"
+    }
+  },
+  "required": [
+    "club_id",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

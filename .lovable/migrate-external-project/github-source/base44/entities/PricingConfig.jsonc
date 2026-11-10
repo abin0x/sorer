@@ -1,0 +1,144 @@
+{
+  "name": "PricingConfig",
+  "type": "object",
+  "properties": {
+    "tiers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "best_for": {
+            "type": "string"
+          },
+          "setup_fee": {
+            "type": "number"
+          },
+          "per_player_cost": {
+            "type": "number"
+          },
+          "module_discount_percent": {
+            "type": "number"
+          }
+        }
+      },
+      "default": [],
+      "description": "The three pricing tiers (Fairway/Regatta/Flagship) with their setup fee, per-player rate, and module discount percent"
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "list_price": {
+            "type": "number"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "default": [],
+      "description": "The six optional add-on modules with their annual list price"
+    },
+    "volume_multipliers": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "default": [
+        1,
+        0.8,
+        0.65,
+        0.5,
+        0.4
+      ],
+      "description": "Multiplier applied to each additional selected module's list price, in order (1st, 2nd, 3rd, 4th, 5th+)"
+    }
+  },
+  "required": [],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

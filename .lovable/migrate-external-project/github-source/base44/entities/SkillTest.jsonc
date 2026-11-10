@@ -1,0 +1,111 @@
+{
+  "name": "SkillTest",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this skill test belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Test name (e.g. Directional 1st Touch / Wall Pass)"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "basic",
+        "advanced"
+      ],
+      "default": "basic",
+      "description": "Difficulty category"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Duration in minutes",
+      "default": 2
+    },
+    "player_count": {
+      "type": "number",
+      "default": 2,
+      "description": "Number of players needed"
+    },
+    "description": {
+      "type": "string",
+      "description": "Intro paragraph describing the drill"
+    },
+    "setup": {
+      "type": "string",
+      "description": "Setup instructions (numbered steps)"
+    },
+    "how_to_perform": {
+      "type": "string",
+      "description": "Detailed instruction block"
+    },
+    "scoring": {
+      "type": "string",
+      "description": "Scoring rules and points"
+    },
+    "diagram_notes": {
+      "type": "string",
+      "description": "Description of the drill diagram for visual rendering"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order within category"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1 @@
+ALTER TABLE public.clubs ADD COLUMN IF NOT EXISTS club_type text NOT NULL DEFAULT 'live'; NOTIFY pgrst, 'reload schema';

@@ -1,0 +1,44 @@
+{
+  "name": "Outreach Sequence Engine",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "outreach_sequence_engine",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_engine": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "outreach-engine"
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Run sequence engine",
+            "description": "Send due step emails for active sequences"
+          }
+        }
+      }
+    ]
+  },
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "*/15 * * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Processes active outreach sequences every 15 minutes \u2014 sends due step emails, evaluates conditions, respects daily limits and warmup mode."
+}

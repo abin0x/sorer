@@ -1,0 +1,137 @@
+{
+  "name": "SpiritwearProduct",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this product belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Product name (e.g. 'Jaguars Hoodie', 'Club T-Shirt')"
+    },
+    "description": {
+      "type": "string",
+      "description": "Public product description shown on the marketplace"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Primary product image URL"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "apparel",
+        "accessories",
+        "equipment",
+        "other"
+      ],
+      "default": "apparel",
+      "description": "Product category for browsing"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active",
+      "description": "Only active products appear in the marketplace"
+    },
+    "base_price": {
+      "type": "number",
+      "description": "Default price used when a variant has no explicit price override"
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "size": {
+            "type": "string",
+            "description": "Size label (e.g. S, M, L, XL, Youth M)"
+          },
+          "color": {
+            "type": "string",
+            "description": "Color label (e.g. Navy, Heather Gray)"
+          },
+          "sku": {
+            "type": "string",
+            "description": "Internal SKU for this variant"
+          },
+          "price": {
+            "type": "number",
+            "description": "Variant price override. 0 or missing = use base_price."
+          },
+          "stock": {
+            "type": "number",
+            "default": 0,
+            "description": "Quantity available. 0 = out of stock."
+          }
+        }
+      },
+      "default": [],
+      "description": "Size/color combinations with individual pricing and stock"
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Manual sort order in the marketplace (lower first)"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "base_price"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

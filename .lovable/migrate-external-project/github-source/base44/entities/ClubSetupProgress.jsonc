@@ -1,0 +1,101 @@
+{
+  "name": "ClubSetupProgress",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club this setup wizard progress belongs to (one record per club)"
+    },
+    "step_1_complete": {
+      "type": "boolean",
+      "default": false,
+      "description": "Club Identity step (name, logo, colors) completed"
+    },
+    "step_2_complete": {
+      "type": "boolean",
+      "default": false,
+      "description": "Structure step (branches & platforms) completed"
+    },
+    "step_3_complete": {
+      "type": "boolean",
+      "default": false,
+      "description": "Modules step (feature flags) completed"
+    },
+    "step_4_complete": {
+      "type": "boolean",
+      "default": false,
+      "description": "Migration step reached \u2014 either a migration was started or explicitly skipped"
+    },
+    "migration_skipped": {
+      "type": "boolean",
+      "default": false,
+      "description": "True if the director chose 'Skip for Now' on the migration step"
+    },
+    "wizard_completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Stamped once all four steps are complete \u2014 unlocks the normal dashboard"
+    }
+  },
+  "required": [
+    "club_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{report_name}} — Scheduled Report</mj-title>
+    <mj-preview>Your scheduled report is ready: {{report_name}}</mj-preview>
+    <mj-attributes>
+      <mj-all font-family="Inter, Helvetica, Arial, sans-serif" />
+      <mj-section background-color="#ffffff" padding="0 36px" />
+      <mj-text color="#0b162b" font-size="15px" line-height="1.6" padding="0" />
+      <mj-button background-color="#5048e5" border-radius="24px" font-weight="700" inner-padding="14px 28px" align="left" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#f8fafc">
+    <mj-section background-color="#5048e5" padding="20px 36px">
+      <mj-column>
+        <mj-text color="#ffffff" font-size="18px" font-weight="800" padding="0">
+          Club Rudder
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="36px 36px 12px">
+      <mj-column>
+        <mj-text font-size="24px" font-weight="800" line-height="1.2" padding="0">
+          Your scheduled report is ready
+        </mj-text>
+        <mj-text color="#64748b" font-size="14px" padding="0" padding-top="8px">
+          {{report_name}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="12px 36px">
+      <mj-column>
+        <mj-text color="#0b162b" font-size="15px" padding="0">
+          Hi {{recipient_name}},
+        </mj-text>
+        <mj-text color="#0b162b" font-size="15px" padding="0" padding-top="12px">
+          Your scheduled report <strong>{{report_name}}</strong> is attached to this email as a {{format}} file. The data in this report has been scoped to your role and access level.
+        </mj-text>
+        <mj-text color="#64748b" font-size="13px" padding="0" padding-top="12px">
+          Generated: {{generated_at}}<br />
+          Rows: {{row_count}}
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+    <mj-section padding="24px 36px 36px">
+      <mj-column>
+        <mj-button href="{{app_url}}" background-color="#5048e5" border-radius="24px" color="#ffffff" font-weight="700">
+          View in Club Rudder
+        </mj-button>
+      </mj-column>
+    </mj-section>
+
+    <mj-section background-color="#f8fafc" padding="20px 36px">
+      <mj-column>
+        <mj-text color="#64748b" font-size="12px" padding="0" align="center">
+          This report was scheduled by {{owner_name}}. You received only data your role allows.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

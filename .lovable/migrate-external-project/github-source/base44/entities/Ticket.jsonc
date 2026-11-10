@@ -1,0 +1,372 @@
+{
+  "name": "Ticket",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this ticket belongs to"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name (denormalized for console display)"
+    },
+    "ticket_number": {
+      "type": "string",
+      "description": "Human-readable ticket number, e.g. TKT-00042"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "billing",
+        "technical",
+        "feature_request",
+        "account",
+        "data_migration",
+        "other"
+      ],
+      "default": "other",
+      "description": "Ticket category"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Short summary of the issue"
+    },
+    "description": {
+      "type": "string",
+      "description": "Full details of the issue (also stored as first TicketMessage)"
+    },
+    "urgency": {
+      "type": "string",
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "default": "P3",
+      "description": "Submitter-selected urgency"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "default": "P3",
+      "description": "Agent-set priority (starts equal to urgency)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "open",
+        "pending_customer",
+        "escalated",
+        "resolved",
+        "closed"
+      ],
+      "default": "new",
+      "description": "Ticket lifecycle status"
+    },
+    "submitted_by_name": {
+      "type": "string",
+      "description": "Name of the person who submitted the ticket"
+    },
+    "submitted_by_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email of the submitter"
+    },
+    "submitted_by_role": {
+      "type": "string",
+      "description": "Role of the submitter (custom_role or system_role label)"
+    },
+    "submitted_by_user_id": {
+      "type": "string",
+      "description": "User ID of the submitter (same as created_by_id, explicit for RLS)"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "Branch ID auto-captured from submitter context"
+    },
+    "branch_name": {
+      "type": "string",
+      "description": "Branch name auto-captured from submitter context"
+    },
+    "current_page": {
+      "type": "string",
+      "description": "Page or screen the user was on when they submitted"
+    },
+    "app_version": {
+      "type": "string",
+      "description": "App version auto-captured at submission"
+    },
+    "device_info": {
+      "type": "object",
+      "default": {},
+      "description": "Auto-captured device/browser info: { user_agent, platform, language, screen }"
+    },
+    "client_errors": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Last 5 client-side errors captured at submission"
+    },
+    "screenshot_uri": {
+      "type": "string",
+      "description": "Private file URI of optional screenshot uploaded by submitter"
+    },
+    "assigned_to_id": {
+      "type": "string",
+      "description": "User ID of the support agent assigned to this ticket"
+    },
+    "assigned_to_name": {
+      "type": "string",
+      "description": "Assigned agent name (denormalized)"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Tags for categorization and filtering"
+    },
+    "sla_policy_id": {
+      "type": "string",
+      "description": "ID of the SLAPolicy applied to this ticket"
+    },
+    "sla_response_deadline": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Deadline for first agent response, computed from SLA policy"
+    },
+    "sla_resolution_deadline": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Deadline for full resolution, computed from SLA policy"
+    },
+    "sla_paused_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When SLA timer was paused (status changed to pending_customer)"
+    },
+    "sla_total_paused_seconds": {
+      "type": "number",
+      "default": 0,
+      "description": "Total seconds the SLA timer has been paused"
+    },
+    "sla_75_alerted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the 75% SLA warning has been sent"
+    },
+    "sla_breach_alerted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the SLA breach alert has been sent"
+    },
+    "satisfaction_rating": {
+      "type": "number",
+      "description": "1-5 rating submitted by customer when ticket is resolved"
+    },
+    "satisfaction_comment": {
+      "type": "string",
+      "description": "Optional feedback comment from customer"
+    },
+    "merged_into_ticket_id": {
+      "type": "string",
+      "description": "When this ticket is merged as duplicate, the ticket it was merged into"
+    },
+    "auto_closed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this ticket was auto-closed by the system"
+    },
+    "auto_close_reason": {
+      "type": "string",
+      "description": "Reason for auto-close (pending_7d or resolved_5d)"
+    },
+    "resolution_notes": {
+      "type": "string",
+      "description": "Agent notes on how the ticket was resolved"
+    },
+    "resolved_by": {
+      "type": "string",
+      "description": "Email of the agent who resolved the ticket"
+    },
+    "resolved_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the ticket was marked resolved"
+    },
+    "closed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the ticket was closed"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the most recent message (for sorting)"
+    },
+    "message_count": {
+      "type": "number",
+      "default": 1,
+      "description": "Total messages in the thread"
+    }
+  },
+  "required": [
+    "club_id",
+    "subject",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "created_by_id": "{{user.id}}"
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

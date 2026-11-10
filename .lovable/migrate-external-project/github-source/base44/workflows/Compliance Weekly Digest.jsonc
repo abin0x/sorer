@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 7 * * 1",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Every Monday at 7am ET: emails each club's admins a weekly compliance digest.",
+  "name": "Compliance Weekly Digest",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "compliance_weekly_digest",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "send_digest": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "compliance-digest",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send weekly compliance digest",
+            "description": "Builds a per-club compliance summary and emails club directors/admins"
+          }
+        }
+      }
+    ]
+  }
+}

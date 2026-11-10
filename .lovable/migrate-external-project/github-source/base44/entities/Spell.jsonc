@@ -1,0 +1,51 @@
+{
+  "name": "Spell",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Spell name"
+    },
+    "level": {
+      "type": "number",
+      "description": "Spell level (0-9)"
+    },
+    "school": {
+      "type": "string",
+      "description": "School of magic"
+    },
+    "casting_time": {
+      "type": "string",
+      "description": "Casting time"
+    },
+    "range": {
+      "type": "string",
+      "description": "Range"
+    },
+    "duration": {
+      "type": "string",
+      "description": "Duration"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Components (V, S, M)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Spell description"
+    },
+    "classes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Classes that can cast this spell"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

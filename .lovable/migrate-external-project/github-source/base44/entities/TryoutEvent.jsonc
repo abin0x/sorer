@@ -1,0 +1,233 @@
+{
+  "name": "TryoutEvent",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this event belongs to"
+    },
+    "tryout_plan_id": {
+      "type": "string",
+      "description": "ID of the parent TryoutPlan this event belongs to"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "main_tryout",
+        "open_training",
+        "supplemental_tryout"
+      ],
+      "default": "open_training",
+      "description": "main_tryout = the plan's single required anchor event. open_training must fall before it, supplemental_tryout must fall after it."
+    },
+    "is_anchor": {
+      "type": "boolean",
+      "default": false,
+      "description": "True only for the plan's single Main Club Tryout Date event. Used to pin it on the Kanban board and to block deletion without a replacement."
+    },
+    "supplemental_index": {
+      "type": "number",
+      "description": "1-based ordinal among this plan's supplemental tryouts, for display as 'Supplemental #1', '#2', etc."
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Event date"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Start time (e.g. 18:00)"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "End time (e.g. 19:30)"
+    },
+    "location": {
+      "type": "string",
+      "description": "Field, facility name, or address for this event"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "ID of the Branch (Location) this session runs at"
+    },
+    "branch_name": {
+      "type": "string",
+      "description": "Branch name (denormalized for display)"
+    },
+    "field_id": {
+      "type": "string",
+      "description": "ID of the Field (Field entity) this session is booked on"
+    },
+    "field_name": {
+      "type": "string",
+      "description": "Field name, with its facility (denormalized for display)"
+    },
+    "capacity": {
+      "type": "number",
+      "description": "Maximum players this session can take. Falls back to the event's max capacity when empty."
+    },
+    "evaluator_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of the coaches assigned to evaluate at this session"
+    },
+    "evaluator_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Evaluator names (denormalized for display)"
+    },
+    "evaluation_criteria": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "What coaches score each player on: [{ key, label }]. Empty means the default criteria (technical, tactical, athleticism, attitude)."
+    },
+    "evaluation_share_scores": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether evaluators can see each other's scores at this session. Off by default \u2014 the admin reveals them when ready."
+    },
+    "evaluation_block_own_child": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether a coach assigned to this session is blocked from evaluating their own child"
+    },
+    "responsible_user_id": {
+      "type": "string",
+      "description": "ID of the coach/staff member responsible for running this event"
+    },
+    "responsible_name": {
+      "type": "string",
+      "description": "Responsible person's name (denormalized for display)"
+    },
+    "owner_user_id": {
+      "type": "string",
+      "description": "ID of the staff member who owns overall coordination of this event (typically the Tryout Lead)"
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Owner's name (denormalized for display)"
+    },
+    "expected_attendance": {
+      "type": "number",
+      "description": "Expected number of players attending, for planning purposes"
+    },
+    "auto_registration": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether a public registration page was auto-created for this event"
+    },
+    "registration_url": {
+      "type": "string",
+      "description": "Link to the event's signup / registration page"
+    },
+    "registration_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of players currently registered for this event"
+    },
+    "checked_in_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of registered players who checked in on the day"
+    },
+    "evaluated_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of players who have been evaluated"
+    },
+    "offered_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of players who received an offer (before acceptance). Drives the tryout funnel 'offered' stage."
+    },
+    "accepted_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of players converted to Accepted"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "planned",
+        "in_progress",
+        "ready",
+        "completed",
+        "post_tryout"
+      ],
+      "default": "planned",
+      "description": "Kanban stage this event card sits in"
+    },
+    "kanban_card_id": {
+      "type": "string",
+      "description": "ID of the synced Kanban card, when the club's Kanban module is enabled"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes about this event"
+    }
+  },
+  "required": [
+    "tryout_plan_id",
+    "type",
+    "date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

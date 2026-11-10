@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 * * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Hourly: checks SLA timers on all active tickets. Alerts the system owner at 75% of resolution SLA and on breach. Paused (pending_customer) tickets are skipped.",
+  "name": "Ticket SLA Monitor",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "ticket_sla_monitor",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "check_sla": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "ticket-sla-check",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Check SLA timers",
+            "description": "Hourly SLA check across all active tickets"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "ProspectSegment",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Segment name, e.g. directors-multi-branch"
+    },
+    "description": {
+      "type": "string",
+      "description": "What this segment represents"
+    },
+    "rules": {
+      "type": "object",
+      "default": {},
+      "description": "Auto-segment rules for dynamic segments: { conditions: [{ field, op, value }], combinator: 'and'|'or' }"
+    },
+    "is_dynamic": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, membership recomputes from rules on demand"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

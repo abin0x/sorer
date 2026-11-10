@@ -1,0 +1,1 @@
+ALTER FUNCTION public.is_system_owner() SECURITY INVOKER;

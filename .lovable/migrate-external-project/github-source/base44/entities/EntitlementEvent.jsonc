@@ -1,0 +1,138 @@
+{
+  "name": "EntitlementEvent",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Tenant this event affects"
+    },
+    "module_key": {
+      "type": "string",
+      "description": "Module key this event is about"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "granted",
+        "revoked",
+        "status_changed",
+        "grace_extended",
+        "complimentary_granted",
+        "complimentary_revoked",
+        "sync_forced",
+        "drift_detected",
+        "checkout_started",
+        "trial_started",
+        "payment_failed",
+        "payment_recovered",
+        "cancellation_requested",
+        "subscription_deleted"
+      ],
+      "description": "What happened to the entitlement"
+    },
+    "from_status": {
+      "type": "string",
+      "description": "Previous TenantModule status"
+    },
+    "to_status": {
+      "type": "string",
+      "description": "New TenantModule status"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Human-readable reason for the change"
+    },
+    "actor": {
+      "type": "string",
+      "description": "Who or what caused the change \u2014 user email, 'stripe_webhook', or 'nightly_reconcile'"
+    },
+    "metadata": {
+      "type": "object",
+      "default": {},
+      "description": "Additional context (Stripe event ID, subscription ID, etc.)"
+    }
+  },
+  "required": [
+    "club_id",
+    "module_key",
+    "action",
+    "actor"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

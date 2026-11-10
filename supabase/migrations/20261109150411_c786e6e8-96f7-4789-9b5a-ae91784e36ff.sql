@@ -1,0 +1,3 @@
+UPDATE public.teams SET coach_ids = '["es-c1","es-c-review"]'::jsonb WHERE id='es-t1' AND club_id='eclipse-select';
+UPDATE public.players SET guardian_ids = coalesce(guardian_ids,'[]'::jsonb) || '["es-g-review"]'::jsonb WHERE id='es-t1-p1' AND club_id='eclipse-select' AND NOT coalesce(guardian_ids,'[]'::jsonb) ? 'es-g-review';
+UPDATE core.users SET custom_role='parent_guardian' WHERE id='15ee4f69-722b-441f-b0a4-9736a7894e4c';

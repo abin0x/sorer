@@ -1,0 +1,137 @@
+{
+  "name": "TestBenchmark",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this benchmark belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "physical",
+        "skill"
+      ],
+      "description": "Whether this benchmark scores a physical fitness test or a skill test"
+    },
+    "test_key": {
+      "type": "string",
+      "description": "Physical: speed, power, agility, endurance. Skill: the SkillTest record ID."
+    },
+    "test_label": {
+      "type": "string",
+      "description": "Display name of the test (denormalized)"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "all",
+        "male",
+        "female"
+      ],
+      "default": "all",
+      "description": "Which gender this benchmark scale applies to"
+    },
+    "unit": {
+      "type": "string",
+      "description": "Unit of the raw measurement (e.g. seconds, inches, levels, points)"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "higher_better",
+        "lower_better"
+      ],
+      "default": "higher_better",
+      "description": "Whether a higher or lower raw value is better"
+    },
+    "coefficient": {
+      "type": "number",
+      "default": 1,
+      "description": "Weight coefficient for this test when computing overall scores. Higher coefficient = more impact on the overall score. Default 1.0 (equal weight)."
+    },
+    "p20": {
+      "type": "number",
+      "description": "Raw value corresponding to a 20% score"
+    },
+    "p40": {
+      "type": "number",
+      "description": "Raw value corresponding to a 40% score"
+    },
+    "p60": {
+      "type": "number",
+      "description": "Raw value corresponding to a 60% score"
+    },
+    "p80": {
+      "type": "number",
+      "description": "Raw value corresponding to a 80% score"
+    },
+    "p100": {
+      "type": "number",
+      "description": "Raw value corresponding to a 100% score"
+    },
+    "ai_formula_notes": {
+      "type": "string",
+      "description": "AI-generated plain-language description of the scoring formula, for coaches"
+    },
+    "updated_by": {
+      "type": "string",
+      "description": "Email of the admin who last updated this benchmark"
+    }
+  },
+  "required": [
+    "category",
+    "test_key",
+    "direction"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

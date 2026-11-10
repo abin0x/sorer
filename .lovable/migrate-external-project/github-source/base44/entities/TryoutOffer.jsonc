@@ -1,0 +1,231 @@
+{
+  "name": "TryoutOffer",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this offer belongs to"
+    },
+    "tryout_plan_id": {
+      "type": "string",
+      "description": "ID of the TryoutPlan this offer was made from"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID of the Team offering the spot"
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team name (denormalized for display and emails)"
+    },
+    "registration_id": {
+      "type": "string",
+      "description": "ID of the TryoutRegistration this offer came from \u2014 kept in step with pool_status"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the Player being offered the spot"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "player_photo_url": {
+      "type": "string",
+      "description": "Player photo (denormalized so the roster board loads in one call)"
+    },
+    "player_age": {
+      "type": "number",
+      "description": "Player age at the tryout session"
+    },
+    "player_bib": {
+      "type": "number",
+      "description": "Bib number worn at the tryout (denormalized)"
+    },
+    "player_gender": {
+      "type": "string",
+      "description": "Gender segment the player tried out for"
+    },
+    "age_group": {
+      "type": "string",
+      "description": "Age group the player tried out for"
+    },
+    "guardian_id": {
+      "type": "string",
+      "description": "ID of the Guardian the offer is sent to"
+    },
+    "guardian_name": {
+      "type": "string",
+      "description": "Guardian full name (denormalized)"
+    },
+    "guardian_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Family email the offer is sent to and the identity used to respond"
+    },
+    "combined_score": {
+      "type": "number",
+      "description": "Every evaluator's score for this player across the tryout's sessions, averaged \u2014 the number the roster is ranked by"
+    },
+    "list_type": {
+      "type": "string",
+      "enum": [
+        "roster",
+        "waitlist"
+      ],
+      "default": "roster",
+      "description": "roster = in line for a spot on this team, waitlist = waiting behind the roster in rank order"
+    },
+    "rank": {
+      "type": "number",
+      "description": "Position in its list \u2014 the roster runs strongest first, and the waitlist is the order players are called up in"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "proposed",
+        "pending",
+        "sent",
+        "accepted",
+        "declined",
+        "expired",
+        "withdrawn"
+      ],
+      "default": "proposed",
+      "description": "proposed = a coach put the player forward and an admin must approve, pending = cleared to send but not sent yet, sent = the family has the offer, accepted / declined = the family answered, expired = the deadline passed, withdrawn = taken off the list"
+    },
+    "fee_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Fees due if the family accepts, shown in the offer email"
+    },
+    "fee_note": {
+      "type": "string",
+      "description": "What the fee covers, or payment-plan terms, shown with the offer"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the offer lapses and the spot passes to the next waitlisted player"
+    },
+    "responded_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "response_note": {
+      "type": "string",
+      "description": "What the family said when they declined, or the admin's override reason"
+    },
+    "response_channel": {
+      "type": "string",
+      "enum": [
+        "family",
+        "admin",
+        "auto"
+      ],
+      "description": "How the offer reached its final status"
+    },
+    "proposed_by_email": {
+      "type": "string"
+    },
+    "proposed_by_name": {
+      "type": "string"
+    },
+    "proposed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approved_by_email": {
+      "type": "string"
+    },
+    "approved_by_name": {
+      "type": "string"
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "extended_count": {
+      "type": "number",
+      "default": 0,
+      "description": "How many times an admin pushed the deadline back"
+    },
+    "final_registration_id": {
+      "type": "string",
+      "description": "TryoutFinalRegistration invite created when the family accepted"
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Every step taken on this offer: [{ at, by, action, note }]"
+    }
+  },
+  "required": [
+    "club_id",
+    "tryout_plan_id",
+    "team_id",
+    "player_name",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

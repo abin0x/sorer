@@ -1,0 +1,82 @@
+# Cloud builds for the Beacon store apps (no Mac needed).
+# Setup in Codemagic: connect this repo, then add
+#  - App Store Connect API key integration named "ClubRudder ASC"
+#  - Android keystore reference "beacon_upload_key"
+#  - Group "google_play" with GCLOUD_SERVICE_ACCOUNT_CREDENTIALS (Play Console JSON)
+#  - Group "firebase" with GOOGLE_SERVICES_JSON (base64 of google-services.json)
+workflows:
+  beacon-android:
+    name: Beacon Android (.aab)
+    instance_type: linux_x2
+    environment:
+      node: 22
+      java: 21
+      android_signing: [beacon_upload_key]
+      groups: [google_play, firebase]
+    triggering:
+      events: [push, tag]
+      branch_patterns: [{ pattern: main }]
+    scripts:
+      - name: Install
+        script: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+      - name: Add Android project
+        script: '[ -d android ] || npx cap add android'
+      - name: Firebase config
+        script: 'if [ -n "$GOOGLE_SERVICES_JSON" ]; then echo "$GOOGLE_SERVICES_JSON" | base64 --decode > android/app/google-services.json; fi'
+      - name: Icons and splash
+        script: npx @capacitor/assets generate --android --iconBackgroundColor '#0f172a' --splashBackgroundColor '#0f172a'
+      - name: Sync
+        script: npx cap sync android
+      - name: Build bundle
+        script: |
+          cd android
+          ./gradlew bundleRelease -PversionCode=$((PROJECT_BUILD_NUMBER + 100)) -PversionName=1.0.$PROJECT_BUILD_NUMBER
+    artifacts:
+      - android/app/build/outputs/**/*.aab
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal
+        submit_as_draft: true
+
+  beacon-ios:
+    name: Beacon iOS (.ipa)
+    instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: ClubRudder ASC
+    environment:
+      node: 22
+      xcode: latest
+      cocoapods: default
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.clubrudder.beacon
+    triggering:
+      events: [push, tag]
+      branch_patterns: [{ pattern: main }]
+    scripts:
+      - name: Install
+        script: npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+      - name: Add iOS project
+        script: '[ -d ios ] || npx cap add ios'
+      - name: Icons and splash
+        script: npx @capacitor/assets generate --ios --iconBackgroundColor '#0f172a' --splashBackgroundColor '#0f172a'
+      - name: Sync
+        script: npx cap sync ios
+      - name: Push capability
+        script: |
+          /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes array" ios/App/App/Info.plist || true
+          /usr/libexec/PlistBuddy -c "Add :UIBackgroundModes:0 string remote-notification" ios/App/App/Info.plist || true
+      - name: Signing
+        script: xcode-project use-profiles
+      - name: Build number
+        script: agvtool new-version -all $(($(app-store-connect get-latest-testflight-build-number "$APP_STORE_APPLE_ID" || echo 0) + 1))
+        working_directory: ios/App
+      - name: Build ipa
+        script: xcode-project build-ipa --workspace ios/App/App.xcworkspace --scheme App
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true

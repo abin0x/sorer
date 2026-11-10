@@ -1,0 +1,158 @@
+{
+  "name": "FeeTemplate",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this fee template belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Template name (e.g. 'U14 Club Dues 2026-2027')"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID of the Team this template applies to. Blank for a club-wide/season-wide template."
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team name (denormalized for display)"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season label this template covers (e.g. 2026-2027). Matches Team.season."
+    },
+    "amount": {
+      "type": "number",
+      "description": "Base fee amount per player"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD",
+      "description": "Currency code"
+    },
+    "installment_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of installments the family may choose. 0 = one-time only."
+    },
+    "installment_interval": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "quarterly",
+        "seasonal"
+      ],
+      "default": "monthly",
+      "description": "Cadence between installments"
+    },
+    "first_due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the first installment (or full payment) is due"
+    },
+    "default_plan": {
+      "type": "string",
+      "enum": [
+        "one_time",
+        "installments"
+      ],
+      "default": "one_time",
+      "description": "Plan pre-selected for new obligations. The family confirms it."
+    },
+    "sibling_discount_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Percent off for the 2nd+ sibling in the same family/season. 0 = none."
+    },
+    "early_bird_discount_percent": {
+      "type": "number",
+      "default": 0,
+      "description": "Percent off when the obligation is created on or before early_bird_until."
+    },
+    "early_bird_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Last date the early-bird discount applies"
+    },
+    "staff_child_exempt": {
+      "type": "boolean",
+      "default": false,
+      "description": "If true, players flagged as staff children owe $0."
+    },
+    "auto_create": {
+      "type": "boolean",
+      "default": false,
+      "description": "true = obligations are created automatically when a player is rostered. false = staff review a preview and confirm before any obligation is created."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active",
+      "description": "Only active templates are used for roster-triggered fee generation."
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this fee template"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "season",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

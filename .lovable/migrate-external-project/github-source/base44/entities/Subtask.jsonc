@@ -1,0 +1,154 @@
+{
+  "name": "Subtask",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this subtask belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Parent task ID"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "Program ID for quick filtering"
+    },
+    "title": {
+      "type": "string",
+      "description": "Subtask title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Subtask description"
+    },
+    "category": {
+      "type": "string",
+      "description": "Subtask category (e.g., Marketing, Registration, Fields, Camps, Tournaments)"
+    },
+    "assignee": {
+      "type": "string",
+      "description": "Email of assigned team member"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "default": "medium",
+      "description": "Subtask priority"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "todo",
+        "in_progress",
+        "done"
+      ],
+      "default": "todo",
+      "description": "Subtask status"
+    },
+    "completed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Completion status"
+    },
+    "due_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Subtask due date"
+    },
+    "estimated_hours": {
+      "type": "number",
+      "description": "Estimated hours to complete"
+    },
+    "actual_hours": {
+      "type": "number",
+      "description": "Actual hours spent"
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Array of subtask IDs that this subtask depends on"
+    },
+    "is_recurring": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is a recurring subtask"
+    },
+    "recurrence_pattern": {
+      "type": "string",
+      "enum": [
+        "daily",
+        "weekly",
+        "monthly",
+        "yearly"
+      ],
+      "description": "How often the subtask recurs"
+    },
+    "recurrence_end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "When to stop creating recurring instances"
+    }
+  },
+  "required": [
+    "task_id",
+    "program_id",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

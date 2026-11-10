@@ -1,0 +1,163 @@
+{
+  "name": "ClubSignupRequest",
+  "type": "object",
+  "properties": {
+    "club_name": {
+      "type": "string",
+      "description": "Name of the club requesting access"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Full name of the requesting contact"
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email address \u2014 where the provisioning invitation will be sent"
+    },
+    "contact_role": {
+      "type": "string",
+      "enum": [
+        "director",
+        "admin",
+        "board_member",
+        "other"
+      ],
+      "default": "director",
+      "description": "The requester's role at the club"
+    },
+    "current_system": {
+      "type": "string",
+      "enum": [
+        "teamsnap",
+        "sportsengine",
+        "leagueapps",
+        "waresport",
+        "spreadsheet",
+        "none"
+      ],
+      "default": "none",
+      "description": "The platform this club currently uses, if any"
+    },
+    "branch_count": {
+      "type": "string",
+      "enum": [
+        "1",
+        "2-3",
+        "4-9",
+        "10+"
+      ],
+      "default": "1",
+      "description": "Approximate number of branches"
+    },
+    "player_count": {
+      "type": "string",
+      "enum": [
+        "<50",
+        "50-150",
+        "150-300",
+        "300+"
+      ],
+      "default": "<50",
+      "description": "Approximate number of players"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Optional phone number for an onboarding call"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "provisioned",
+        "expired"
+      ],
+      "default": "pending",
+      "description": "pending = awaiting system owner review, provisioned = a live Club + invitation were created, expired = no longer actionable"
+    },
+    "provisioned_club_id": {
+      "type": "string",
+      "description": "ID of the Club created from this request, once provisioned"
+    },
+    "provisioned_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the system owner provisioned this request"
+    }
+  },
+  "required": [
+    "club_name",
+    "contact_name",
+    "contact_email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "is_super_admin": true
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

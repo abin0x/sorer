@@ -1,0 +1,161 @@
+{
+  "name": "ComplianceRecord",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club (tenant) this record belongs to"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "Optional branch (Location) the coach is based at"
+    },
+    "branch_name": {
+      "type": "string",
+      "description": "Branch name (denormalized)"
+    },
+    "coach_id": {
+      "type": "string",
+      "description": "User id of the coach, when the coach has submitted a document"
+    },
+    "coach_email": {
+      "type": "string",
+      "description": "Coach email - the key that links a record to a coach"
+    },
+    "coach_name": {
+      "type": "string",
+      "description": "Coach name (denormalized)"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "Season this compliance is for"
+    },
+    "season_name": {
+      "type": "string",
+      "description": "Season name, e.g. 2026-2027 (denormalized)"
+    },
+    "governing_body": {
+      "type": "string",
+      "enum": [
+        "us_soccer",
+        "girls_academy_league",
+        "mls_next",
+        "gotsports",
+        "us_youth_soccer",
+        "us_club_soccer",
+        "michigan_youth_soccer"
+      ],
+      "description": "Governing body whose rule produced the expiration date (the strictest of the club's affiliations)"
+    },
+    "governing_bodies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "All governing bodies this document was evaluated against"
+    },
+    "requirement_type": {
+      "type": "string",
+      "enum": [
+        "background_check",
+        "safesport_certification"
+      ]
+    },
+    "document_url": {
+      "type": "string",
+      "description": "Private storage URI of the uploaded certificate"
+    },
+    "document_name": {
+      "type": "string",
+      "description": "Original file name"
+    },
+    "completion_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date on the certificate"
+    },
+    "expiration_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Auto-calculated from governing body rules"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "missing",
+        "pending",
+        "approved",
+        "flagged",
+        "expired",
+        "expiring_soon"
+      ],
+      "default": "missing"
+    },
+    "admin_notes": {
+      "type": "string",
+      "description": "Reason for flagging"
+    },
+    "reviewed_by": {
+      "type": "string",
+      "description": "Email of the admin who approved or flagged"
+    },
+    "reviewed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "submitted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resubmission_count": {
+      "type": "number",
+      "default": 0
+    },
+    "escalated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When an unresolved flag was escalated to the club director"
+    },
+    "carried_forward_from": {
+      "type": "string",
+      "description": "Season id this approved record was carried forward from"
+    }
+  },
+  "required": [
+    "club_id",
+    "coach_email",
+    "season_id",
+    "requirement_type",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "name": "AgeGroup",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this age group configuration belongs to"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "ID of the Season this age group configuration applies to"
+    },
+    "season_name": {
+      "type": "string",
+      "description": "Season label (denormalized for display, e.g. 2026-2027)"
+    },
+    "age_group": {
+      "type": "string",
+      "description": "Age group label (e.g., U11, U12, U13)"
+    },
+    "birth_date_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Earliest eligible birth date for this age group (e.g. 2015-08-01)"
+    },
+    "birth_date_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Latest eligible birth date for this age group (e.g. 2016-07-31)"
+    },
+    "playing_format": {
+      "type": "string",
+      "enum": [
+        "4v4",
+        "7v7",
+        "9v9",
+        "11v11"
+      ],
+      "description": "Playing format for this age group"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order (lower = younger)"
+    }
+  },
+  "required": [
+    "season_id",
+    "age_group",
+    "birth_date_start",
+    "birth_date_end",
+    "playing_format"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

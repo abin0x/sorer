@@ -1,0 +1,140 @@
+{
+  "name": "Event",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this event belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Event title"
+    },
+    "description": {
+      "type": "string",
+      "description": "Event description"
+    },
+    "organizer_id": {
+      "type": "string",
+      "description": "ID of the staff member organizing this event"
+    },
+    "organizer_name": {
+      "type": "string",
+      "description": "Organizer name (denormalized for display)"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "single",
+        "recurring",
+        "multi_date"
+      ],
+      "default": "single",
+      "description": "single = one occurrence, recurring = expanded from an RRULE, multi_date = an explicit list of dates"
+    },
+    "timezone": {
+      "type": "string",
+      "default": "America/New_York",
+      "description": "IANA timezone this event's times are interpreted in"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "published",
+        "cancelled"
+      ],
+      "default": "draft",
+      "description": "draft = still being built in the wizard, published = live with generated occurrences, cancelled = called off"
+    },
+    "session_templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "start_time": {
+            "type": "string"
+          },
+          "end_time": {
+            "type": "string"
+          },
+          "location_id": {
+            "type": "string"
+          },
+          "field_id": {
+            "type": "string"
+          },
+          "capacity": {
+            "type": "number"
+          },
+          "group_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "default": [],
+      "description": "Session templates applied to every occurrence when it's generated"
+    }
+  },
+  "required": [
+    "club_id",
+    "title",
+    "event_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

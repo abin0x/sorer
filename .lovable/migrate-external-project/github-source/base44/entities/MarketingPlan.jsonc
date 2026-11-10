@@ -1,0 +1,113 @@
+{
+  "name": "MarketingPlan",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this marketing plan belongs to"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "ID of the Season this plan covers. One plan per season per club."
+    },
+    "season_name": {
+      "type": "string",
+      "description": "Season name (denormalized for display, e.g. 2026-2027)"
+    },
+    "name": {
+      "type": "string",
+      "description": "Plan name shown in the marketing module"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "completed",
+        "archived"
+      ],
+      "default": "draft",
+      "description": "Plan lifecycle state"
+    },
+    "goals": {
+      "type": "string",
+      "description": "High-level marketing goals for the season (free text)"
+    },
+    "brand_kit_id": {
+      "type": "string",
+      "description": "ID of the BrandKit linked to this plan"
+    },
+    "budget": {
+      "type": "number",
+      "default": 0,
+      "description": "Optional marketing budget for the season"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "User ID of the plan owner (typically the marketing director)"
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Owner name (denormalized for display)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this plan"
+    }
+  },
+  "required": [
+    "club_id",
+    "season_id",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

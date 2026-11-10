@@ -1,0 +1,146 @@
+{
+  "name": "PaymentProcessor",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this processor connection belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Friendly name for this connection (e.g. 'Stripe - Main Club')"
+    },
+    "processor_type": {
+      "type": "string",
+      "enum": [
+        "stripe",
+        "square",
+        "payment_depot",
+        "stax",
+        "manual"
+      ],
+      "description": "Which payment processor this connection represents"
+    },
+    "environment": {
+      "type": "string",
+      "enum": [
+        "sandbox",
+        "live"
+      ],
+      "default": "sandbox",
+      "description": "Whether this connection is configured for test or live transactions"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this processor connection is available for use"
+    },
+    "is_default": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the default processor offered when recording a payment"
+    },
+    "account_label": {
+      "type": "string",
+      "description": "Merchant account nickname or identifier"
+    },
+    "secret_key": {
+      "type": "string",
+      "description": "Main secret credential. Stripe: secret key (sk_test_\u2026 / sk_live_\u2026). Square: access token (EAAA\u2026). Payment Depot: API key."
+    },
+    "publishable_key": {
+      "type": "string",
+      "description": "Public credential. Stripe: publishable key (pk_test_\u2026 / pk_live_\u2026). Square: application ID."
+    },
+    "webhook_secret": {
+      "type": "string",
+      "description": "Webhook signing secret. Stripe: whsec_\u2026 Used to verify incoming webhook events."
+    },
+    "location_id": {
+      "type": "string",
+      "description": "Processor-specific location/merchant ID. Square: location ID (required to charge)."
+    },
+    "connection_status": {
+      "type": "string",
+      "enum": [
+        "untested",
+        "connected",
+        "failed"
+      ],
+      "default": "untested",
+      "description": "Result of the last Test Connection check"
+    },
+    "last_tested_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the connection was last tested"
+    },
+    "connected_by": {
+      "type": "string",
+      "description": "Email of the admin who configured this connection"
+    },
+    "connected_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this connection was configured"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this processor connection"
+    }
+  },
+  "required": [
+    "display_name",
+    "processor_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

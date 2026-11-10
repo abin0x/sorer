@@ -1,0 +1,47 @@
+{
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "trial_signup_journey_sync",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_journey": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sync-client-journey",
+            "args": {
+              "type": "trial",
+              "email": "${ .trigger.data.email }",
+              "club_name": "${ .trigger.data.club_name }",
+              "branch_count": "${ .trigger.data.branch_count }",
+              "sport": "${ .trigger.data.sport }",
+              "user_id": "${ .trigger.data.user_id }",
+              "club_id": "${ .trigger.data.club_id }",
+              "trial_end_date": "${ .trigger.data.trial_end_date }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sync to status sheet",
+            "description": "Upsert ClientJourney and send welcome checklist"
+          }
+        }
+      }
+    ]
+  },
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create"
+      ],
+      "entity_name": "TrialSignups"
+    }
+  },
+  "name": "Trial Signup Journey Sync",
+  "description": "Creates or updates the status-sheet record and sends a welcome checklist email when a free trial starts"
+}

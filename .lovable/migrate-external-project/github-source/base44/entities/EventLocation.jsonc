@@ -1,0 +1,106 @@
+{
+  "name": "EventLocation",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this location belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Location name"
+    },
+    "address": {
+      "type": "string",
+      "description": "Street address"
+    },
+    "city": {
+      "type": "string",
+      "description": "City"
+    },
+    "state": {
+      "type": "string",
+      "description": "State"
+    },
+    "postal_code": {
+      "type": "string",
+      "description": "Postal / ZIP code"
+    },
+    "country": {
+      "type": "string",
+      "default": "US",
+      "description": "Country"
+    },
+    "latitude": {
+      "type": "number",
+      "description": "Latitude"
+    },
+    "longitude": {
+      "type": "number",
+      "description": "Longitude"
+    },
+    "timezone": {
+      "type": "string",
+      "default": "America/New_York",
+      "description": "IANA timezone of this location"
+    },
+    "metadata": {
+      "type": "string",
+      "description": "Freeform JSON metadata"
+    }
+  },
+  "required": [
+    "club_id",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

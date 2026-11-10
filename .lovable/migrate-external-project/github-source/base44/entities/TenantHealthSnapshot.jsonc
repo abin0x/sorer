@@ -1,0 +1,161 @@
+{
+  "name": "TenantHealthSnapshot",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club ID this snapshot is for. Empty for platform-wide."
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name (denormalized)"
+    },
+    "snapshot_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this snapshot was computed"
+    },
+    "health_score": {
+      "type": "number",
+      "default": 100,
+      "description": "0-100 health score. 100 = no open issues, no failures."
+    },
+    "open_issues_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Open (non-resolved) issues for this club"
+    },
+    "open_p1_p2_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Open P1/P2 issues for this club"
+    },
+    "failed_payments_24h": {
+      "type": "number",
+      "default": 0,
+      "description": "Failed payments in the last 24h"
+    },
+    "failed_syncs_24h": {
+      "type": "number",
+      "default": 0,
+      "description": "Failed QuickBooks syncs in the last 24h"
+    },
+    "stalled_migrations": {
+      "type": "number",
+      "default": 0,
+      "description": "Migration jobs that are stalled or partly processed"
+    },
+    "top_errors": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Top recurring client/server errors: { title, count, signal_type }"
+    },
+    "needs_attention": {
+      "type": "boolean",
+      "default": false,
+      "description": "True when health_score is below threshold or P1/P2 open"
+    },
+    "metrics": {
+      "type": "object",
+      "default": {},
+      "description": "Raw counts and extra signals used to compute the score"
+    }
+  },
+  "required": [
+    "club_id",
+    "snapshot_date",
+    "health_score"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "name": "StripePayout",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this payout belongs to"
+    },
+    "stripe_payout_id": {
+      "type": "string",
+      "description": "Stripe payout ID"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Net payout amount that landed in the bank"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "arrival_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the payout arrived in the bank"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "paid",
+        "failed"
+      ],
+      "default": "pending",
+      "description": "Payout status from Stripe"
+    },
+    "payment_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of the Payment ledger entries (sales receipts + fee expenses) included in this payout"
+    },
+    "payment_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of payments included in this payout (denormalized for display)"
+    },
+    "gross_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Sum of gross charge amounts included in this payout"
+    },
+    "fee_total": {
+      "type": "number",
+      "default": 0,
+      "description": "Sum of Stripe fees deducted for this payout"
+    },
+    "qbo_deposit_id": {
+      "type": "string",
+      "description": "QuickBooks Deposit ID created for this payout, moving net funds from Stripe Clearing to the bank"
+    }
+  },
+  "required": [
+    "club_id",
+    "stripe_payout_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

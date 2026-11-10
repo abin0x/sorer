@@ -1,0 +1,144 @@
+{
+  "name": "Referee",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club this referee belongs to"
+    },
+    "first_name": {
+      "type": "string",
+      "description": "Referee first name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Referee last name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Referee contact email"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Referee contact phone"
+    },
+    "certification_level": {
+      "type": "string",
+      "description": "Referee certification level (e.g. Grade 8, State, National)"
+    },
+    "sport": {
+      "type": "string",
+      "default": "soccer",
+      "description": "Sport this referee is certified for"
+    },
+    "availability": {
+      "type": "string",
+      "description": "General availability notes (e.g. 'Weekends only')"
+    },
+    "assigned_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Denormalized count of currently assigned games"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this referee is currently available for assignment"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes about this referee"
+    }
+  },
+  "required": [
+    "club_id",
+    "first_name",
+    "last_name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "name": "PhysicalAssessment",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this assessment belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the assessed player"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "assessment_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of assessment"
+    },
+    "sprint_20m_seconds": {
+      "type": "number",
+      "description": "Raw Speed test result: 20-meter sprint time, in seconds (lower is better)"
+    },
+    "vertical_jump_inches": {
+      "type": "number",
+      "description": "Raw Power test result: vertical jump height, in inches (higher is better)"
+    },
+    "agility_5_10_5_seconds": {
+      "type": "number",
+      "description": "Raw Agility test result: 5-10-5 shuttle time, in seconds (lower is better)"
+    },
+    "yoyo_level": {
+      "type": "number",
+      "description": "Raw Endurance test result: Yo-Yo Intermittent Recovery Test level attained (higher is better)"
+    },
+    "speed": {
+      "type": "number",
+      "description": "Speed score, 0-100 (computed from sprint_20m_seconds via the Speed benchmark)"
+    },
+    "endurance": {
+      "type": "number",
+      "description": "Endurance score, 0-100 (computed from yoyo_level via the Endurance benchmark)"
+    },
+    "agility": {
+      "type": "number",
+      "description": "Agility score, 0-100 (computed from agility_5_10_5_seconds via the Agility benchmark)"
+    },
+    "power": {
+      "type": "number",
+      "description": "Power score, 0-100 (computed from vertical_jump_inches via the Power benchmark)"
+    },
+    "recovery": {
+      "type": "number",
+      "description": "Recovery score (0-100), legacy metric"
+    },
+    "lean": {
+      "type": "number",
+      "description": "Lean body composition score, legacy metric"
+    },
+    "overall": {
+      "type": "number",
+      "description": "Overall physical score, 0-100 (average of speed, power, agility, endurance)"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "assessed_by": {
+      "type": "string",
+      "description": "Email of the assessor"
+    }
+  },
+  "required": [
+    "player_id",
+    "assessment_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

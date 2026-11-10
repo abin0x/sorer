@@ -1,0 +1,186 @@
+{
+  "name": "TenantModule",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this module entitlement belongs to"
+    },
+    "module_key": {
+      "type": "string",
+      "description": "ModuleCatalog key this entitlement grants access to"
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "ID of the TenantSubscription this entitlement belongs to"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending_payment",
+        "trialing",
+        "active",
+        "past_due",
+        "canceling",
+        "suspended",
+        "expired",
+        "complimentary"
+      ],
+      "default": "pending_payment",
+      "description": "Billing lifecycle status for this module entitlement"
+    },
+    "admin_enabled": {
+      "type": "boolean",
+      "description": "System-owner access approval. An explicit false blocks access even if billing later reports active."
+    },
+    "stripe_subscription_id": {
+      "type": "string",
+      "description": "Stripe Subscription ID backing this entitlement"
+    },
+    "stripe_item_id": {
+      "type": "string",
+      "description": "Stripe Subscription Item ID for this module line item"
+    },
+    "current_period_start": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "grace_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Access continues until grace expires"
+    },
+    "access_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When canceling access ends"
+    },
+    "complimentary_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Null means permanent complimentary access"
+    },
+    "complimentary_reason": {
+      "type": "string"
+    },
+    "complimentary_granted_by": {
+      "type": "string"
+    },
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "drift_flagged": {
+      "type": "boolean",
+      "default": false
+    },
+    "drift_detail": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "club_id",
+    "module_key",
+    "status"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "name": "Expense",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this expense belongs to"
+    },
+    "unique_id": {
+      "type": "string",
+      "description": "Unique identifier for the expense (used for imports/updates)"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "ID of the associated program"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "ID of the Location (branch) this expense is attributed to \u2014 drives branch-filtered expense analytics"
+    },
+    "description": {
+      "type": "string",
+      "description": "Expense description"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Expense amount"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Expense date"
+    },
+    "category": {
+      "type": "string",
+      "description": "Expense category"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Email of staff member responsible for this expense"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "to_be_paid",
+        "paid"
+      ],
+      "default": "to_be_paid",
+      "description": "Payment status"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "approved",
+        "rejected"
+      ],
+      "default": "pending",
+      "description": "Approval status"
+    },
+    "approved_by": {
+      "type": "string",
+      "description": "Email of approver"
+    },
+    "approval_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of approval/rejection"
+    },
+    "approval_notes": {
+      "type": "string",
+      "description": "Notes from approver"
+    }
+  },
+  "required": [
+    "program_id",
+    "description",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

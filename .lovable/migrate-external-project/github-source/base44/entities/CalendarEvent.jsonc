@@ -1,0 +1,217 @@
+{
+  "name": "CalendarEvent",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this event belongs to"
+    },
+    "title": {
+      "type": "string",
+      "description": "Human-readable event title"
+    },
+    "event_type": {
+      "type": "string",
+      "enum": [
+        "practice",
+        "game",
+        "tournament",
+        "meeting",
+        "camp",
+        "clinic",
+        "other"
+      ],
+      "default": "practice",
+      "description": "Type of calendar event"
+    },
+    "start_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Authoritative event start date and time"
+    },
+    "end_datetime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Event end date and time"
+    },
+    "location_text": {
+      "type": "string",
+      "description": "Field, facility name, or address for this event"
+    },
+    "facility_id": {
+      "type": "string",
+      "description": "ID of the Facility this event is booked at, for space utilization tracking"
+    },
+    "field_id": {
+      "type": "string",
+      "description": "ID of the specific Field this event is booked on"
+    },
+    "field_name": {
+      "type": "string",
+      "description": "Field name (denormalized for display)"
+    },
+    "is_recurring": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this event was generated as part of a recurring weekly schedule"
+    },
+    "recurrence_group_id": {
+      "type": "string",
+      "description": "Identifier grouping all events generated from the same recurring schedule import or booking series"
+    },
+    "team_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "IDs of the Team(s) this event applies to (one or many)"
+    },
+    "team_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Team names (denormalized for display)"
+    },
+    "home_team_id": {
+      "type": "string",
+      "description": "For games: ID of the home Team"
+    },
+    "home_team_name": {
+      "type": "string",
+      "description": "For games: home team name (denormalized)"
+    },
+    "away_team_id": {
+      "type": "string",
+      "description": "For games: ID of the away Team (blank if external opponent)"
+    },
+    "away_team_name": {
+      "type": "string",
+      "description": "For games: away team name, or external opponent name (denormalized)"
+    },
+    "is_external_opponent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the away team is an external (non-club) opponent"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "ID of the associated Program, if any"
+    },
+    "program_title": {
+      "type": "string",
+      "description": "Program title (denormalized for display)"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season this event belongs to, for filtering and archiving"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "confirmed",
+        "pending",
+        "cancelled",
+        "postponed"
+      ],
+      "default": "confirmed",
+      "description": "Event status"
+    },
+    "visibility": {
+      "type": "string",
+      "enum": [
+        "club_wide",
+        "team_only",
+        "staff_only"
+      ],
+      "default": "team_only",
+      "description": "Who this event is visible to"
+    },
+    "rsvp_required": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether attendees must RSVP for this event"
+    },
+    "rsvps": {
+      "type": "object",
+      "description": "Player RSVP/attendance status for this event, keyed by player_id. Values: 'attending' or 'not_attending'. Players not present have 'no_response' status.",
+      "default": {}
+    },
+    "calendar_synced": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this booking has been propagated to the involved team calendars"
+    },
+    "notified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether players, coaches, and parents have been notified about this booking"
+    },
+    "notified_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When notifications were last sent for this booking"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Additional notes or instructions for attendees"
+    }
+  },
+  "required": [
+    "title",
+    "event_type",
+    "start_datetime"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

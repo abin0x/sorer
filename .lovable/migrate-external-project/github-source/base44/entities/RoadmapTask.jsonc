@@ -1,0 +1,197 @@
+{
+  "name": "RoadmapTask",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this roadmap task belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "project_id": {
+      "type": "string",
+      "description": "ID of the parent RoadmapProject"
+    },
+    "project_number": {
+      "type": "string",
+      "description": "Parent project number (denormalized)"
+    },
+    "project_title": {
+      "type": "string",
+      "description": "Parent project title (denormalized)"
+    },
+    "task_number": {
+      "type": "string",
+      "description": "Task number (e.g. '1.1', '4.15')"
+    },
+    "title": {
+      "type": "string",
+      "description": "Task description"
+    },
+    "responsible": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "RACI Responsible staff emails \u2014 who does the work"
+    },
+    "accountable": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "RACI Accountable staff emails \u2014 owner(s) of the outcome"
+    },
+    "consulted": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "RACI Consulted staff emails"
+    },
+    "informed": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "RACI Informed staff emails"
+    },
+    "assigned_to": {
+      "type": "string",
+      "description": "Email of the staff member currently assigned responsibility for this task in the platform (legacy, superseded by RACI)"
+    },
+    "budget": {
+      "type": "number",
+      "description": "Budgeted amount for this task"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "not_paid",
+        "partial",
+        "paid",
+        "na"
+      ],
+      "default": "not_paid",
+      "description": "Payment status for this task"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_started",
+        "in_progress",
+        "completed"
+      ],
+      "default": "not_started",
+      "description": "Current fulfillment status"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this task is currently active on the roadmap and pushed to the Kanban board"
+    },
+    "kanban_program_id": {
+      "type": "string",
+      "description": "ID of the Program record auto-created on the Kanban board when this task was activated"
+    },
+    "activated_by": {
+      "type": "string",
+      "description": "Email of the user who confirmed activation of this task"
+    },
+    "activated_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this task was activated and pushed to the Kanban board"
+    },
+    "linked_module": {
+      "type": "string",
+      "enum": [
+        "none",
+        "inquiries",
+        "tryouts",
+        "evaluations",
+        "offers",
+        "registration",
+        "payments",
+        "teams",
+        "retention"
+      ],
+      "default": "none",
+      "description": "Platform action module that automatically marks this task fulfilled when triggered"
+    },
+    "completed_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the task was marked fulfilled"
+    },
+    "completed_by": {
+      "type": "string",
+      "description": "Email of who marked it fulfilled (or 'system' if automatic)"
+    },
+    "fulfillment_notes": {
+      "type": "string",
+      "description": "Notes entered when the task was marked fulfilled"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order within the project"
+    }
+  },
+  "required": [
+    "task_number",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

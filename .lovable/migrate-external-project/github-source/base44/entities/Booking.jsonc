@@ -1,0 +1,231 @@
+{
+  "name": "Booking",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string"
+    },
+    "week_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Monday of the week this booking belongs to"
+    },
+    "field_id": {
+      "type": "string"
+    },
+    "field_name": {
+      "type": "string"
+    },
+    "facility_name": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "day": {
+      "type": "string",
+      "enum": [
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat",
+        "Sun"
+      ]
+    },
+    "start_min": {
+      "type": "number",
+      "description": "Start, minutes after midnight"
+    },
+    "end_min": {
+      "type": "number",
+      "description": "End, minutes after midnight"
+    },
+    "start_time": {
+      "type": "string",
+      "description": "Display start, e.g. 6:30 PM"
+    },
+    "end_time": {
+      "type": "string",
+      "description": "Display end, e.g. 8:00 PM"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "training",
+        "game",
+        "camp",
+        "class",
+        "goalkeeping",
+        "small group",
+        "other"
+      ],
+      "description": "Booking type: training, game, camp, class, goalkeeping, small group, or other"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Event type label (practice, match, camp, class, goalkeeping, small group, training, other)"
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Primary team name (home team for games)"
+    },
+    "away_team_name": {
+      "type": "string",
+      "description": "Away team name for game bookings"
+    },
+    "coach_name": {
+      "type": "string"
+    },
+    "platform_name": {
+      "type": "string"
+    },
+    "grid_label": {
+      "type": "string",
+      "description": "Grid label(s) assigned to this booking (e.g. A1, B1+B2) when published from a training schedule scenario"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "source_ref": {
+      "type": "string",
+      "description": "Origin of the booking (event:<id>, tryout:<id>, game:<id>, scenario:<id>, or manual)"
+    },
+    "identity_key": {
+      "type": "string",
+      "description": "club | field | date | start | end | team (plus coach/type only when two rows would collide)"
+    },
+    "import_batch_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "cancelled"
+      ],
+      "default": "confirmed",
+      "description": "Booking status. Games start as pending until confirmed (triggers team notifications)."
+    },
+    "referee_name": {
+      "type": "string",
+      "description": "Assigned referee for game bookings"
+    },
+    "trainer_name": {
+      "type": "string",
+      "description": "Assigned athletic trainer for game bookings"
+    },
+    "volunteer_names": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Field volunteer names for game bookings"
+    },
+    "video_setup": {
+      "type": "string",
+      "description": "Video setup assignment (person name or 'needed'/'confirmed'/'n/a')"
+    },
+    "notified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether team notifications have been sent for this game booking"
+    },
+    "billing_scope": {
+      "type": "string",
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "default": "internal",
+      "description": "internal = the club's own use and never invoiced. external = an outside organization renting the facility, billable to a BillingEntity."
+    },
+    "billing_entity_id": {
+      "type": "string",
+      "description": "BillingEntity this external booking is billed to"
+    },
+    "billing_entity_name": {
+      "type": "string",
+      "description": "BillingEntity name (denormalized for display)"
+    },
+    "billing_rate": {
+      "type": "number",
+      "description": "Hourly rate charged for this external booking (falls back to the entity's default rate)"
+    },
+    "billing_amount": {
+      "type": "number",
+      "description": "Explicit flat amount for this external booking; overrides the hours x rate calculation"
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Invoice this booking was billed on \u2014 set once so the booking is never invoiced twice"
+    },
+    "invoiced_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "club_id",
+    "week_start",
+    "field_name",
+    "date",
+    "start_min",
+    "end_min",
+    "identity_key"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

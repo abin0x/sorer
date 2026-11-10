@@ -1,0 +1,128 @@
+{
+  "name": "Offer",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this offer belongs to"
+    },
+    "name": {
+      "type": "string",
+      "description": "Offer name shown on the storefront"
+    },
+    "description": {
+      "type": "string",
+      "description": "Public description shown on the storefront"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Primary image URL"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "dues",
+        "event",
+        "spiritwear"
+      ],
+      "description": "Product type \u2014 drives what the cart line collects and how the card renders"
+    },
+    "access": {
+      "type": "string",
+      "enum": [
+        "public",
+        "members_only"
+      ],
+      "default": "public",
+      "description": "public = anyone can buy, members_only = must sign in before checkout"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "archived"
+      ],
+      "default": "active",
+      "description": "Only active offers appear on the storefront"
+    },
+    "sort_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Manual sort order in the storefront (lower first)"
+    },
+    "badge": {
+      "type": "string",
+      "enum": [
+        "new",
+        "hot",
+        "members_only",
+        "spots_left"
+      ],
+      "description": "Optional highlight badge displayed on the card"
+    },
+    "config": {
+      "type": "object",
+      "description": "Type-specific configuration. Spiritwear: { base_price, variants: [{size,color,sku,price,stock,image_url}], colors, sizes, fulfillment_options: ['shipping','pickup'], order_window_closes, allow_custom_name_number, custom_name_price, custom_number_price }. Event: { club_event_id, price_options: [{key,name,price,type:'series'|'individual'|'drop_in'|'full_range'|'per_day'}], capacity_per_session, allow_waitlist, waiver_text, early_bird: {until,price}, sibling_discount_percent, addon_questions: [{key,label,type,required}] }. Dues: { amount, payment_plans: ['full','monthly','split_guardians'], season, team_id, team_name, sibling_discount_percent, early_bird: {until,price}, cover_fee_option, fee_percent, installment_count, installment_interval, first_due_date }."
+    },
+    "quickbooks_income_account": {
+      "type": "string",
+      "description": "QuickBooks income account name for this offer \u2014 lets dues, events, and merchandise book to separate accounts"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "type",
+    "access"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

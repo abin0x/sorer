@@ -1,0 +1,113 @@
+{
+  "name": "SocialAccount",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club (tenant) this social account belongs to"
+    },
+    "branch_id": {
+      "type": "string",
+      "description": "Branch this account is scoped to. Empty = club-wide account."
+    },
+    "platform": {
+      "type": "string",
+      "enum": [
+        "instagram",
+        "facebook",
+        "x",
+        "tiktok",
+        "linkedin",
+        "youtube",
+        "club_feed"
+      ]
+    },
+    "account_name": {
+      "type": "string"
+    },
+    "account_handle": {
+      "type": "string"
+    },
+    "profile_key": {
+      "type": "string",
+      "description": "Ayrshare profile key for multi-account per club"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "expired",
+        "revoked"
+      ],
+      "default": "active"
+    },
+    "token_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the platform access token expires. Null if unknown / no expiry."
+    },
+    "last_synced_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_post_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the last successful post was published through this account"
+    }
+  },
+  "required": [
+    "club_id",
+    "platform"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

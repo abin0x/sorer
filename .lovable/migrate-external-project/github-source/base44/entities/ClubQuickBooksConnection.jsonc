@@ -1,0 +1,67 @@
+{
+  "name": "ClubQuickBooksConnection",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club this QuickBooks connection belongs to (one per club)"
+    },
+    "realm_id": {
+      "type": "string",
+      "description": "QuickBooks company (realm) id"
+    },
+    "access_token": {
+      "type": "string",
+      "description": "Current OAuth access token (short-lived, refreshed automatically)"
+    },
+    "refresh_token": {
+      "type": "string",
+      "description": "OAuth refresh token (rotates on each refresh)"
+    },
+    "token_expires_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the current access token expires"
+    },
+    "is_sandbox": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this connection points at the QuickBooks sandbox environment"
+    },
+    "connected_by": {
+      "type": "string",
+      "description": "Email of the club admin who connected this account"
+    },
+    "connected_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this connection was first established"
+    }
+  },
+  "required": [
+    "club_id",
+    "realm_id"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

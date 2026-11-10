@@ -1,0 +1,88 @@
+{
+  "name": "OutreachEnrollment",
+  "type": "object",
+  "properties": {
+    "prospect_id": {
+      "type": "string",
+      "description": "FK \u2192 Prospect"
+    },
+    "prospect_name": {
+      "type": "string",
+      "description": "Prospect full name (denormalized)"
+    },
+    "prospect_email": {
+      "type": "string",
+      "description": "Prospect email (denormalized)"
+    },
+    "sequence_id": {
+      "type": "string",
+      "description": "FK \u2192 OutreachSequence"
+    },
+    "sequence_name": {
+      "type": "string",
+      "description": "Sequence name (denormalized)"
+    },
+    "current_step_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Last step sent (0 = not started yet)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "completed",
+        "removed"
+      ],
+      "default": "active",
+      "description": "Enrollment lifecycle"
+    },
+    "enrolled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the prospect was enrolled"
+    },
+    "next_send_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the next step is due"
+    },
+    "last_step_sent_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the last step was sent"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the sequence completed for this prospect"
+    }
+  },
+  "required": [
+    "prospect_id",
+    "sequence_id"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

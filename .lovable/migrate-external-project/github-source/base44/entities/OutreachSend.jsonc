@@ -1,0 +1,136 @@
+{
+  "name": "OutreachSend",
+  "type": "object",
+  "properties": {
+    "prospect_id": {
+      "type": "string",
+      "description": "FK \u2192 Prospect"
+    },
+    "prospect_email": {
+      "type": "string",
+      "description": "Prospect email (denormalized)"
+    },
+    "sequence_id": {
+      "type": "string",
+      "description": "FK \u2192 OutreachSequence (null for one-off sends)"
+    },
+    "sequence_name": {
+      "type": "string",
+      "description": "Sequence name (denormalized)"
+    },
+    "step_id": {
+      "type": "string",
+      "description": "FK \u2192 OutreachSequenceStep (null for one-off sends)"
+    },
+    "resend_message_id": {
+      "type": "string",
+      "description": "Resend's message ID for webhook correlation"
+    },
+    "from_address": {
+      "type": "string",
+      "description": "From address used"
+    },
+    "to_address": {
+      "type": "string",
+      "description": "Recipient address"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Rendered subject line"
+    },
+    "body_html": {
+      "type": "string",
+      "description": "Rendered HTML body"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "sent",
+        "delivered",
+        "bounced",
+        "complained",
+        "failed"
+      ],
+      "default": "queued",
+      "description": "Delivery status"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "delivered_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "opened_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First open timestamp"
+    },
+    "open_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Total open events"
+    },
+    "clicked_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "First click timestamp"
+    },
+    "click_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Total click events"
+    },
+    "clicked_links": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "URLs clicked"
+    },
+    "replied_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When a reply was received (manual or webhook)"
+    },
+    "bounced_reason": {
+      "type": "string",
+      "description": "Bounce reason from Resend"
+    },
+    "is_one_off": {
+      "type": "boolean",
+      "default": false,
+      "description": "True for manual one-off sends (not part of a sequence)"
+    }
+  },
+  "required": [
+    "prospect_id",
+    "to_address",
+    "subject"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

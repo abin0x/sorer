@@ -1,0 +1,40 @@
+{
+  "name": "Tournament Standings Update",
+  "description": "Recalculates tournament standings automatically when a game is updated (e.g. score entered, status changed to completed).",
+  "trigger": {
+    "config": {
+      "trigger_type": "entity",
+      "entity_name": "Game",
+      "events": [
+        "update"
+      ]
+    },
+    "condition": "${ (.trigger.changed_fields | index(\"is_played\")) != null or (.trigger.changed_fields | index(\"home_score\")) != null or (.trigger.changed_fields | index(\"away_score\")) != null or (.trigger.changed_fields | index(\"status\")) != null }"
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "tournament_standings_update",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "recalc": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "recalculate-standings",
+            "args": {
+              "tournament_id": "${ .trigger.data.tournament_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Recalculate standings",
+            "description": "Updates live standings from game results"
+          }
+        }
+      }
+    ]
+  }
+}

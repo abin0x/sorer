@@ -1,0 +1,46 @@
+# Club Rudder — https://clubrudder.com
+User-agent: *
+Allow: /
+Allow: /why-clubrudder
+Allow: /features
+Allow: /pricing
+Allow: /migration
+Allow: /resources
+Allow: /soccer-tryout-management-software
+Allow: /youth-club-registration-software
+Allow: /multi-branch-club-management-software
+Allow: /club-payments-stripe-quickbooks
+Allow: /field-scheduling-software
+Allow: /demo
+Allow: /faq
+Allow: /create-club
+Allow: /demo-access
+Allow: /request-access
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Authentication
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+Disallow: /accept-invite
+
+# App dashboard and admin
+Disallow: /home
+Disallow: /SetupJourney
+Disallow: /SaaSAdmin
+Disallow: /PlatformDashboard
+Disallow: /PlatformSettings
+Disallow: /SupportConsole
+Disallow: /SystemHealth
+Disallow: /MyTickets
+Disallow: /Compliance
+Disallow: /AdminCompliance
+Disallow: /MyCompliance
+Disallow: /PaymentSettings
+Disallow: /MigrationWizard
+Disallow: /api/
+Disallow: /functions/
+
+Sitemap: https://clubrudder.com/sitemap.xml

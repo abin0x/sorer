@@ -1,0 +1,230 @@
+{
+  "name": "Issue",
+  "type": "object",
+  "properties": {
+    "fingerprint": {
+      "type": "string",
+      "description": "Stable hash of signal_type + club_id + key. One Issue per fingerprint+club."
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Affected club ID. Empty for platform-wide issues."
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name (denormalized)"
+    },
+    "signal_type": {
+      "type": "string",
+      "enum": [
+        "stripe_webhook",
+        "failed_payment",
+        "quickbooks_sync",
+        "email_delivery",
+        "migration",
+        "scheduled_job",
+        "client_error",
+        "push_notification"
+      ],
+      "description": "What kind of signal produced this issue"
+    },
+    "severity": {
+      "type": "string",
+      "enum": [
+        "P1",
+        "P2",
+        "P3",
+        "P4"
+      ],
+      "default": "P3",
+      "description": "P1/P2 escalate immediately (tickets + owner alert)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "investigating",
+        "mitigated",
+        "resolved"
+      ],
+      "default": "new",
+      "description": "Issue lifecycle"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short human-readable summary"
+    },
+    "description": {
+      "type": "string",
+      "description": "What happened, in plain language"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Email of the system owner/staff member responsible"
+    },
+    "first_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this issue was first observed"
+    },
+    "last_seen": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this issue was last seen (updated on each recurrence)"
+    },
+    "count": {
+      "type": "number",
+      "default": 1,
+      "description": "How many times this signal has recurred"
+    },
+    "error_context": {
+      "type": "object",
+      "default": {},
+      "description": "Redacted structured context (tokens, card data and PII removed)"
+    },
+    "root_cause": {
+      "type": "string",
+      "description": "Identified root cause (filled during investigation)"
+    },
+    "fix_notes": {
+      "type": "string",
+      "description": "What was done to resolve it"
+    },
+    "linked_ticket_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Ticket IDs created for this issue (one per affected club for P1/P2)"
+    },
+    "incident_id": {
+      "type": "string",
+      "description": "Incident this issue is part of, if declared"
+    },
+    "metadata": {
+      "type": "object",
+      "default": {},
+      "description": "Extra structured data (thresholds, counts, source refs)"
+    },
+    "resolved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "resolved_by": {
+      "type": "string",
+      "description": "Email of who resolved the issue"
+    }
+  },
+  "required": [
+    "fingerprint",
+    "signal_type",
+    "severity",
+    "status",
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

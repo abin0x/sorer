@@ -1,0 +1,161 @@
+{
+  "name": "TicketIssueLink",
+  "type": "object",
+  "properties": {
+    "issue_id": {
+      "type": "string",
+      "description": "ID of the Issue this link belongs to"
+    },
+    "issue_fingerprint": {
+      "type": "string",
+      "description": "Issue fingerprint (denormalized for lookup)"
+    },
+    "issue_title": {
+      "type": "string",
+      "description": "Issue title (denormalized for display)"
+    },
+    "club_id": {
+      "type": "string",
+      "description": "Club ID the ticket was created for"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club name (denormalized)"
+    },
+    "ticket_id": {
+      "type": "string",
+      "description": "ID of the Ticket created for this issue"
+    },
+    "ticket_number": {
+      "type": "string",
+      "description": "Ticket number (denormalized)"
+    },
+    "ticket_subject": {
+      "type": "string",
+      "description": "Ticket subject (denormalized)"
+    },
+    "ticket_status": {
+      "type": "string",
+      "description": "Ticket status (denormalized, kept in sync on resolve)"
+    },
+    "resolution_posted": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the issue resolution was posted to this ticket"
+    }
+  },
+  "required": [
+    "issue_id",
+    "ticket_id",
+    "club_id"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "$or": [
+                {
+                  "user_condition": {
+                    "custom_role": "club_admin"
+                  }
+                },
+                {
+                  "user_condition": {
+                    "custom_role": "club_director"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    }
+  }
+}

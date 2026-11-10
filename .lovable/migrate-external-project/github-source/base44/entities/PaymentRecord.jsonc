@@ -1,0 +1,139 @@
+{
+  "name": "PaymentRecord",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string"
+    },
+    "invoice_id": {
+      "type": "string",
+      "description": "Invoice this payment settles"
+    },
+    "billing_entity_id": {
+      "type": "string",
+      "description": "Paying entity (denormalized from the invoice)"
+    },
+    "billing_entity_name": {
+      "type": "string"
+    },
+    "invoice_number": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Amount received (positive for payments, negative for refunds)"
+    },
+    "currency": {
+      "type": "string",
+      "default": "USD"
+    },
+    "method": {
+      "type": "string",
+      "enum": [
+        "stripe",
+        "cash",
+        "check",
+        "ach",
+        "card",
+        "manual",
+        "other"
+      ],
+      "default": "manual"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "recorded",
+        "confirmed",
+        "failed",
+        "refunded"
+      ],
+      "default": "recorded"
+    },
+    "paid_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "reference": {
+      "type": "string",
+      "description": "Check number, ACH reference, or Stripe payment intent id"
+    },
+    "is_refund": {
+      "type": "boolean",
+      "default": false
+    },
+    "stripe_event_id": {
+      "type": "string",
+      "description": "Stripe event that produced this record (null for manually recorded payments)"
+    },
+    "payment_ledger_id": {
+      "type": "string",
+      "description": "Matching Payment ledger row (Bookkeeping) created for this receipt"
+    },
+    "recorded_by": {
+      "type": "string",
+      "description": "Email of the person who recorded it, or 'stripe-webhook'"
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "club_id",
+    "invoice_id",
+    "amount"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.billing_entity_id": "{{user.data.billing_entity_id}}"
+        },
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

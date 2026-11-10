@@ -1,0 +1,136 @@
+{
+  "name": "PlayerEvaluation",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this evaluation belongs to"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the evaluated player"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player full name (denormalized)"
+    },
+    "evaluator_email": {
+      "type": "string",
+      "description": "Email of the coach who completed this evaluation"
+    },
+    "evaluation_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the evaluation was conducted"
+    },
+    "primary_position": {
+      "type": "string",
+      "description": "Player's primary position for this evaluation"
+    },
+    "preferred_foot": {
+      "type": "string",
+      "enum": [
+        "Left",
+        "Right",
+        "Both"
+      ],
+      "description": "Preferred foot"
+    },
+    "physical_score": {
+      "type": "number",
+      "description": "Explosive/physical percentage score, pulled from the latest PhysicalAssessment at time of evaluation"
+    },
+    "technical_scores": {
+      "type": "object",
+      "description": "Precise/technical skill ratings 1-10, keyed by skill (first_touch, passing, receiving_under_pressure, dribbling_1v1, finishing, heading, crossing_service, tackling_defending)"
+    },
+    "tactical_scores": {
+      "type": "object",
+      "description": "Insightful/tactical ratings 1-10, keyed by skill (defending_organized, defending_final_third, defending_transition, pressing, defending_set_pieces, attacking_organized, attacking_final_third, attacking_transition, building_out, attacking_set_pieces, line_breaking, possession_retention, pressing_regaining, goal_scoring)"
+    },
+    "mental_scores": {
+      "type": "object",
+      "description": "Combative/mental M.E.N.T.A.L. ratings 1-10, keyed by skill (mindset, effort, next_play_focus, team_first, assuredness, leadership)"
+    },
+    "overall_score": {
+      "type": "number",
+      "description": "Computed overall average rating (1-10) across all recorded categories"
+    },
+    "strengths": {
+      "type": "string",
+      "description": "Key strengths across the four E.P.I.C. tenets"
+    },
+    "areas_of_growth": {
+      "type": "string",
+      "description": "Which tenet or skill needs the most work"
+    },
+    "training_focus": {
+      "type": "string",
+      "description": "Recommended training priorities"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "completed"
+      ],
+      "default": "completed",
+      "description": "Evaluation status"
+    }
+  },
+  "required": [
+    "player_id",
+    "player_name",
+    "evaluation_date"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

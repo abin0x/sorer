@@ -1,0 +1,118 @@
+{
+  "name": "CurriculumDocument",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this curriculum document belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Document title"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "curriculum",
+        "philosophy",
+        "session_plan",
+        "position_guide",
+        "development_framework",
+        "policy",
+        "other"
+      ],
+      "default": "curriculum",
+      "description": "Type of curriculum document"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of what this document covers"
+    },
+    "content_text": {
+      "type": "string",
+      "description": "Extracted text content of the document, used as context for AI-generated feedback and content"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to the uploaded document file (PDF, doc, etc.)"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Original uploaded file name"
+    },
+    "uploaded_by": {
+      "type": "string",
+      "description": "Email of the director/admin who uploaded this document"
+    },
+    "uploaded_by_name": {
+      "type": "string",
+      "description": "Name of the uploader (denormalized)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this document is active and included in AI context"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Tags for filtering (e.g. E.P.I.C., technical, tactical, physical, mental)"
+    }
+  },
+  "required": [
+    "title"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

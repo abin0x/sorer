@@ -1,0 +1,19 @@
+import React from "react";
+import { format, parseISO } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import SelectedDateChips from "@/components/events/SelectedDateChips";
+import WeeklyDatesShortcut from "@/components/events/WeeklyDatesShortcut";
+import useDateCalendar from "@/components/events/useDateCalendar";
+export default function DateSelectionCalendar({ dates, onChange, sessionCount = 1, unavailable = {}, allowPast = false, showModes = true, showShortcut = true, onShortcut }) {
+  const ui = useDateCalendar({ dates, onChange, unavailable, allowPast });
+  return <section className="space-y-3 border rounded-xl p-3 bg-card text-card-foreground" aria-label="Event dates">
+    <h3 className="font-semibold">Event Dates</h3>
+    {showModes && <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Date selection mode">{[["range", "Consecutive days"], ["specific", "Specific dates"]].map(([mode, label]) => <button key={mode} type="button" role="radio" aria-checked={ui.mode === mode} onClick={() => ui.setMode(mode)} className={`min-h-11 rounded-lg border px-2 text-sm font-medium ${ui.mode === mode ? "bg-primary text-primary-foreground border-primary" : "bg-background border-input hover:bg-muted"}`}>{label}</button>)}</div>}
+    <p className="text-xs text-muted-foreground">{showModes && ui.mode === "range" ? "Tap the first and last day. Shift-click extends a range." : "Tap once to select, again to remove."} Arrow keys move between days; Enter or Space selects. Esc clears dates. Swipe to change months.</p>
+    <div data-event-calendar className="flex justify-center" style={{ touchAction: "pan-y" }} onTouchStart={ui.touchStart} onTouchEnd={ui.touchEnd} onKeyDown={(e) => { if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); ui.clear(); } }}>
+      <Calendar mode="multiple" numberOfMonths={1} weekStartsOn={1} month={ui.month} onMonthChange={ui.setMonth} selected={dates.map(parseISO)} onDayClick={ui.click} disabled={(d) => !!ui.reason(d)} onDayMouseEnter={(d) => ui.setHover(format(d, "yyyy-MM-dd"))} onDayMouseLeave={() => ui.setHover(null)} modifiers={{ unavailable: (d) => !!ui.reason(d), rangePreview: ui.preview }} modifiersClassNames={{ unavailable: "bg-muted text-muted-foreground opacity-50 border-dashed", rangePreview: "bg-primary/10 border-primary" }} className="p-0" classNames={{ month: "space-y-3", months: "flex flex-col", caption: "flex justify-center items-center relative min-h-11", nav_button: "h-11 w-11 rounded-lg border border-input bg-background p-0 inline-flex items-center justify-center hover:bg-muted", table: "border-collapse", head_row: "flex", head_cell: "w-11 text-xs font-normal text-muted-foreground text-center", row: "flex mt-1", cell: "h-11 w-11 p-0 text-center relative", day: "h-11 w-11 rounded-lg border border-border bg-background text-sm hover:bg-primary/10 hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary", day_today: "font-bold border-primary", day_outside: "text-muted-foreground", day_selected: "!bg-primary !text-primary-foreground !border-primary", day_disabled: "bg-muted text-muted-foreground opacity-50 cursor-not-allowed" }} components={{ DayContent: ({ date }) => <span title={ui.reason(date) || undefined}>{date.getDate()}</span> }} />
+    </div>
+    <SelectedDateChips dates={dates} sessionCount={sessionCount} onRemove={(date) => onChange(dates.filter((d) => d !== date))} />
+    {showShortcut && <WeeklyDatesShortcut dates={dates} onAdd={onShortcut || ((added) => onChange([...new Set([...dates, ...ui.available(added)])].sort()))} />}
+  </section>;
+}

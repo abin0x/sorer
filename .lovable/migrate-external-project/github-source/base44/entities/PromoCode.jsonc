@@ -1,0 +1,129 @@
+{
+  "name": "PromoCode",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this promo code belongs to"
+    },
+    "code": {
+      "type": "string",
+      "description": "The code customers enter at checkout (stored uppercase, case-insensitive match)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Internal description of what this code is for"
+    },
+    "discount_type": {
+      "type": "string",
+      "enum": [
+        "percent",
+        "fixed"
+      ],
+      "default": "percent",
+      "description": "percent = percentage off, fixed = flat dollar amount off"
+    },
+    "discount_value": {
+      "type": "number",
+      "description": "Percent (1-100) or flat dollar amount"
+    },
+    "min_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Minimum subtotal required for the code to apply"
+    },
+    "max_uses": {
+      "type": "number",
+      "default": 0,
+      "description": "Maximum total redemptions. 0 = unlimited."
+    },
+    "used_count": {
+      "type": "number",
+      "default": 0,
+      "description": "Number of times this code has been redeemed \u2014 incremented on successful checkout"
+    },
+    "valid_from": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the code becomes valid (optional)"
+    },
+    "valid_until": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the code expires (optional)"
+    },
+    "applies_to": {
+      "type": "string",
+      "enum": [
+        "registration",
+        "tryout_event",
+        "club_event",
+        "all"
+      ],
+      "default": "all",
+      "description": "Which checkout sources this code can be applied to"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this code can be redeemed"
+    }
+  },
+  "required": [
+    "club_id",
+    "code",
+    "discount_type",
+    "discount_value",
+    "applies_to"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

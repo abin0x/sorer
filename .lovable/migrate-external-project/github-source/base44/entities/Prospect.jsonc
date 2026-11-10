@@ -1,0 +1,174 @@
+{
+  "name": "Prospect",
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string",
+      "description": "Prospect first name"
+    },
+    "last_name": {
+      "type": "string",
+      "description": "Prospect last name"
+    },
+    "title": {
+      "type": "string",
+      "description": "Job title, e.g. Executive Director, Director of Coaching"
+    },
+    "club_name": {
+      "type": "string",
+      "description": "Club this prospect belongs to"
+    },
+    "club_website": {
+      "type": "string",
+      "description": "Club website URL"
+    },
+    "branch_count": {
+      "type": "number",
+      "description": "Number of branches/locations \u2014 used for filtering and pitch personalization"
+    },
+    "player_count": {
+      "type": "number",
+      "description": "Approximate player count"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Contact email (unique)"
+    },
+    "email_verified": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the email has been verified as deliverable"
+    },
+    "needs_review": {
+      "type": "boolean",
+      "default": false,
+      "description": "Imported email looks risky (e.g. role-based address). Excluded from all sends until a System Owner approves it."
+    },
+    "linkedin_url": {
+      "type": "string",
+      "description": "LinkedIn profile URL"
+    },
+    "region": {
+      "type": "string",
+      "description": "State/region for geo segments"
+    },
+    "registration_platform": {
+      "type": "string",
+      "enum": [
+        "stack_sports",
+        "sportsengine",
+        "playmetrics",
+        "2enroll",
+        "spreadsheets",
+        "unknown"
+      ],
+      "default": "unknown",
+      "description": "Current registration system this club uses"
+    },
+    "pain_signal": {
+      "type": "string",
+      "description": "Free-text pain point observed, e.g. 'posted about tryout chaos'"
+    },
+    "pain_signal_source": {
+      "type": "string",
+      "description": "Link to the post/source of the pain signal"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "linkedin",
+        "referral",
+        "conference",
+        "inbound",
+        "manual",
+        "import"
+      ],
+      "default": "manual",
+      "description": "How this prospect was added to the pipeline"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "contacted",
+        "opened",
+        "clicked",
+        "replied",
+        "booked",
+        "not_interested",
+        "bounced",
+        "unsubscribed"
+      ],
+      "default": "new",
+      "description": "Current engagement status"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "Internal user (System Owner or SDR) who owns this prospect"
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Owner name (denormalized for display)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Latest internal notes"
+    },
+    "notes_history": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "All notes: { text, author_email, author_name, created_at }"
+    },
+    "last_contacted_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time an email was sent to this prospect"
+    },
+    "last_engaged_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time this prospect opened/clicked/replied"
+    },
+    "suppressed": {
+      "type": "boolean",
+      "default": false,
+      "description": "Global suppression \u2014 no sequence or one-off send can bypass this"
+    },
+    "suppression_reason": {
+      "type": "string",
+      "description": "Why suppressed: bounce, complaint, manual, unsubscribe"
+    }
+  },
+  "required": [
+    "first_name",
+    "last_name",
+    "club_name",
+    "email"
+  ],
+  "rls": {
+    "read": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "create": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "system_role": "system_owner"
+      }
+    }
+  }
+}

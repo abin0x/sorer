@@ -1,0 +1,340 @@
+{
+  "name": "Club",
+  "type": "object",
+  "properties": {
+    "club_type": {
+      "type": "string",
+      "enum": [
+        "live",
+        "trial"
+      ],
+      "default": "trial",
+      "description": "Live clubs are onboarded by the system owner and go through the concierge migration process. Trial clubs are created automatically when a self-serve trial starts."
+    },
+    "name": {
+      "type": "string",
+      "description": "Club name"
+    },
+    "slug": {
+      "type": "string",
+      "description": "URL-friendly unique identifier for the club (used as its subdomain)"
+    },
+    "app_name": {
+      "type": "string",
+      "description": "Tenant's preferred application/display name shown in the sidebar, header, and browser tab. Falls back to 'name' when blank."
+    },
+    "plan_tier": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "standard",
+        "pro",
+        "enterprise"
+      ],
+      "default": "starter",
+      "description": "Active subscription plan tier"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "trialing",
+        "active",
+        "past_due",
+        "suspended",
+        "canceled",
+        "archived"
+      ],
+      "default": "trialing",
+      "description": "Club lifecycle / billing status"
+    },
+    "billing_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email receiving invoices and billing alerts"
+    },
+    "address": {
+      "type": "string",
+      "description": "Club mailing / physical address"
+    },
+    "director_name": {
+      "type": "string",
+      "description": "Club director name (free text)"
+    },
+    "admin_name": {
+      "type": "string",
+      "description": "Club admin name (free text)"
+    },
+    "primary_contact_name": {
+      "type": "string",
+      "description": "Primary contact full name for this account"
+    },
+    "primary_contact_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary contact email address"
+    },
+    "primary_contact_phone": {
+      "type": "string",
+      "description": "Primary contact phone number"
+    },
+    "internal_notes": {
+      "type": "string",
+      "description": "Private notes about this club, visible only to the system owner"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "Club logo URL \u2014 the single source of truth for tenant branding, set by the system owner"
+    },
+    "primary_color": {
+      "type": "string",
+      "default": "#399F7D",
+      "description": "Brand primary color \u2014 the single source of truth for tenant branding, set by the system owner"
+    },
+    "secondary_color": {
+      "type": "string",
+      "default": "#F59E0B",
+      "description": "Brand secondary / accent color \u2014 the single source of truth for tenant branding, set by the system owner"
+    },
+    "derived_brand_colors": {
+      "type": "object",
+      "default": {},
+      "description": "Auto-derived brand color tokens (RGB channels, tints, shades, on-color, ring) computed by the derive-brand-colors backend function when primary_color or secondary_color changes. Injected as CSS custom properties by TenantBrandingProvider."
+    },
+    "max_players": {
+      "type": "number",
+      "default": 50,
+      "description": "Player cap enforced by the active plan"
+    },
+    "max_branches": {
+      "type": "number",
+      "default": 1,
+      "description": "Branch cap enforced by the active plan"
+    },
+    "max_teams": {
+      "type": "number",
+      "default": 5,
+      "description": "Team cap enforced by the active plan"
+    },
+    "subscription_id": {
+      "type": "string",
+      "description": "Wix subscription contract id (set by the payments webhook)"
+    },
+    "subscription_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "active",
+        "canceled",
+        "expired"
+      ],
+      "default": "pending",
+      "description": "Synced from the payment provider"
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the trial period ends"
+    },
+    "quickbooks_connected": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this club has connected its own QuickBooks account"
+    },
+    "quickbooks_realm_id": {
+      "type": "string",
+      "description": "QuickBooks company realm id for this club's connection (denormalized for display)"
+    },
+    "stripe_account_id": {
+      "type": "string",
+      "description": "Stripe connected account id for this club's own payment processing"
+    },
+    "resend_domain_id": {
+      "type": "string",
+      "description": "Resend.com domain id for this club's custom sending domain"
+    },
+    "resend_domain_name": {
+      "type": "string",
+      "description": "The custom sending domain registered with Resend (e.g. mail.clubname.com)"
+    },
+    "resend_domain_status": {
+      "type": "string",
+      "enum": [
+        "notsetup",
+        "pending",
+        "verified",
+        "failed"
+      ],
+      "default": "notsetup",
+      "description": "Verification status of the club's Resend sending domain"
+    },
+    "onboarded_by_user_id": {
+      "type": "string",
+      "description": "User who created this club (the first club admin)"
+    },
+    "assigned_specialist_name": {
+      "type": "string",
+      "description": "Name of the ClubRudder support specialist assigned to this club's concierge migration"
+    },
+    "enabled_modules": {
+      "type": "object",
+      "default": {
+        "registration": true,
+        "payments": true,
+        "messaging": true,
+        "scheduling": true,
+        "tryouts": true,
+        "player_dev": true,
+        "facilities": true,
+        "tournaments": true,
+        "merchandise": false
+      },
+      "description": "Feature module toggles confirmed by the director during Club Setup Wizard step 3. Disabled modules are hidden from navigation entirely."
+    },
+    "is_demo": {
+      "type": "boolean",
+      "default": false,
+      "description": "True for the sandboxed demo club used in the public beta demo experience. Demo clubs are read-only and isolated from real user data."
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this club is currently active on the platform"
+    },
+    "tenant_status": {
+      "type": "string",
+      "enum": [
+        "invited",
+        "onboarding",
+        "live",
+        "suspended"
+      ],
+      "description": "Onboarding lifecycle: invited (link sent) -> onboarding (admin accepted, in Setup Journey) -> live (first invitation wave sent). Empty for clubs created before the Setup Journey."
+    },
+    "go_live_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the club went Live"
+    },
+    "timezone": {
+      "type": "string",
+      "description": "IANA timezone, e.g. America/New_York"
+    },
+    "season_naming": {
+      "type": "string",
+      "description": "Season naming pattern, e.g. 2026-2027"
+    },
+    "season_start_month": {
+      "type": "number",
+      "description": "Usual season start month (1-12)"
+    },
+    "season_end_month": {
+      "type": "number",
+      "description": "Usual season end month (1-12)"
+    },
+    "age_group_convention": {
+      "type": "string",
+      "enum": [
+        "u_age",
+        "birth_year"
+      ],
+      "description": "How age groups are named: U-age (U12) or birth year (2014)"
+    },
+    "start_path": {
+      "type": "string",
+      "enum": [
+        "upload",
+        "known_system",
+        "fresh",
+        "assisted"
+      ],
+      "description": "How the club chose to start"
+    },
+    "source_system": {
+      "type": "string",
+      "description": "System the club is migrating from, if any"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_billing"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_type": "trial"
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

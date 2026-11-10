@@ -1,0 +1,10 @@
+alter function public.staticbot_touch_updated_date() set search_path = public;
+alter function core.staticbot_guard_user_update() set search_path = public, core;
+revoke execute on function core.handle_new_auth_user() from public, anon, authenticated;
+revoke execute on function public.staticbot_touch_updated_date() from public, anon, authenticated;
+revoke execute on function core.staticbot_guard_user_update() from public, anon, authenticated;
+revoke execute on function public.beacon_guard_message_update() from public, anon, authenticated;
+revoke execute on function public.touch_module_storage_timestamps() from public, anon, authenticated;
+revoke execute on function public.validate_club_integration() from public, anon, authenticated;
+create policy club_oauth_states_no_client on public.club_oauth_states for all to anon, authenticated using (false) with check (false);
+create policy club_integration_vault_refs_no_client on public.club_integration_vault_refs for all to anon, authenticated using (false) with check (false);

@@ -1,0 +1,140 @@
+{
+  "name": "Campaign",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "source_type": {
+      "type": "string"
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "event_type": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "event_promo",
+        "season_launch",
+        "fundraising",
+        "evergreen"
+      ],
+      "default": "event_promo"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "completed",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "cadence_preset": {
+      "type": "string",
+      "enum": [
+        "light",
+        "standard",
+        "aggressive"
+      ],
+      "default": "standard"
+    },
+    "marketing_plan_id": {
+      "type": "string",
+      "description": "MarketingPlan this campaign belongs to"
+    },
+    "season_id": {
+      "type": "string",
+      "description": "Season this campaign's event falls in"
+    },
+    "brand_kit_id": {
+      "type": "string",
+      "description": "BrandKit used for this campaign's content"
+    },
+    "timeline_template": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "default": [],
+      "description": "Editable cadence steps: [{ offset, role, label, platforms [] }]. Announce 3 weeks before, reminders at 7 and 2 days, day-of, recap."
+    },
+    "qr_code_url": {
+      "type": "string",
+      "description": "QR code image URL encoding the campaign UTM link"
+    },
+    "utm_campaign": {
+      "type": "string",
+      "description": "UTM campaign string used in all post links"
+    }
+  },
+  "required": [
+    "club_id",
+    "name"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,160 @@
+{
+  "name": "TryoutEvaluation",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this evaluation belongs to"
+    },
+    "tryout_plan_id": {
+      "type": "string",
+      "description": "The tryout this evaluation was written at"
+    },
+    "tryout_event_id": {
+      "type": "string",
+      "description": "The session the player was evaluated at"
+    },
+    "season_name": {
+      "type": "string",
+      "description": "Season label (denormalized for display)"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the Player evaluated"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Player name (denormalized)"
+    },
+    "player_bib": {
+      "type": "number",
+      "description": "Bib number the player wore at this session"
+    },
+    "player_photo_url": {
+      "type": "string",
+      "description": "Player photo (denormalized so the scoring list loads in one call)"
+    },
+    "player_age": {
+      "type": "number",
+      "description": "Player age on the session date"
+    },
+    "age_group": {
+      "type": "string",
+      "description": "Age group the player was trying out for"
+    },
+    "player_gender": {
+      "type": "string",
+      "description": "Gender segment the player was trying out for"
+    },
+    "guardian_email": {
+      "type": "string",
+      "description": "Family email on the registration \u2014 used to keep a coach from scoring their own child"
+    },
+    "evaluator_user_id": {
+      "type": "string",
+      "description": "App User id of the coach who wrote this evaluation (the record's owner)"
+    },
+    "evaluator_email": {
+      "type": "string",
+      "description": "Email of the coach who wrote this evaluation"
+    },
+    "evaluator_name": {
+      "type": "string",
+      "description": "Coach name (denormalized for the admin breakdown)"
+    },
+    "criteria_scores": {
+      "type": "object",
+      "description": "Score 1-5 per criterion, keyed by the session's criterion key (e.g. { technical: 4, attitude: 5 })"
+    },
+    "overall_grade": {
+      "type": "number",
+      "description": "The evaluator's overall grade for the player, 1-5"
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": [
+        "offer",
+        "waitlist",
+        "not_selected",
+        "needs_look",
+        ""
+      ],
+      "default": "",
+      "description": "offer = offer a spot, waitlist = hold, not_selected = pass, needs_look = see them again"
+    },
+    "notes": {
+      "type": "string",
+      "description": "The evaluator's notes on the player"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "submitted"
+      ],
+      "default": "submitted",
+      "description": "draft = still being written, submitted = the evaluator's finished view"
+    },
+    "saved_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time this evaluation was saved"
+    }
+  },
+  "required": [
+    "club_id",
+    "tryout_event_id",
+    "player_name",
+    "evaluator_email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.evaluator_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.evaluator_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.evaluator_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.evaluator_user_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

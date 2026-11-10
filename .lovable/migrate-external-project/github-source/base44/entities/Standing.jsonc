@@ -1,0 +1,148 @@
+{
+  "name": "Standing",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the organizing Club"
+    },
+    "tournament_id": {
+      "type": "string",
+      "description": "ID of the Tournament this standing belongs to"
+    },
+    "team_id": {
+      "type": "string",
+      "description": "ID of the team (Team entity for in-house, TournamentRegistration id for outside teams)"
+    },
+    "team_name": {
+      "type": "string",
+      "description": "Team name (denormalized for display)"
+    },
+    "team_type": {
+      "type": "string",
+      "enum": [
+        "internal",
+        "external"
+      ],
+      "default": "external",
+      "description": "Whether the team is in-house or an outside registration"
+    },
+    "group_name": {
+      "type": "string",
+      "description": "Group/bracket name for group-stage formats (e.g. 'Group A')"
+    },
+    "played": {
+      "type": "number",
+      "default": 0,
+      "description": "Games played"
+    },
+    "won": {
+      "type": "number",
+      "default": 0,
+      "description": "Games won"
+    },
+    "drawn": {
+      "type": "number",
+      "default": 0,
+      "description": "Games drawn"
+    },
+    "lost": {
+      "type": "number",
+      "default": 0,
+      "description": "Games lost"
+    },
+    "goals_for": {
+      "type": "number",
+      "default": 0,
+      "description": "Goals scored"
+    },
+    "goals_against": {
+      "type": "number",
+      "default": 0,
+      "description": "Goals conceded"
+    },
+    "goal_difference": {
+      "type": "number",
+      "default": 0,
+      "description": "Goal difference (goals_for - goals_against)"
+    },
+    "points": {
+      "type": "number",
+      "default": 0,
+      "description": "Total points"
+    },
+    "position": {
+      "type": "number",
+      "description": "Rank within the group/tournament (1 = first)"
+    }
+  },
+  "required": [
+    "club_id",
+    "tournament_id",
+    "team_name"
+  ],
+  "rls": {
+    "read": {},
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    }
+  }
+}

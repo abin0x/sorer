@@ -1,0 +1,44 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update",
+        "delete"
+      ],
+      "entity_name": "Game"
+    }
+  },
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "tournament_calendar_sync",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "sync_game": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "sync-to-google-calendar",
+            "args": {
+              "entity_type": "game",
+              "entity_id": "${ .trigger.entity_id }",
+              "event_type": "${ .trigger.event_type }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Sync game to Google Calendar",
+            "description": "Creates, updates, or deletes the calendar event"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Tournament Calendar Sync",
+  "description": "Syncs tournament game changes to Google Calendar in real-time \u2014 creates, updates, or deletes calendar events when games are created, updated, or deleted."
+}

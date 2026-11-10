@@ -1,0 +1,138 @@
+{
+  "name": "ReportSchedule",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this schedule belongs to"
+    },
+    "saved_report_id": {
+      "type": "string",
+      "description": "ID of the SavedReport this schedule sends"
+    },
+    "saved_report_name": {
+      "type": "string",
+      "description": "Saved report name (denormalized for display)"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "monthly"
+      ],
+      "description": "How often the report is emailed"
+    },
+    "day_of_week": {
+      "type": "number",
+      "description": "Day of week for weekly schedules (0=Sunday, 1=Monday, ..., 6=Saturday)"
+    },
+    "day_of_month": {
+      "type": "number",
+      "description": "Day of month for monthly schedules (1-31)"
+    },
+    "recipients": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Email addresses of app users to receive the report. Each recipient gets data scoped to their role."
+    },
+    "format": {
+      "type": "string",
+      "enum": [
+        "csv",
+        "pdf"
+      ],
+      "default": "csv",
+      "description": "Attachment format for the emailed report"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this schedule is active and should be processed"
+    },
+    "last_run": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the schedule was last processed"
+    },
+    "last_run_status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed",
+        "partial"
+      ],
+      "default": "success",
+      "description": "Result of the last run: success = all recipients emailed, partial = some failed, failed = all failed"
+    },
+    "last_error": {
+      "type": "string",
+      "description": "Error message from the last run if it failed"
+    },
+    "owner_id": {
+      "type": "string",
+      "description": "User ID of the schedule owner"
+    },
+    "owner_name": {
+      "type": "string",
+      "description": "Owner name (denormalized for display)"
+    }
+  },
+  "required": [
+    "saved_report_id",
+    "frequency",
+    "recipients"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

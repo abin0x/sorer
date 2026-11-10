@@ -1,0 +1,530 @@
+[
+  {
+    "type": "text",
+    "table": "demo_access_requests",
+    "column": "trial_club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tenant_modules",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "NO"
+  },
+  {
+    "type": "text",
+    "table": "users",
+    "column": "club_id",
+    "schema": "core",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "locations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "notes",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "entitlement_events",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "NO"
+  },
+  {
+    "type": "text",
+    "table": "skill_test_scores",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tryout_tasks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tryout_subtasks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "calendar_events",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "age_groups",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "email_templates",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "staff_pays",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "program_feedbacks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tasks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "player_evaluations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "base44_purchases",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "training_sessions",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "messages",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "player_feedbacks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "test_sessions",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "club_invitations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "expenses",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "physical_assessments",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "payment_processors",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tryout_events",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "curriculum_documents",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tryout_plans",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "skill_tests",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "platform_accesses",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "fields",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "training_videos",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "notifications",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "guardians",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "players",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "club_credentials",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "subtasks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "audit_logs",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "chat_messages",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "categories",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "trial_signupses",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "documents",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "registrations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "email_logs",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "roadmap_tasks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "test_benchmarks",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "program_templates",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "programs",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "payments",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "time_entries",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "teams",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "coaches",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "scheduled_reports",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "club_quick_books_connections",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "facilities",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "user_roleses",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "support_tickets",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "clubs",
+    "column": "id",
+    "schema": "public",
+    "default": "substr(replace((gen_random_uuid())::text, '-'::text, ''::text), 1, 24)",
+    "nullable": "NO"
+  },
+  {
+    "type": "text",
+    "table": "player_notes",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "roadmap_projects",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tryout_registrations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "seasons",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "tryout_final_registrations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "YES"
+  },
+  {
+    "type": "text",
+    "table": "club_members",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "NO"
+  },
+  {
+    "type": "text",
+    "table": "club_integrations",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "NO"
+  },
+  {
+    "type": "text",
+    "table": "club_integration_secrets",
+    "column": "club_id",
+    "schema": "public",
+    "default": null,
+    "nullable": "NO"
+  }
+]

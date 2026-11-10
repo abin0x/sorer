@@ -1,0 +1,130 @@
+{
+  "name": "EmailLog",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this email log belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "recipient_email": {
+      "type": "string",
+      "description": "Email address of the recipient"
+    },
+    "recipient_name": {
+      "type": "string",
+      "description": "Name of the recipient"
+    },
+    "subject": {
+      "type": "string",
+      "description": "Email subject line"
+    },
+    "body": {
+      "type": "string",
+      "description": "Email body content"
+    },
+    "template_type": {
+      "type": "string",
+      "enum": [
+        "program_assignment",
+        "task_assignment",
+        "expense_submission",
+        "expense_approval",
+        "expense_rejection",
+        "staffpay_record",
+        "new_message",
+        "test_email",
+        "custom"
+      ],
+      "description": "Type of email template used"
+    },
+    "related_program_id": {
+      "type": "string",
+      "description": "ID of related program if applicable"
+    },
+    "related_task_id": {
+      "type": "string",
+      "description": "ID of related task if applicable"
+    },
+    "related_expense_id": {
+      "type": "string",
+      "description": "ID of related expense if applicable"
+    },
+    "related_staffpay_id": {
+      "type": "string",
+      "description": "ID of related staff pay if applicable"
+    },
+    "sent_by": {
+      "type": "string",
+      "description": "Email of user who triggered the email"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "success",
+        "failed"
+      ],
+      "default": "success",
+      "description": "Email send status"
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Error message if failed"
+    }
+  },
+  "required": [
+    "recipient_email",
+    "subject",
+    "body",
+    "template_type"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

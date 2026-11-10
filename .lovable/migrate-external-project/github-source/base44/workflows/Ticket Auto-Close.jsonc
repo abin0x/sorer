@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 2 * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Daily at 2am: auto-closes tickets that have been pending customer for 7 days, and tickets resolved for 5 days. Adds a system note to each closed ticket.",
+  "name": "Ticket Auto-Close",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "ticket_auto_close",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "auto_close": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "ticket-auto-close",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Auto-close stale tickets",
+            "description": "Daily auto-close of pending (7d) and resolved (5d) tickets"
+          }
+        }
+      }
+    ]
+  }
+}

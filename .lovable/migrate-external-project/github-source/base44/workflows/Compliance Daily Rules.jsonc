@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 6 * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Daily: generates missing coach compliance records, flags expiring/expired certificates, and escalates unresolved flags.",
+  "name": "Compliance Daily Rules",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "compliance_daily_rules",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "run_rules": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "compliance-rules",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Run compliance rules",
+            "description": "Season start, expiration, escalation and carry-forward rules for every club"
+          }
+        }
+      }
+    ]
+  }
+}

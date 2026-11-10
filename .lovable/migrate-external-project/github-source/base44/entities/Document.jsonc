@@ -1,0 +1,138 @@
+{
+  "name": "Document",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this document belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "program_id": {
+      "type": "string",
+      "description": "Associated program ID"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Associated task ID (optional)"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "todo",
+        "in_progress",
+        "in_review",
+        "done"
+      ],
+      "description": "Program stage this document is associated with"
+    },
+    "file_name": {
+      "type": "string",
+      "description": "Original file name"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to the uploaded file"
+    },
+    "file_type": {
+      "type": "string",
+      "description": "MIME type of the file"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "contract",
+        "budget",
+        "marketing",
+        "registration",
+        "legal",
+        "report",
+        "other"
+      ],
+      "default": "other",
+      "description": "Document category"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Document tags for categorization"
+    },
+    "version": {
+      "type": "number",
+      "default": 1,
+      "description": "Document version number"
+    },
+    "previous_version_id": {
+      "type": "string",
+      "description": "ID of previous version if this is an update"
+    },
+    "uploaded_by": {
+      "type": "string",
+      "description": "Email of uploader"
+    },
+    "description": {
+      "type": "string",
+      "description": "Document description or notes"
+    }
+  },
+  "required": [
+    "program_id",
+    "file_name",
+    "file_url",
+    "uploaded_by"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

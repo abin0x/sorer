@@ -1,0 +1,127 @@
+{
+  "name": "TrainingSession",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this training session belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "title": {
+      "type": "string",
+      "description": "Session title (e.g. Shot-Stopping Fundamentals)"
+    },
+    "position": {
+      "type": "string",
+      "description": "Player position group (Goalkeeper, Centerback, Midfielder, Forward, etc.)"
+    },
+    "tenet": {
+      "type": "string",
+      "enum": [
+        "explosive",
+        "precise",
+        "insightful",
+        "combative"
+      ],
+      "description": "E.P.I.C. tenet this session develops"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "beginner",
+        "intermediate",
+        "advanced"
+      ],
+      "default": "intermediate",
+      "description": "Difficulty level"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the session"
+    },
+    "duration_minutes": {
+      "type": "number",
+      "description": "Duration in minutes"
+    },
+    "player_count": {
+      "type": "number",
+      "description": "Recommended player count"
+    },
+    "objective": {
+      "type": "string",
+      "description": "Footer call-to-action / objective text"
+    },
+    "topic": {
+      "type": "string",
+      "description": "Topic category for filtering"
+    },
+    "is_scheduled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this session is scheduled as a class"
+    },
+    "scheduled_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the class is scheduled"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order within position group"
+    }
+  },
+  "required": [
+    "title",
+    "position"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

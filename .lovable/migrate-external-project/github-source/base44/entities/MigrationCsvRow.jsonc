@@ -1,0 +1,109 @@
+{
+  "name": "MigrationCsvRow",
+  "type": "object",
+  "properties": {
+    "job_id": {
+      "type": "string"
+    },
+    "club_id": {
+      "type": "string"
+    },
+    "generation": {
+      "type": "string"
+    },
+    "unique_id": {
+      "type": "string"
+    },
+    "file_key": {
+      "type": "string"
+    },
+    "row_number": {
+      "type": "number"
+    },
+    "sequence": {
+      "type": "number"
+    },
+    "raw_data": {
+      "type": "object"
+    },
+    "payload": {
+      "type": "object"
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "has_errors": {
+      "type": "boolean",
+      "default": false
+    },
+    "excluded": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "job_id",
+    "club_id",
+    "generation",
+    "unique_id",
+    "file_key",
+    "row_number",
+    "sequence"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            }
+          ]
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_support"
+          }
+        }
+      ]
+    },
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

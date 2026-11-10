@@ -1,0 +1,41 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "entity",
+      "events": [
+        "create",
+        "update"
+      ],
+      "entity_name": "RecurrenceRule"
+    }
+  },
+  "description": "When a RecurrenceRule is created or updated, expands it into EventOccurrence + Session + GroupSession rows for the next 90 days.",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "expand_recurrence",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "expand": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "expand-recurrence",
+            "args": {
+              "rule_id": "${ .trigger.entity_id }"
+            }
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Expand recurrence rule",
+            "description": "Generate occurrences + sessions"
+          }
+        }
+      }
+    ]
+  },
+  "name": "Expand Recurrence"
+}

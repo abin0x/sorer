@@ -1,0 +1,146 @@
+{
+  "name": "EventRegistration",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this registration belongs to"
+    },
+    "event_id": {
+      "type": "string",
+      "description": "ID of the ClubEvent this registration is for"
+    },
+    "event_name": {
+      "type": "string",
+      "description": "Event name (denormalized for display)"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Name of the participant (player or attendee)"
+    },
+    "guardian_name": {
+      "type": "string",
+      "description": "Guardian/parent full name"
+    },
+    "guardian_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Email of the guardian \u2014 used for confirmation and payment links"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Contact phone number"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "registered",
+        "waitlist",
+        "cancelled",
+        "attended"
+      ],
+      "default": "registered",
+      "description": "registered = confirmed spot, waitlist = queued for when a spot opens, cancelled = withdrawn, attended = checked in"
+    },
+    "amount_due": {
+      "type": "number",
+      "default": 0,
+      "description": "Total cost after any promo discount"
+    },
+    "amount_paid": {
+      "type": "number",
+      "default": 0,
+      "description": "Amount paid so far"
+    },
+    "payment_status": {
+      "type": "string",
+      "enum": [
+        "unpaid",
+        "paid",
+        "partial",
+        "refunded",
+        "free"
+      ],
+      "default": "unpaid",
+      "description": "Payment state for this event registration"
+    },
+    "promo_code": {
+      "type": "string",
+      "description": "Promo code applied at signup, if any"
+    },
+    "discount_amount": {
+      "type": "number",
+      "default": 0,
+      "description": "Discount amount applied by the promo code"
+    },
+    "stripe_checkout_session_id": {
+      "type": "string",
+      "description": "Stripe Checkout Session id used to collect payment"
+    },
+    "registered_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the registration was submitted"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal staff notes"
+    }
+  },
+  "required": [
+    "club_id",
+    "event_id",
+    "player_name",
+    "guardian_email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

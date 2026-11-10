@@ -1,0 +1,141 @@
+{
+  "name": "Notification",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this notification belongs to. Auto-stamped from the creating user's club_id."
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user receiving the notification"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "program_assignment",
+        "task_assignment",
+        "expense_approval",
+        "mention",
+        "program_deadline",
+        "budget_alert",
+        "announcement",
+        "beacon_message"
+      ],
+      "description": "Type of notification"
+    },
+    "delivery": {
+      "type": "string",
+      "enum": [
+        "push",
+        "badge",
+        "digest"
+      ],
+      "default": "push",
+      "description": "How this notification should surface \u2014 push (immediate), badge (quiet, count only), or digest (held for the daily summary)"
+    },
+    "digest_sent": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether a digest-mode notification has been flushed (emailed) by the digest batch workflow. Push/badge notifications are never flushed."
+    },
+    "is_priority": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this came from a priority Beacon message (bypasses mute/quiet hours)"
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "Related Beacon Channel ID, if applicable"
+    },
+    "channel_name": {
+      "type": "string",
+      "description": "Beacon channel name (denormalized for display)"
+    },
+    "title": {
+      "type": "string",
+      "description": "Notification title"
+    },
+    "message": {
+      "type": "string",
+      "description": "Notification message"
+    },
+    "link": {
+      "type": "string",
+      "description": "Link to related content"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether notification has been read"
+    },
+    "program_id": {
+      "type": "string",
+      "description": "Related program ID if applicable"
+    },
+    "task_id": {
+      "type": "string",
+      "description": "Related task ID if applicable"
+    },
+    "expense_id": {
+      "type": "string",
+      "description": "Related expense report ID if applicable"
+    }
+  },
+  "required": [
+    "user_email",
+    "type",
+    "title",
+    "message"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

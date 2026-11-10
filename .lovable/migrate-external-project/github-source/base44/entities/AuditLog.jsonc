@@ -1,0 +1,103 @@
+{
+  "name": "AuditLog",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "ID of the Club (tenant) this event belongs to. Empty for platform-level (cross-club) events."
+    },
+    "user_id": {
+      "type": "string",
+      "description": "ID of the user who performed the action"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of the user who performed the action (denormalized for display)"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "user_login",
+        "club_created",
+        "user_invited",
+        "user_removed",
+        "role_changed",
+        "quickbooks_connected",
+        "quickbooks_disconnected",
+        "quickbooks_sync_started",
+        "quickbooks_sync_completed",
+        "quickbooks_sync_failed",
+        "stripe_connected",
+        "stripe_disconnected",
+        "stripe_webhook_processed",
+        "integration_error",
+        "settings_changed",
+        "club_invited",
+        "club_status_changed",
+        "club_went_live",
+        "journey_opened",
+        "journey_step_changed",
+        "journey_profile_saved",
+        "journey_saved_exit",
+        "other"
+      ],
+      "description": "The action that was performed"
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Type of entity affected (e.g. Club, ClubQuickBooksConnection, User)"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID of the affected record, if any"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional structured context about the event (never store raw tokens/secrets here)",
+      "default": {}
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "IP address of the requester, if available"
+    }
+  },
+  "required": [
+    "action"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

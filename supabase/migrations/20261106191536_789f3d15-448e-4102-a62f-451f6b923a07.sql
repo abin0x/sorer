@@ -1,0 +1,20 @@
+WITH defaults(category,title,sort_order,duration_minutes,description,setup,how_to_perform,scoring,diagram_notes) AS (
+  VALUES
+  ('basic','Around the Cone',1,1,'First touch and close ball control around a cone.','Place one cone and a supply of balls two yards away.','Receive, turn around the cone and return through the start gate. Alternate directions and feet.','Record successful controlled repetitions in 60 seconds.','Use both directions; a repetition counts only when the ball remains under control.'),
+  ('basic','Alternating Feet Juggling',2,1,'Comfort and coordination using both feet while juggling.','Use one ball and enough clear space for the player to move safely.','Juggle continuously, alternating right and left feet. Restart after the ball touches the ground.','Record the longest alternating-feet sequence.','Two touches on the same foot end the counted sequence.'),
+  ('basic','Figure 8 — Timed',3,3,'Dribbling control, turning and changes of direction.','Place two cones five yards apart with a marked start line.','Dribble in a figure eight around both cones, alternating direction after each completed lap.','Record completed figure-eight laps in the allotted time.','A lap counts when the ball crosses the start line after rounding both cones.'),
+  ('basic','5-10-5 Dribbling',4,2,'Ball speed and control through short acceleration and cuts.','Set three gates at five-yard intervals in a straight line.','Dribble from the middle gate to one end, back to the other end, then through the middle.','Record the fastest valid time in seconds; lower is better.','The ball must pass through every gate under control.'),
+  ('advanced','3-Zone Shooting',1,5,'Finishing technique from central and wide zones.','Mark three shooting zones with a goalkeeper or target goal and a supply of balls.','Finish from each zone using the instructed foot and service pattern.','Record successful finishes or points according to the target zones.','Use the same service and target setup when comparing sessions.'),
+  ('advanced','Alternating Insides Volleys',2,3,'Clean volley contact and rhythm using the inside of both feet.','Pair players or use a rebounder three yards away with one ball.','Return the ball on the volley, alternating the inside of the right and left foot.','Record consecutive controlled alternating volleys.','A sequence ends on a bounce, second touch or uncontrolled return.'),
+  ('advanced','Directional 1st Touch / Wall Pass',3,1,'Passing accuracy and a purposeful directional first touch.','Place a wall or rebounder and two receiving gates at angles from the start marker.','Pass to the wall and move the return through the indicated receiving gate with one touch.','Record successful gate receptions in the allotted time.','The first touch must travel through the gate; alternate sides.'),
+  ('advanced','Long Passing — Both Feet',4,5,'Long-range passing distance, accuracy and technique with both feet.','Mark a passing line and target zones at an age-appropriate distance.','Strike driven or lofted passes into the target, alternating feet after each attempt.','Record target hits or points for each foot and the combined result.','Keep distance and target size consistent across sessions.')
+)
+INSERT INTO public.skill_tests(id,club_id,category,title,"order",duration_minutes,description,setup,how_to_perform,scoring,diagram_notes,is_sample)
+SELECT 'default-' || substr(md5(c.id || ':' || d.category || ':' || d.title),1,24),c.id,d.category,d.title,d.sort_order,d.duration_minutes,d.description,d.setup,d.how_to_perform,d.scoring,d.diagram_notes,false
+FROM public.clubs c
+CROSS JOIN defaults d
+WHERE NOT EXISTS (
+  SELECT 1 FROM public.skill_tests existing
+  WHERE existing.club_id=c.id AND existing.category=d.category AND lower(existing.title)=lower(d.title)
+)
+ON CONFLICT (id) DO NOTHING;

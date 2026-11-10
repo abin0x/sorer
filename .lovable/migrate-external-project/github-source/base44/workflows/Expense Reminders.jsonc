@@ -1,0 +1,45 @@
+{
+  "trigger": {
+    "condition": null,
+    "config": {
+      "trigger_type": "scheduled",
+      "events": [],
+      "schedule_mode": "recurring",
+      "cron_expression": "0 9 * * *",
+      "one_time_date": null,
+      "timezone": "America/New_York",
+      "interval_value": null,
+      "interval_unit": null,
+      "interval_anchor": null,
+      "ends_type": "never",
+      "ends_on_date": null,
+      "ends_after_count": null
+    }
+  },
+  "description": "Daily at 9am: reminds approvers about reports stuck in review past the reminder threshold, and escalates to the club director past the escalation threshold.",
+  "name": "Expense Reminders",
+  "definition": {
+    "document": {
+      "dsl": "1.0.0",
+      "name": "expense_reminders",
+      "version": "1.0",
+      "namespace": "base44"
+    },
+    "do": [
+      {
+        "remind": {
+          "call": "invoke_backend_function",
+          "with": {
+            "function_name": "expense-reminders",
+            "args": {}
+          },
+          "then": "end",
+          "x-base44": {
+            "title": "Send reminders & escalations",
+            "description": "Daily check for stale reports"
+          }
+        }
+      }
+    ]
+  }
+}

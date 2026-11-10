@@ -1,0 +1,125 @@
+{
+  "name": "BillingEntity",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club (tenant) that invoices this organization"
+    },
+    "name": {
+      "type": "string",
+      "description": "Organization name, e.g. Northville United SC"
+    },
+    "contact_name": {
+      "type": "string",
+      "description": "Primary billing contact"
+    },
+    "contact_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Where invoices are emailed. Also the identity used to link a signed-in portal account to this entity."
+    },
+    "additional_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "default": [],
+      "description": "Other emails allowed to view this entity's invoices in the portal"
+    },
+    "contact_phone": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string",
+      "description": "Billing address"
+    },
+    "default_hourly_rate": {
+      "type": "number",
+      "default": 0,
+      "description": "Default rate charged per hour for this entity's field bookings"
+    },
+    "payment_terms_days": {
+      "type": "number",
+      "default": 30,
+      "description": "Days after issue before an invoice is due"
+    },
+    "stripe_customer_id": {
+      "type": "string",
+      "description": "Stripe customer id on the club's connected Stripe account, when one has been created"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Internal notes \u2014 never shown in the portal"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "inactive"
+      ],
+      "default": "active",
+      "description": "Inactive entities keep their history but are hidden from booking pickers"
+    }
+  },
+  "required": [
+    "club_id",
+    "name",
+    "contact_email"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

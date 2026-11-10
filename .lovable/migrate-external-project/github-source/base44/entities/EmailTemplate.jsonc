@@ -1,0 +1,193 @@
+{
+  "name": "EmailTemplate",
+  "type": "object",
+  "properties": {
+    "club_id": {
+      "type": "string",
+      "description": "Club owning this template; blank for platform templates"
+    },
+    "template_type": {
+      "type": "string",
+      "description": "Email workflow key or custom template name"
+    },
+    "subject": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string",
+      "description": "Editable email body, supports HTML and {{variables}}"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "template_type",
+    "subject",
+    "body"
+  ],
+  "rls": {
+    "read": {
+      "$or": [
+        {
+          "data.club_id": "{{user.data.club_id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        }
+      ]
+    },
+    "create": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            },
+            {
+              "user_condition": {
+                "custom_role": "club_admin"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            },
+            {
+              "user_condition": {
+                "custom_role": "club_director"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            },
+            {
+              "user_condition": {
+                "custom_role": "club_admin"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            },
+            {
+              "user_condition": {
+                "custom_role": "club_director"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        },
+        {
+          "user_condition": {
+            "system_role": "system_owner"
+          }
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            },
+            {
+              "user_condition": {
+                "custom_role": "club_admin"
+              }
+            }
+          ]
+        },
+        {
+          "$and": [
+            {
+              "data.club_id": "{{user.data.club_id}}"
+            },
+            {
+              "data.club_id": {
+                "$ne": null
+              }
+            },
+            {
+              "user_condition": {
+                "custom_role": "club_director"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
